@@ -1,6 +1,7 @@
 package calculator.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Complex implements Number<Complex> {
     private static final int MAX_PRECISION = 100;
@@ -8,6 +9,9 @@ public class Complex implements Number<Complex> {
     private BigDecimal imaginary;
 
     public Complex(BigDecimal real, BigDecimal imaginary) {
+        if (real == null || imaginary == null) {
+            throw new IllegalArgumentException("Arguments can not be null");
+        }
         this.real = real;
         this.imaginary = imaginary;
     }
@@ -93,5 +97,19 @@ public class Complex implements Number<Complex> {
                 "real=" + real +
                 ", imaginary=" + imaginary +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Complex complex = (Complex) o;
+        return real.equals(complex.real) &&
+                imaginary.equals(complex.imaginary);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(real, imaginary);
     }
 }
