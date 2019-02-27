@@ -5,3 +5,4 @@ out/
 build/
 gradlew
 gradlew.bat
+lib/

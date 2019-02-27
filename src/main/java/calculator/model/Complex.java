@@ -2,7 +2,7 @@ package calculator.model;
 
 import java.math.BigDecimal;
 
-public class Complex implements Number<Complex>{
+public class Complex implements Number<Complex> {
     private static final int MAX_PRECISION = 100;
     private BigDecimal real;
     private BigDecimal imaginary;
@@ -19,13 +19,15 @@ public class Complex implements Number<Complex>{
         BigDecimal im = a.imaginary.add(b.imaginary);
         return new Complex(re, im);
     }
+
     @Override
-    public Complex substract(Complex b) {
+    public Complex subtract(Complex b) {
         Complex a = this;
         BigDecimal re = a.real.subtract(b.real);
         BigDecimal im = a.imaginary.subtract(b.imaginary);
         return new Complex(re, im);
     }
+
     @Override
     public Complex multiply(Complex b) {
         Complex a = this;
@@ -34,9 +36,10 @@ public class Complex implements Number<Complex>{
         return new Complex(re, im);
     }
 
-    public Complex scale (BigDecimal b){
+    public Complex scale(BigDecimal b) {
         return new Complex(this.real.multiply(b), this.imaginary.multiply(b));
     }
+
     @Override
     public Complex divide(Complex b) {
         BigDecimal scale = b.real.multiply(b.real).add(b.imaginary.multiply(b.imaginary));
@@ -54,12 +57,17 @@ public class Complex implements Number<Complex>{
                 this.conjugate().imaginary.divide(square, MAX_PRECISION, BigDecimal.ROUND_FLOOR));
     }
 
+    @Override
+    public Complex negate() {
+        return new Complex(this.real.negate(), this.imaginary.negate());
+    }
+
 
     public Complex conjugate() {
         return new Complex(this.real, this.imaginary.negate());
     }
 
-    public BigDecimal square(){
+    public BigDecimal square() {
         return this.real.multiply(this.real).subtract(this.imaginary.multiply(this.imaginary));
     }
 
