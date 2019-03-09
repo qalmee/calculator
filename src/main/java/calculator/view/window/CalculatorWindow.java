@@ -2,6 +2,8 @@ package calculator.view.window;
 
 import javafx.stage.Stage;
 
+import static calculator.view.LanguageProperties.getProperty;
+
 public class CalculatorWindow extends Stage {
 
     public CalculatorWindow() {
@@ -9,6 +11,6 @@ public class CalculatorWindow extends Stage {
     }
 
     private void setupCalculatorWindow() {
-        this.setTitle("Calculator");
+        this.setTitle(getProperty("calculator_window.title"));
     }
 }
