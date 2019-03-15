@@ -2,6 +2,9 @@ package calculator.view.scene;
 
 import javafx.scene.control.Button;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static calculator.view.LanguageProperties.getProperty;
 
 public enum AbstractCalculatorSceneButtons {
@@ -42,6 +45,7 @@ public enum AbstractCalculatorSceneButtons {
     private int columnInGridPane;
     private Button button;
 
+    @SuppressWarnings("unusePrivateMethod")
     AbstractCalculatorSceneButtons(int rowInGridPane, int columnInGridPane, Button button) {
         this.rowInGridPane = rowInGridPane;
         this.columnInGridPane = columnInGridPane;
@@ -58,5 +62,10 @@ public enum AbstractCalculatorSceneButtons {
 
     public Button getButton() {
         return button;
+    }
+
+    public static List<AbstractCalculatorSceneButtons> getDigitButtons() {
+        return Arrays.asList(BUTTON_DIGIT0, BUTTON_DIGIT1, BUTTON_DIGIT2, BUTTON_DIGIT3, BUTTON_DIGIT4,
+                BUTTON_DIGIT5, BUTTON_DIGIT6, BUTTON_DIGIT7, BUTTON_DIGIT8, BUTTON_DIGIT9);
     }
 }

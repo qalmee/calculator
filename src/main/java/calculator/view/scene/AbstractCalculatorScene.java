@@ -1,33 +1,57 @@
 package calculator.view.scene;
 
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static calculator.view.LanguageProperties.getProperty;
 
 abstract class AbstractCalculatorScene extends Scene {
 
+    private static final int MAIN_PANEL_PADDING_SIZE = 5;
+
     private static final int GRID_PANE_ROWS = 5;
     private static final int GRID_PANE_COLUMNS = 6;
 
+    private static final int BUTTON_WIDTH = 80;
+    private static final int BUTTON_HEIGHT = 50;
+    private static final int ROW_CONSTRAINS_HEIGHT = 60;
+    private static final int COLUMN_CONSTRAINS_WIDTH = 90;
+
+    private static final String FONT_FAMILY = "System";
+
+    private static final Font TEXT_FIELD_VALUE_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 30);
+    private static final Font TEXT_FIELD_PREVIOUS_OPERATION_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 14);
+    private static final Font BUTTONS_FONT = Font.font(FONT_FAMILY, 20);
+    private static final Font DIGIT_BUTTONS_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 24);
+
     private VBox mainPanel;
-
-    private TextField textField;
-
-    private List<Node> elementsInGridPane;
+    private GridPane buttonsGridPane;
+    private TextField textFieldValue;
+    private TextField textFieldPreviousOperation;
 
     AbstractCalculatorScene() {
         super(new VBox());
-        mainPanel = (VBox) this.getRoot();
+        setupMainPanel();
         setupMenu();
-        setupTextField();
+        setupTextFields();
+        setupButtonsGridPane();
         setupButtons();
+    }
+
+    private void setupMainPanel() {
+        mainPanel = (VBox) this.getRoot();
     }
 
     private void setupMenu() {
@@ -52,43 +76,86 @@ abstract class AbstractCalculatorScene extends Scene {
         mainPanel.getChildren().add(menuBar);
     }
 
-    private void setupTextField() {
-        textField = new TextField();
+    private void setupTextFields() {
+        textFieldValue = new TextField();
+        textFieldValue.setFont(TEXT_FIELD_VALUE_FONT);
+        textFieldValue.setAlignment(Pos.BASELINE_RIGHT);
+        textFieldValue.setBackground(Background.EMPTY);
+        textFieldValue.setText("555");
+        textFieldValue.setStyle("-fx-display-caret: false");
+        textFieldValue.setCursor(Cursor.DEFAULT);
+
+        textFieldPreviousOperation = new TextField();
+        textFieldPreviousOperation.setFont(TEXT_FIELD_PREVIOUS_OPERATION_FONT);
+        textFieldPreviousOperation.setAlignment(Pos.BASELINE_RIGHT);
+        textFieldPreviousOperation.setBackground(Background.EMPTY);
+        textFieldPreviousOperation.setText("500+55 =");
+        textFieldPreviousOperation.setStyle("-fx-display-caret: false");
+        textFieldPreviousOperation.setCursor(Cursor.DEFAULT);
+
+        mainPanel.getChildren().addAll(textFieldPreviousOperation, textFieldValue);
+    }
+
+    private void setupButtonsGridPane() {
+        buttonsGridPane = new GridPane();
+        addRowAndColumnConstraintsToButtonsGridPane();
+        buttonsGridPane.setAlignment(Pos.CENTER);
+        buttonsGridPane.setGridLinesVisible(true);
+        buttonsGridPane.setPadding(new Insets(0,
+                MAIN_PANEL_PADDING_SIZE, MAIN_PANEL_PADDING_SIZE, MAIN_PANEL_PADDING_SIZE));
+        mainPanel.getChildren().add(buttonsGridPane);
     }
 
     private void setupButtons() {
-        GridPane gridPane = new GridPane();
-        mainPanel.getChildren().add(gridPane);
-        elementsInGridPane = new ArrayList<>(GRID_PANE_ROWS * GRID_PANE_COLUMNS);
-        createDigitButtons();
-        createClearButtons();
-        createMemoryButtons();
-        createUnaryOperationButtons();
-        createBinaryOperationButtons();
-        createOtherButtons();
+        AbstractCalculatorSceneButtons[] buttons = AbstractCalculatorSceneButtons.values();
+        Arrays.stream(buttons).forEach(button -> {
+            button.getButton().setPrefWidth(BUTTON_WIDTH);
+            button.getButton().setPrefHeight(BUTTON_HEIGHT);
+            button.getButton().setFont(BUTTONS_FONT);
+        });
+        setFontToDigitButtons();
+        addButtonsToGridPane();
     }
 
-    private void createDigitButtons() {
-
+    private void setFontToDigitButtons() {
+        List<AbstractCalculatorSceneButtons> digitButtons = AbstractCalculatorSceneButtons.getDigitButtons();
+        digitButtons.forEach(button -> button.getButton().setFont(DIGIT_BUTTONS_FONT));
     }
 
-    private void createClearButtons() {
+    private void addButtonsToGridPane() {
+        Node[][] elementsInGridPane = new Node[GRID_PANE_ROWS][GRID_PANE_COLUMNS];
 
+        AbstractCalculatorSceneButtons[] buttons = AbstractCalculatorSceneButtons.values();
+        Arrays.stream(buttons).forEach(button -> {
+            int row = button.getRowInGridPane();
+            int column = button.getColumnInGridPane();
+            elementsInGridPane[row][column] = button.getButton();
+        });
+        addEmptyPaneToBullGridPaneElements(elementsInGridPane);
+
+        for (int i = 0; i < elementsInGridPane.length; ++i) {
+            buttonsGridPane.addRow(i, elementsInGridPane[i]);
+        }
     }
 
-    private void createMemoryButtons() {
+    private void addRowAndColumnConstraintsToButtonsGridPane() {
+        RowConstraints rowConstraints = new RowConstraints();
+        rowConstraints.setPrefHeight(ROW_CONSTRAINS_HEIGHT);
+        ColumnConstraints columnConstraints = new ColumnConstraints();
+        columnConstraints.setPrefWidth(COLUMN_CONSTRAINS_WIDTH);
+        columnConstraints.setHalignment(HPos.CENTER);
 
+        buttonsGridPane.getRowConstraints().addAll(Collections.nCopies(GRID_PANE_ROWS, rowConstraints));
+        buttonsGridPane.getColumnConstraints().addAll(Collections.nCopies(GRID_PANE_COLUMNS, columnConstraints));
     }
 
-    private void createUnaryOperationButtons() {
-
-    }
-
-    private void createBinaryOperationButtons() {
-
-    }
-
-    private void createOtherButtons() {
-
+    private void addEmptyPaneToBullGridPaneElements(Node[][] elementsInGridPane) {
+        for (int i = 0; i < elementsInGridPane.length; ++i) {
+            for (int j = 0; j < elementsInGridPane[i].length; ++j) {
+                if (elementsInGridPane[i][j] == null) {
+                    elementsInGridPane[i][j] = new Pane();
+                }
+            }
+        }
     }
 }
