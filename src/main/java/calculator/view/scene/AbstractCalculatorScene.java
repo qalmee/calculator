@@ -98,7 +98,7 @@ abstract class AbstractCalculatorScene extends Scene {
 
     private void setupButtonsGridPane() {
         buttonsGridPane = new GridPane();
-        addRowAndColumnConstraintsToButtonsGridPane();
+        addRowAndColumnConstraintsToButtonsGridPane(GRID_PANE_ROWS, GRID_PANE_COLUMNS);
         buttonsGridPane.setAlignment(Pos.CENTER);
         buttonsGridPane.setGridLinesVisible(true);
         buttonsGridPane.setPadding(new Insets(0,
@@ -108,19 +108,12 @@ abstract class AbstractCalculatorScene extends Scene {
 
     private void setupButtons() {
         AbstractCalculatorSceneButtons[] buttons = AbstractCalculatorSceneButtons.values();
-        Arrays.stream(buttons).forEach(button -> {
-            button.getButton().setPrefWidth(BUTTON_WIDTH);
-            button.getButton().setPrefHeight(BUTTON_HEIGHT);
-            button.getButton().setFont(BUTTONS_FONT);
-        });
-        setFontToDigitButtons();
+        Arrays.stream(buttons).forEach(button -> configureButton(button.getButton()));
+        List<AbstractCalculatorSceneButtons> digitButtons = AbstractCalculatorSceneButtons.getDigitButtons();
+        digitButtons.forEach(button -> configureDigitButton(button.getButton()));
         addButtonsToGridPane();
     }
 
-    private void setFontToDigitButtons() {
-        List<AbstractCalculatorSceneButtons> digitButtons = AbstractCalculatorSceneButtons.getDigitButtons();
-        digitButtons.forEach(button -> button.getButton().setFont(DIGIT_BUTTONS_FONT));
-    }
 
     private void addButtonsToGridPane() {
         Node[][] elementsInGridPane = new Node[GRID_PANE_ROWS][GRID_PANE_COLUMNS];
@@ -138,15 +131,15 @@ abstract class AbstractCalculatorScene extends Scene {
         }
     }
 
-    private void addRowAndColumnConstraintsToButtonsGridPane() {
+    private void addRowAndColumnConstraintsToButtonsGridPane(int countRows, int countColumns) {
         RowConstraints rowConstraints = new RowConstraints();
         rowConstraints.setPrefHeight(ROW_CONSTRAINS_HEIGHT);
         ColumnConstraints columnConstraints = new ColumnConstraints();
         columnConstraints.setPrefWidth(COLUMN_CONSTRAINS_WIDTH);
         columnConstraints.setHalignment(HPos.CENTER);
 
-        buttonsGridPane.getRowConstraints().addAll(Collections.nCopies(GRID_PANE_ROWS, rowConstraints));
-        buttonsGridPane.getColumnConstraints().addAll(Collections.nCopies(GRID_PANE_COLUMNS, columnConstraints));
+        buttonsGridPane.getRowConstraints().addAll(Collections.nCopies(countRows, rowConstraints));
+        buttonsGridPane.getColumnConstraints().addAll(Collections.nCopies(countColumns, columnConstraints));
     }
 
     private void addEmptyPaneToBullGridPaneElements(Node[][] elementsInGridPane) {
@@ -157,5 +150,21 @@ abstract class AbstractCalculatorScene extends Scene {
                 }
             }
         }
+    }
+
+    void addRowToGridPane(Node... elements) {
+        addRowAndColumnConstraintsToButtonsGridPane(1, 0);
+        buttonsGridPane.addRow(GRID_PANE_ROWS, elements);
+    }
+
+    void configureButton(Button button) {
+        button.setPrefWidth(BUTTON_WIDTH);
+        button.setPrefHeight(BUTTON_HEIGHT);
+        button.setFont(BUTTONS_FONT);
+    }
+
+    void configureDigitButton(Button button) {
+        configureButton(button);
+        button.setFont(DIGIT_BUTTONS_FONT);
     }
 }

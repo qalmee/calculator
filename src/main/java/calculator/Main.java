@@ -1,6 +1,6 @@
 package calculator;
 
-import calculator.view.scene.FractionCalculatorScene;
+import calculator.view.scene.PNumberCalculatorScene;
 import calculator.view.window.CalculatorWindow;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -10,7 +10,7 @@ public class Main extends Application {
 
     private Stage calculatorWindow;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Application.launch(args);
     }
 
@@ -22,7 +22,7 @@ public class Main extends Application {
     }
 
     private void setupCalculatorWindow() {
-        Scene calculatorScene = new FractionCalculatorScene();
+        Scene calculatorScene = new PNumberCalculatorScene();
         calculatorWindow.setScene(calculatorScene);
         calculatorWindow.show();
     }
