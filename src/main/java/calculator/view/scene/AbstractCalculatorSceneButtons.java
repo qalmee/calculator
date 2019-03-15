@@ -52,6 +52,11 @@ public enum AbstractCalculatorSceneButtons {
         this.button = button;
     }
 
+    public static List<AbstractCalculatorSceneButtons> getDigitButtons() {
+        return Arrays.asList(BUTTON_DIGIT0, BUTTON_DIGIT1, BUTTON_DIGIT2, BUTTON_DIGIT3, BUTTON_DIGIT4,
+                BUTTON_DIGIT5, BUTTON_DIGIT6, BUTTON_DIGIT7, BUTTON_DIGIT8, BUTTON_DIGIT9);
+    }
+
     public int getRowInGridPane() {
         return rowInGridPane;
     }
@@ -62,10 +67,5 @@ public enum AbstractCalculatorSceneButtons {
 
     public Button getButton() {
         return button;
-    }
-
-    public static List<AbstractCalculatorSceneButtons> getDigitButtons() {
-        return Arrays.asList(BUTTON_DIGIT0, BUTTON_DIGIT1, BUTTON_DIGIT2, BUTTON_DIGIT3, BUTTON_DIGIT4,
-                BUTTON_DIGIT5, BUTTON_DIGIT6, BUTTON_DIGIT7, BUTTON_DIGIT8, BUTTON_DIGIT9);
     }
 }
