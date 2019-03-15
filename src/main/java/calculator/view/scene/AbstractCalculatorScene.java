@@ -167,4 +167,8 @@ abstract class AbstractCalculatorScene extends Scene {
         configureButton(button);
         button.setFont(DIGIT_BUTTONS_FONT);
     }
+
+    void addElementToMainPanel(Node element) {
+        mainPanel.getChildren().add(element);
+    }
 }
