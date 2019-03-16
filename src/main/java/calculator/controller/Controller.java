@@ -9,4 +9,9 @@ public class Controller implements ControllerListener {
     public Controller(CalculatorModel calculatorModel) {
         this.calculatorModel = calculatorModel;
     }
+
+    @Override
+    public void updateDigitButtons(int base) {
+        calculatorModel.updateDigitButtons(base);
+    }
 }

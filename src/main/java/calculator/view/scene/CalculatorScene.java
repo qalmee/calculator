@@ -13,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -22,9 +23,6 @@ import static calculator.view.LanguageProperties.getProperty;
 public abstract class CalculatorScene extends Scene implements CalculatorObserver {
 
     private static final int MAIN_PANEL_PADDING_SIZE = 5;
-
-    private static final int GRID_PANE_ROWS = 5;
-    private static final int GRID_PANE_COLUMNS = 6;
 
     private static final int BUTTON_WIDTH = 80;
     private static final int BUTTON_HEIGHT = 50;
@@ -38,21 +36,37 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     private static final Font BUTTONS_FONT = Font.font(FONT_FAMILY, 20);
     private static final Font DIGIT_BUTTONS_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 24);
 
+    ControllerListener controllerListener;
+    private CalculatorMode calculatorMode;
+
     private VBox mainPanel;
     private GridPane buttonsGridPane;
     private TextField textFieldValue;
     private TextField textFieldPreviousOperation;
 
-    ControllerListener controllerListener;
-
-    CalculatorScene() {
+    CalculatorScene(CalculatorMode calculatorMode) {
         super(new VBox());
+        this.calculatorMode = calculatorMode;
         setupMainPanel();
         setupMenu();
         setupTextFields();
         setupButtonsGridPane();
         setupButtons();
     }
+
+    @Override
+    public void updateDigitButtons(List<String> buttonsText) {
+        List<CalculatorButtons> allDigitButtons = new ArrayList<>();
+        allDigitButtons.addAll(CalculatorButtons.getDigitButtons());
+        allDigitButtons.addAll(CalculatorButtons.getPNumberDigitButtons());
+        for (CalculatorButtons digitButton : allDigitButtons) {
+            Button button = digitButton.getButton();
+            String buttonText = button.getText();
+            button.setDisable(buttonsText.contains(buttonText));
+        }
+    }
+
+    public abstract void onInitializationComplete();
 
     public void setControllerListener(ControllerListener controllerListener) {
         this.controllerListener = controllerListener;
@@ -106,7 +120,8 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
 
     private void setupButtonsGridPane() {
         buttonsGridPane = new GridPane();
-        addRowAndColumnConstraintsToButtonsGridPane(GRID_PANE_ROWS, GRID_PANE_COLUMNS);
+        addRowAndColumnConstraintsToButtonsGridPane(
+                calculatorMode.getCountButtonsGridPaneRows(), calculatorMode.getCountButtonsGridPaneColumns());
         buttonsGridPane.setAlignment(Pos.CENTER);
         buttonsGridPane.setGridLinesVisible(true);
         buttonsGridPane.setPadding(new Insets(0,
@@ -115,23 +130,28 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     }
 
     private void setupButtons() {
-        CalculatorSceneButtons[] buttons = CalculatorSceneButtons.values();
+        CalculatorButtons[] buttons = CalculatorButtons.values();
         Arrays.stream(buttons).forEach(button -> configureButton(button.getButton()));
-        List<CalculatorSceneButtons> digitButtons = CalculatorSceneButtons.getDigitButtons();
+        List<CalculatorButtons> digitButtons = CalculatorButtons.getDigitButtons();
         digitButtons.forEach(button -> configureDigitButton(button.getButton()));
         addButtonsToGridPane();
     }
 
 
     private void addButtonsToGridPane() {
-        Node[][] elementsInGridPane = new Node[GRID_PANE_ROWS][GRID_PANE_COLUMNS];
+        int countRows = calculatorMode.getCountButtonsGridPaneColumns();
+        int countColumns = calculatorMode.getCountButtonsGridPaneColumns();
+        Node[][] elementsInGridPane = new Node[countRows][countColumns];
 
-        CalculatorSceneButtons[] buttons = CalculatorSceneButtons.values();
-        Arrays.stream(buttons).forEach(button -> {
-            int row = button.getRowInGridPane();
-            int column = button.getColumnInGridPane();
-            elementsInGridPane[row][column] = button.getButton();
-        });
+        CalculatorButtons[] buttons = CalculatorButtons.values();
+        Arrays.stream(buttons)
+                .filter(button -> button.getCalculatorMode() == CalculatorMode.BASIC ||
+                        button.getCalculatorMode() == calculatorMode)
+                .forEach(button -> {
+                    int row = button.getRowInGridPane();
+                    int column = button.getColumnInGridPane();
+                    elementsInGridPane[row][column] = button.getButton();
+                });
         addEmptyPaneToBullGridPaneElements(elementsInGridPane);
 
         for (int i = 0; i < elementsInGridPane.length; ++i) {
@@ -160,19 +180,13 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         }
     }
 
-    void addRowToGridPane(Node... elements) {
-        addRowAndColumnConstraintsToButtonsGridPane(1, 0);
-        buttonsGridPane.addRow(GRID_PANE_ROWS, elements);
-    }
-
-    void configureButton(Button button) {
+    private void configureButton(Button button) {
         button.setPrefWidth(BUTTON_WIDTH);
         button.setPrefHeight(BUTTON_HEIGHT);
         button.setFont(BUTTONS_FONT);
     }
 
     void configureDigitButton(Button button) {
-        configureButton(button);
         button.setFont(DIGIT_BUTTONS_FONT);
     }
 

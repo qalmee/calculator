@@ -2,13 +2,11 @@ package calculator.view.scene;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static calculator.view.LanguageProperties.getProperty;
@@ -34,29 +32,23 @@ public class PNumberCalculatorScene extends CalculatorScene {
     private HBox bottomPanel;
     private Slider sliderBase;
 
-    private List<Button> pNumberButtons;
-
     public PNumberCalculatorScene() {
-        createButtons();
+        super(CalculatorMode.P_NUMBER);
         setupPNumberButtons();
         setupBottomPanel();
         setupLabelBase();
         setupSliderBase();
+
     }
 
-    private void createButtons() {
-        pNumberButtons = new ArrayList<>();
-        pNumberButtons.add(new Button(getProperty("p-number_calculator_scene.buttonA")));
-        pNumberButtons.add(new Button(getProperty("p-number_calculator_scene.buttonB")));
-        pNumberButtons.add(new Button(getProperty("p-number_calculator_scene.buttonC")));
-        pNumberButtons.add(new Button(getProperty("p-number_calculator_scene.buttonD")));
-        pNumberButtons.add(new Button(getProperty("p-number_calculator_scene.buttonE")));
-        pNumberButtons.add(new Button(getProperty("p-number_calculator_scene.buttonF")));
+    @Override
+    public void onInitializationComplete() {
+        updateDigitButtonsOnStart();
     }
 
     private void setupPNumberButtons() {
-        this.addRowToGridPane(pNumberButtons.toArray(new Button[0]));
-        pNumberButtons.forEach(this::configureDigitButton);
+        List<CalculatorButtons> pNumberDigitButtons = CalculatorButtons.getPNumberDigitButtons();
+        pNumberDigitButtons.forEach(button -> configureDigitButton(button.getButton()));
     }
 
     private void setupBottomPanel() {
@@ -86,5 +78,15 @@ public class PNumberCalculatorScene extends CalculatorScene {
         sliderBase.setPrefWidth(SLIDER_WIDTH_SIZE);
         sliderBase.setValue(SLIDER_DEFAULT_VALUE);
         bottomPanel.getChildren().add(sliderBase);
+        setupSliderBaseUpdateListener();
+    }
+
+    private void setupSliderBaseUpdateListener() {
+        sliderBase.valueProperty().addListener((observable, oldValue, newValue) ->
+                controllerListener.updateDigitButtons(newValue.intValue()));
+    }
+
+    private void updateDigitButtonsOnStart() {
+        controllerListener.updateDigitButtons((int) sliderBase.getValue());
     }
 }
