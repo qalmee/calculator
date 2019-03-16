@@ -7,7 +7,7 @@ import java.util.List;
 
 import static calculator.view.LanguageProperties.getProperty;
 
-public enum AbstractCalculatorSceneButtons {
+public enum CalculatorSceneButtons {
 
     BUTTON_DIGIT0(4, 3, new Button(getProperty("abstract_calculator_scene.button0"))),
     BUTTON_DIGIT1(3, 2, new Button(getProperty("abstract_calculator_scene.button1"))),
@@ -46,13 +46,13 @@ public enum AbstractCalculatorSceneButtons {
     private Button button;
 
     @SuppressWarnings("unusePrivateMethod")
-    AbstractCalculatorSceneButtons(int rowInGridPane, int columnInGridPane, Button button) {
+    CalculatorSceneButtons(int rowInGridPane, int columnInGridPane, Button button) {
         this.rowInGridPane = rowInGridPane;
         this.columnInGridPane = columnInGridPane;
         this.button = button;
     }
 
-    public static List<AbstractCalculatorSceneButtons> getDigitButtons() {
+    public static List<CalculatorSceneButtons> getDigitButtons() {
         return Arrays.asList(BUTTON_DIGIT0, BUTTON_DIGIT1, BUTTON_DIGIT2, BUTTON_DIGIT3, BUTTON_DIGIT4,
                 BUTTON_DIGIT5, BUTTON_DIGIT6, BUTTON_DIGIT7, BUTTON_DIGIT8, BUTTON_DIGIT9);
     }

@@ -13,7 +13,7 @@ import java.util.List;
 
 import static calculator.view.LanguageProperties.getProperty;
 
-public class PNumberCalculatorScene extends AbstractCalculatorScene {
+public class PNumberCalculatorScene extends CalculatorScene {
 
     private static final int SLIDER_MIN_VALUE = 2;
     private static final int SLIDER_MAX_VALUE = 16;

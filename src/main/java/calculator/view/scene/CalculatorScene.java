@@ -1,5 +1,7 @@
 package calculator.view.scene;
 
+import calculator.controller.ControllerListener;
+import calculator.model.observer.CalculatorObserver;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,7 +19,7 @@ import java.util.List;
 
 import static calculator.view.LanguageProperties.getProperty;
 
-abstract class AbstractCalculatorScene extends Scene {
+public abstract class CalculatorScene extends Scene implements CalculatorObserver {
 
     private static final int MAIN_PANEL_PADDING_SIZE = 5;
 
@@ -41,13 +43,19 @@ abstract class AbstractCalculatorScene extends Scene {
     private TextField textFieldValue;
     private TextField textFieldPreviousOperation;
 
-    AbstractCalculatorScene() {
+    ControllerListener controllerListener;
+
+    CalculatorScene() {
         super(new VBox());
         setupMainPanel();
         setupMenu();
         setupTextFields();
         setupButtonsGridPane();
         setupButtons();
+    }
+
+    public void setControllerListener(ControllerListener controllerListener) {
+        this.controllerListener = controllerListener;
     }
 
     private void setupMainPanel() {
@@ -107,9 +115,9 @@ abstract class AbstractCalculatorScene extends Scene {
     }
 
     private void setupButtons() {
-        AbstractCalculatorSceneButtons[] buttons = AbstractCalculatorSceneButtons.values();
+        CalculatorSceneButtons[] buttons = CalculatorSceneButtons.values();
         Arrays.stream(buttons).forEach(button -> configureButton(button.getButton()));
-        List<AbstractCalculatorSceneButtons> digitButtons = AbstractCalculatorSceneButtons.getDigitButtons();
+        List<CalculatorSceneButtons> digitButtons = CalculatorSceneButtons.getDigitButtons();
         digitButtons.forEach(button -> configureDigitButton(button.getButton()));
         addButtonsToGridPane();
     }
@@ -118,7 +126,7 @@ abstract class AbstractCalculatorScene extends Scene {
     private void addButtonsToGridPane() {
         Node[][] elementsInGridPane = new Node[GRID_PANE_ROWS][GRID_PANE_COLUMNS];
 
-        AbstractCalculatorSceneButtons[] buttons = AbstractCalculatorSceneButtons.values();
+        CalculatorSceneButtons[] buttons = CalculatorSceneButtons.values();
         Arrays.stream(buttons).forEach(button -> {
             int row = button.getRowInGridPane();
             int column = button.getColumnInGridPane();

@@ -1,4 +1,4 @@
-package calculator.model;
+package calculator.model.numbers;
 
 public interface Number<T extends Number> {
     T add(T b);

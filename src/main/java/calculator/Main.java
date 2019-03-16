@@ -1,14 +1,14 @@
 package calculator;
 
+import calculator.controller.Controller;
+import calculator.model.CalculatorModel;
+import calculator.view.scene.CalculatorScene;
 import calculator.view.scene.PNumberCalculatorScene;
 import calculator.view.window.CalculatorWindow;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
-    private Stage calculatorWindow;
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -16,13 +16,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        calculatorWindow = new CalculatorWindow();
+        Stage calculatorWindow = new CalculatorWindow();
+        CalculatorModel calculatorModel = new CalculatorModel();
+        Controller controller = new Controller(calculatorModel);
 
-        setupCalculatorWindow();
-    }
+        CalculatorScene calculatorScene = new PNumberCalculatorScene();
+        calculatorScene.setControllerListener(controller);
 
-    private void setupCalculatorWindow() {
-        Scene calculatorScene = new PNumberCalculatorScene();
+        calculatorModel.setCalculatorObserver(calculatorScene);
+
         calculatorWindow.setScene(calculatorScene);
         calculatorWindow.show();
     }

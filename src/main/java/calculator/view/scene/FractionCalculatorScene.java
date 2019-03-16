@@ -1,5 +1,5 @@
 package calculator.view.scene;
 
-public class FractionCalculatorScene extends AbstractCalculatorScene {
+public class FractionCalculatorScene extends CalculatorScene {
 
 }
