@@ -92,8 +92,8 @@ public enum CalculatorButtons {
             new Button(getProperty("complex_calculator_scene.button_argument_deg")), CalculatorMode.COMPLEX),
     BUTTON_POW(5, 3,
             new Button(getProperty("complex_calculator_scene.button_pow")), CalculatorMode.COMPLEX),
-    BUTTON_ROOT(5, 4,
-            new Button(getProperty("complex_calculator_scene.button_root")), CalculatorMode.COMPLEX),
+    BUTTON_SQR(5, 4,
+            new Button(getProperty("complex_calculator_scene.button_sqr")), CalculatorMode.COMPLEX),
     BUTTON_I(5, 5,
             new Button(getProperty("complex_calculator_scene.buttonI")), CalculatorMode.COMPLEX);
 
