@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +43,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
 
     private VBox mainPanel;
     private GridPane buttonsGridPane;
+    private MenuBar menuBar;
     private TextField textFieldValue;
     private TextField textFieldPreviousOperation;
 
@@ -78,25 +80,53 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     }
 
     private void setupMenu() {
+        menuBar = new MenuBar();
+        mainPanel.getChildren().add(menuBar);
+        setupMenuFile();
+        setupMenuEdit();
+        setupModeMenu();
+        setupMenuHelp();
+    }
+
+    private void setupMenuFile() {
+        Menu menuFile = new Menu(getProperty("abstract_calculator_scene.menu_file"));
+        menuBar.getMenus().add(menuFile);
+    }
+
+    private void setupMenuEdit() {
+        Menu menuEdit = new Menu(getProperty("abstract_calculator_scene.menu_edit"));
         MenuItem menuItemCopy = new MenuItem(getProperty("abstract_calculator_scene.menu_item_copy"));
         MenuItem menuItemPaste = new MenuItem(getProperty("abstract_calculator_scene.menu_item_paste"));
-        MenuItem menuItemHelp = new MenuItem(getProperty("abstract_calculator_scene.menu_item_help"));
-
-        MenuItem menuItemFraction = new RadioMenuItem(getProperty("abstract_calculator_scene.menu_item_mode_fraction"));
-        MenuItem menuItemComplex = new RadioMenuItem(getProperty("abstract_calculator_scene.menu_item_mode_complex"));
-        MenuItem menuItemPNumber = new RadioMenuItem(getProperty("abstract_calculator_scene.menu_item_mode_p-number"));
-
-        Menu menuFile = new Menu(getProperty("abstract_calculator_scene.menu_file"));
-        Menu menuEdit = new Menu(getProperty("abstract_calculator_scene.menu_edit"));
-        Menu menuMode = new Menu(getProperty("abstract_calculator_scene.menu_mode"));
-        Menu menuHelp = new Menu(getProperty("abstract_calculator_scene.menu_help"));
-
         menuEdit.getItems().addAll(menuItemCopy, menuItemPaste);
-        menuMode.getItems().addAll(menuItemFraction, menuItemComplex, menuItemPNumber);
-        menuHelp.getItems().addAll(menuItemHelp);
+        menuBar.getMenus().add(menuEdit);
+    }
 
-        MenuBar menuBar = new MenuBar(menuFile, menuEdit, menuMode, menuHelp);
-        mainPanel.getChildren().add(menuBar);
+    private void setupModeMenu() {
+        ToggleGroup modeToggleGroup = new ToggleGroup();
+        Menu menuMode = new Menu(getProperty("abstract_calculator_scene.menu_mode"));
+        RadioMenuItem menuItemFraction =
+                new RadioMenuItem(getProperty("abstract_calculator_scene.menu_item_mode_fraction"));
+        RadioMenuItem menuItemComplex =
+                new RadioMenuItem(getProperty("abstract_calculator_scene.menu_item_mode_complex"));
+        RadioMenuItem menuItemPNumber =
+                new RadioMenuItem(getProperty("abstract_calculator_scene.menu_item_mode_p-number"));
+        menuMode.getItems().addAll(menuItemFraction, menuItemComplex, menuItemPNumber);
+        menuBar.getMenus().add(menuMode);
+
+        menuItemFraction.setToggleGroup(modeToggleGroup);
+        menuItemComplex.setToggleGroup(modeToggleGroup);
+        menuItemPNumber.setToggleGroup(modeToggleGroup);
+
+        menuItemFraction.setOnAction(event -> changeScene(CalculatorMode.FRACTION));
+        menuItemComplex.setOnAction(event -> changeScene(CalculatorMode.COMPLEX));
+        menuItemPNumber.setOnAction(event -> changeScene(CalculatorMode.P_NUMBER));
+    }
+
+    private void setupMenuHelp() {
+        Menu menuHelp = new Menu(getProperty("abstract_calculator_scene.menu_help"));
+        MenuItem menuItemHelp = new MenuItem(getProperty("abstract_calculator_scene.menu_item_help"));
+        menuHelp.getItems().addAll(menuItemHelp);
+        menuBar.getMenus().add(menuHelp);
     }
 
     private void setupTextFields() {
@@ -185,6 +215,23 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         button.setPrefWidth(BUTTON_WIDTH);
         button.setPrefHeight(BUTTON_HEIGHT);
         button.setFont(BUTTONS_FONT);
+    }
+
+    private void changeScene(CalculatorMode mode) {
+        Stage calculatorWindow = (Stage) this.getWindow();
+        switch (mode) {
+            case FRACTION:
+                calculatorWindow.setScene(new FractionCalculatorScene());
+                break;
+            case COMPLEX:
+                calculatorWindow.setScene(new ComplexCalculatorScene());
+                break;
+            case P_NUMBER:
+                calculatorWindow.setScene(new PNumberCalculatorScene());
+                break;
+            default:
+                break;
+        }
     }
 
     void configureDigitButton(Button button) {
