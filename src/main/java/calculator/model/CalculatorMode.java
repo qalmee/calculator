@@ -1,4 +1,4 @@
-package calculator.view.scene;
+package calculator.model;
 
 public enum CalculatorMode {
 

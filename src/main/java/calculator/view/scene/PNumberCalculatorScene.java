@@ -1,5 +1,6 @@
 package calculator.view.scene;
 
+import calculator.model.CalculatorMode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

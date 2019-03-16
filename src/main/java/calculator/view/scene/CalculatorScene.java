@@ -1,6 +1,7 @@
 package calculator.view.scene;
 
 import calculator.controller.ControllerListener;
+import calculator.model.CalculatorMode;
 import calculator.model.observer.CalculatorObserver;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;

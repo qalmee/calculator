@@ -1,5 +1,6 @@
 package calculator.view.scene;
 
+import calculator.model.CalculatorMode;
 import javafx.scene.control.Button;
 
 import java.util.Arrays;
