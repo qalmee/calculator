@@ -38,7 +38,6 @@ public class PNumberCalculatorScene extends CalculatorScene {
         setupBottomPanel();
         setupLabelBase();
         setupSliderBase();
-
     }
 
     @Override

@@ -51,8 +51,8 @@ public enum CalculatorButtons {
     BUTTON_REVERSE(4, 1,
             new Button(getProperty("abstract_calculator_scene.button_reverse")), CalculatorMode.BASIC),
 
-    BUTTON_DELIMITER(4, 4,
-            new Button(getProperty("abstract_calculator_scene.button_delimiter")), CalculatorMode.BASIC),
+    BUTTON_DOT(4, 4,
+            new Button(getProperty("abstract_calculator_scene.button_dot")), CalculatorMode.BASIC),
     BUTTON_ENTER(4, 5,
             new Button(getProperty("abstract_calculator_scene.button_enter")), CalculatorMode.BASIC),
     BUTTON_PLUS_MINUS(4, 2,
@@ -78,7 +78,24 @@ public enum CalculatorButtons {
     BUTTON_DIGIT_E(5, 4,
             new Button(getProperty("p-number_calculator_scene.buttonE")), CalculatorMode.P_NUMBER),
     BUTTON_DIGIT_F(5, 5,
-            new Button(getProperty("p-number_calculator_scene.buttonF")), CalculatorMode.P_NUMBER);
+            new Button(getProperty("p-number_calculator_scene.buttonF")), CalculatorMode.P_NUMBER),
+
+    BUTTON_DELIMITER(2, 1,
+            new Button(getProperty("fraction_calculator_scene.button_delimiter")), CalculatorMode.FRACTION),
+
+    BUTTON_MODULE(5, 0,
+            new Button(getProperty("complex_calculator_scene.button_module")), CalculatorMode.COMPLEX),
+    BUTTON_ARGUMENT_RAD(5, 1,
+            new Button(getProperty("complex_calculator_scene.button_argument_rad")), CalculatorMode.COMPLEX),
+    BUTTON_ARGUMENT_DEG(5, 2,
+            new Button(getProperty("complex_calculator_scene.button_argument_deg")), CalculatorMode.COMPLEX),
+    BUTTON_POW(5, 3,
+            new Button(getProperty("complex_calculator_scene.button_pow")), CalculatorMode.COMPLEX),
+    BUTTON_ROOT(5, 4,
+            new Button(getProperty("complex_calculator_scene.button_root")), CalculatorMode.COMPLEX),
+    BUTTON_I(5, 5,
+            new Button(getProperty("complex_calculator_scene.buttonI")), CalculatorMode.COMPLEX);
+
 
     private int rowInGridPane;
     private int columnInGridPane;
