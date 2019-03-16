@@ -90,8 +90,8 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     }
 
     private void setupMenuFile() {
-        Menu menuFile = new Menu(getProperty("abstract_calculator_scene.menu_file"));
-        MenuItem menuItemExit = new MenuItem(getProperty("abstract_calculator_scene.menu_exit"));
+        Menu menuFile = new Menu(getProperty("calculator_scene.menu_file"));
+        MenuItem menuItemExit = new MenuItem(getProperty("calculator_scene.menu_exit"));
         menuFile.getItems().addAll(menuItemExit);
         menuBar.getMenus().add(menuFile);
 
@@ -99,22 +99,19 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     }
 
     private void setupMenuEdit() {
-        Menu menuEdit = new Menu(getProperty("abstract_calculator_scene.menu_edit"));
-        MenuItem menuItemCopy = new MenuItem(getProperty("abstract_calculator_scene.menu_item_copy"));
-        MenuItem menuItemPaste = new MenuItem(getProperty("abstract_calculator_scene.menu_item_paste"));
+        Menu menuEdit = new Menu(getProperty("calculator_scene.menu_edit"));
+        MenuItem menuItemCopy = new MenuItem(getProperty("calculator_scene.menu_item_copy"));
+        MenuItem menuItemPaste = new MenuItem(getProperty("calculator_scene.menu_item_paste"));
         menuEdit.getItems().addAll(menuItemCopy, menuItemPaste);
         menuBar.getMenus().add(menuEdit);
     }
 
     private void setupModeMenu() {
         ToggleGroup modeToggleGroup = new ToggleGroup();
-        Menu menuMode = new Menu(getProperty("abstract_calculator_scene.menu_mode"));
-        RadioMenuItem menuItemFraction =
-                new RadioMenuItem(getProperty("abstract_calculator_scene.menu_item_mode_fraction"));
-        RadioMenuItem menuItemComplex =
-                new RadioMenuItem(getProperty("abstract_calculator_scene.menu_item_mode_complex"));
-        RadioMenuItem menuItemPNumber =
-                new RadioMenuItem(getProperty("abstract_calculator_scene.menu_item_mode_p-number"));
+        Menu menuMode = new Menu(getProperty("calculator_scene.menu_mode"));
+        RadioMenuItem menuItemFraction = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_fraction"));
+        RadioMenuItem menuItemComplex = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_complex"));
+        RadioMenuItem menuItemPNumber = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_p-number"));
         menuMode.getItems().addAll(menuItemFraction, menuItemComplex, menuItemPNumber);
         menuBar.getMenus().add(menuMode);
 
@@ -128,8 +125,8 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     }
 
     private void setupMenuHelp() {
-        Menu menuHelp = new Menu(getProperty("abstract_calculator_scene.menu_help"));
-        MenuItem menuItemHelp = new MenuItem(getProperty("abstract_calculator_scene.menu_item_help"));
+        Menu menuHelp = new Menu(getProperty("calculator_scene.menu_help"));
+        MenuItem menuItemHelp = new MenuItem(getProperty("calculator_scene.menu_item_help"));
         menuHelp.getItems().addAll(menuItemHelp);
         menuBar.getMenus().add(menuHelp);
     }
