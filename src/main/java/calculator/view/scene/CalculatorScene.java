@@ -3,6 +3,7 @@ package calculator.view.scene;
 import calculator.controller.ControllerListener;
 import calculator.model.CalculatorMode;
 import calculator.model.observer.CalculatorObserver;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -90,7 +91,11 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
 
     private void setupMenuFile() {
         Menu menuFile = new Menu(getProperty("abstract_calculator_scene.menu_file"));
+        MenuItem menuItemExit = new MenuItem(getProperty("abstract_calculator_scene.menu_exit"));
+        menuFile.getItems().addAll(menuItemExit);
         menuBar.getMenus().add(menuFile);
+
+        menuItemExit.setOnAction(event -> Platform.exit());
     }
 
     private void setupMenuEdit() {
