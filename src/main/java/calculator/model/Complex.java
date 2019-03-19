@@ -5,6 +5,9 @@ import java.util.Objects;
 
 public class Complex implements Number<Complex> {
     private static final int MAX_PRECISION = 100;
+    private static final int MAX_COMPARE_PRECISION = 90;
+    private static final BigDecimal EPS = BigDecimal.ONE
+            .divide(BigDecimal.TEN.pow(MAX_COMPARE_PRECISION), MAX_COMPARE_PRECISION, BigDecimal.ROUND_FLOOR);
     private BigDecimal real;
     private BigDecimal imaginary;
 
@@ -72,6 +75,7 @@ public class Complex implements Number<Complex> {
     }
 
     public BigDecimal square() {
+        System.out.println(this.real.multiply(this.real).subtract(this.imaginary.multiply(this.imaginary)));
         return this.real.multiply(this.real).subtract(this.imaginary.multiply(this.imaginary));
     }
 
@@ -104,8 +108,9 @@ public class Complex implements Number<Complex> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Complex complex = (Complex) o;
-        return real.equals(complex.real) &&
-                imaginary.equals(complex.imaginary);
+
+        return real.subtract(complex.real).abs().compareTo(EPS) < 0  &&
+                imaginary.subtract(complex.imaginary).abs().compareTo(EPS) < 0;
     }
 
     @Override
