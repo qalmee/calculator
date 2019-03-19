@@ -1,18 +1,30 @@
-plugins {
-    id 'java'
+buildscript {
+    dependencies {
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+
+    }
 }
 
-group 'stp'
-version '1.0-SNAPSHOT'
-
-sourceCompatibility = 1.8
+apply plugin: 'java'
 
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
+apply plugin: 'javafx-gradle-plugin'
+
 dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.4.0'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.4.0'
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 }
+
+group 'STP2'
+version '1.0'
+
+sourceCompatibility = 1.8
