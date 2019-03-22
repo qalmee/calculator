@@ -21,10 +21,10 @@ public class PNumberCalculatorScene extends CalculatorScene {
     private static final int SLIDER_MAJOR_TICK_UNIT = 1;
     private static final int SLIDER_MINOR_TICK_COUNT = 0;
 
-    private static final int SLIDER_WIDTH_SIZE = 490;
+    private static final int SLIDER_WIDTH_SIZE = 340;
 
-    private static final int LABEL_PADDING_LEFT = 10;
-    private static final int SLIDER_PADDING_TOP = 25;
+    private static final int LABEL_PADDING_TOP = 10;
+    private static final int SLIDER_PADDING_TOP = 20;
 
     private static final String FONT_FAMILY = "System";
 
@@ -53,13 +53,13 @@ public class PNumberCalculatorScene extends CalculatorScene {
 
     private void setupBottomPanel() {
         bottomPanel = new HBox();
-        bottomPanel.setAlignment(Pos.CENTER_LEFT);
+        bottomPanel.setAlignment(Pos.TOP_CENTER);
         this.addElementToMainPanel(bottomPanel);
     }
 
     private void setupLabelBase() {
         Label labelBase = new Label(getProperty("p-number_calculator_scene.label_base"));
-        labelBase.setPadding(new Insets(LABEL_PADDING_LEFT));
+        labelBase.setPadding(new Insets(LABEL_PADDING_TOP, 0, 0, 0));
         labelBase.setFont(LABEL_TEXT_FONT);
         bottomPanel.getChildren().add(labelBase);
     }

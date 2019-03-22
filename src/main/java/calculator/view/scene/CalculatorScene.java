@@ -27,17 +27,17 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
 
     private static final int MAIN_PANEL_PADDING_SIZE = 5;
 
-    private static final int BUTTON_WIDTH = 80;
-    private static final int BUTTON_HEIGHT = 50;
-    private static final int ROW_CONSTRAINS_HEIGHT = 60;
-    private static final int COLUMN_CONSTRAINS_WIDTH = 90;
+    private static final int BUTTON_WIDTH = 60;
+    private static final int BUTTON_HEIGHT = 30;
+    private static final int ROW_CONSTRAINS_HEIGHT = 40;
+    private static final int COLUMN_CONSTRAINS_WIDTH = 65;
 
     private static final String FONT_FAMILY = "System";
 
     private static final Font TEXT_FIELD_VALUE_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 30);
     private static final Font TEXT_FIELD_PREVIOUS_OPERATION_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 14);
-    private static final Font BUTTONS_FONT = Font.font(FONT_FAMILY, 20);
-    private static final Font DIGIT_BUTTONS_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 24);
+    private static final Font BUTTONS_FONT = Font.font(FONT_FAMILY, 15);
+    private static final Font BUTTONS_DIGIT_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 15);
 
     ControllerListener controllerListener;
     private CalculatorMode calculatorMode;
@@ -237,7 +237,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     }
 
     void configureDigitButton(Button button) {
-        button.setFont(DIGIT_BUTTONS_FONT);
+        button.setFont(BUTTONS_DIGIT_FONT);
     }
 
     void addElementToMainPanel(Node element) {
