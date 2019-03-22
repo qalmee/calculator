@@ -10,7 +10,7 @@ import javafx.scene.text.Font;
 
 import java.util.List;
 
-import static calculator.view.LanguageProperties.getProperty;
+import static calculator.view.localization.LanguageProperties.getProperty;
 
 public class PNumberCalculatorScene extends CalculatorScene {
 
@@ -21,7 +21,7 @@ public class PNumberCalculatorScene extends CalculatorScene {
     private static final int SLIDER_MAJOR_TICK_UNIT = 1;
     private static final int SLIDER_MINOR_TICK_COUNT = 0;
 
-    private static final int SLIDER_WIDTH_SIZE = 340;
+    private static final int SLIDER_WIDTH_SIZE = 270;
 
     private static final int LABEL_PADDING_TOP = 10;
     private static final int SLIDER_PADDING_TOP = 20;

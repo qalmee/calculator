@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import java.util.Arrays;
 import java.util.List;
 
-import static calculator.view.LanguageProperties.getProperty;
+import static calculator.view.localization.LanguageProperties.getProperty;
 
 public enum CalculatorButtons {
 

@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static calculator.view.LanguageProperties.getProperty;
+import static calculator.view.localization.LanguageProperties.getProperty;
 
 public abstract class CalculatorScene extends Scene implements CalculatorObserver {
 

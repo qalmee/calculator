@@ -3,7 +3,7 @@ package calculator.view.window;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import static calculator.view.LanguageProperties.getProperty;
+import static calculator.view.localization.LanguageProperties.getProperty;
 
 public class CalculatorWindow extends Stage {
 
