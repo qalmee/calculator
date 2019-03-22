@@ -2,7 +2,7 @@ package calculator.model.numbers;
 
 import java.math.BigDecimal;
 
-public interface Number<T extends Number> {
+public interface Number<T extends Number<T>> {
 
     int MAX_PRECISION = 100;
     int MAX_COMPARE_PRECISION = 90;

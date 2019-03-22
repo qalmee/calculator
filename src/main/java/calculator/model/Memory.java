@@ -2,23 +2,24 @@ package calculator.model;
 
 import calculator.model.numbers.Number;
 
-public class Memory {
+public class Memory <T extends Number<T>> {
+
     private static final Memory INSTANCE = new Memory();
-    private Number memoryValue;
+    private Number<T> memoryValue;
 
     private Memory() {
     }
 
-    public void MemoryClear() {
+    public void memoryClear() {
         memoryValue = null;
     }
 
     //this function may return null if memory was cleared or never used
-    public Number MemoryRead() {
+    public Number<T> memoryRead() {
         return memoryValue;
     }
 
-    public Number MemoryAdd(Number addend) {
+    public Number<T> memoryAdd(T addend) {
         if (memoryValue == null) {
             memoryValue = addend;
         } else {
@@ -27,7 +28,7 @@ public class Memory {
         return memoryValue;
     }
 
-    public void MemorySave(Number value) {
+    public void memorySave(Number<T> value) {
         memoryValue = value;
     }
 }
