@@ -111,7 +111,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         Menu menuMode = new Menu(getProperty("calculator_scene.menu_mode"));
         RadioMenuItem menuItemFraction = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_fraction"));
         RadioMenuItem menuItemComplex = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_complex"));
-        RadioMenuItem menuItemPNumber = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_p-number"));
+        RadioMenuItem menuItemPNumber = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_p-value"));
         menuMode.getItems().addAll(menuItemFraction, menuItemComplex, menuItemPNumber);
         menuBar.getMenus().add(menuMode);
 
