@@ -8,6 +8,9 @@ public class Fraction implements Number<Fraction> {
     private BigInteger denominator;
 
     public Fraction(BigInteger numerator, BigInteger denominator) {
+        if (numerator == null || denominator == null) {
+            throw new IllegalArgumentException("Arguments can not be null");
+        }
         this.numerator = numerator;
         this.denominator = denominator;
         if (denominator.equals(BigInteger.ZERO)) {
@@ -67,16 +70,8 @@ public class Fraction implements Number<Fraction> {
         return numerator;
     }
 
-    public void setNumerator(BigInteger numerator) {
-        this.numerator = numerator;
-    }
-
     public BigInteger getDenominator() {
         return denominator;
-    }
-
-    public void setDenominator(BigInteger denominator) {
-        this.denominator = denominator;
     }
 
     @Override
