@@ -35,14 +35,16 @@ public class PNumberCalculatorScene extends CalculatorScene {
 
     public PNumberCalculatorScene() {
         super(CalculatorMode.P_NUMBER);
+
+    }
+
+    @Override
+    public void initializeScene() {
+        super.initializeScene();
         setupPNumberButtons();
         setupBottomPanel();
         setupLabelBase();
         setupSliderBase();
-    }
-
-    @Override
-    public void onInitializationComplete() {
         updateDigitButtonsOnStart();
     }
 

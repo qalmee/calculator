@@ -25,7 +25,7 @@ public class Main extends Application {
 
         calculatorModel.setCalculatorObserver(calculatorScene);
 
-        calculatorScene.onInitializationComplete();
+        calculatorScene.initializeScene();
 
         calculatorWindow.setScene(calculatorScene);
         calculatorWindow.show();

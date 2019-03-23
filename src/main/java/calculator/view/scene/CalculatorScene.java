@@ -51,6 +51,9 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     CalculatorScene(CalculatorMode calculatorMode) {
         super(new VBox());
         this.calculatorMode = calculatorMode;
+    }
+
+    public void initializeScene() {
         setupMainPanel();
         setupMenu();
         setupTextFields();
@@ -69,8 +72,6 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
             button.setDisable(buttonsText.contains(buttonText));
         }
     }
-
-    public abstract void onInitializationComplete();
 
     public void setControllerListener(ControllerListener controllerListener) {
         this.controllerListener = controllerListener;
@@ -220,20 +221,26 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     }
 
     private void changeScene(CalculatorMode mode) {
-        Stage calculatorWindow = (Stage) this.getWindow();
         switch (mode) {
             case FRACTION:
-                calculatorWindow.setScene(new FractionCalculatorScene());
+                setupAndSetNewScene(new FractionCalculatorScene());
                 break;
             case COMPLEX:
-                calculatorWindow.setScene(new ComplexCalculatorScene());
+                setupAndSetNewScene(new ComplexCalculatorScene());
                 break;
             case P_NUMBER:
-                calculatorWindow.setScene(new PNumberCalculatorScene());
+                setupAndSetNewScene(new PNumberCalculatorScene());
                 break;
             default:
                 break;
         }
+    }
+
+    private void setupAndSetNewScene(CalculatorScene calculatorScene) {
+        Stage calculatorWindow = (Stage) this.getWindow();
+        calculatorScene.setControllerListener(controllerListener);
+        calculatorScene.initializeScene();
+        calculatorWindow.setScene(calculatorScene);
     }
 
     void configureDigitButton(Button button) {

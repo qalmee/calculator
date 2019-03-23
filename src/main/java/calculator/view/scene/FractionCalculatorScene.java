@@ -8,8 +8,4 @@ public class FractionCalculatorScene extends CalculatorScene {
         super(CalculatorMode.FRACTION);
     }
 
-    @Override
-    public void onInitializationComplete() {
-
-    }
 }

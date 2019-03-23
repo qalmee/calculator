@@ -8,8 +8,4 @@ public class ComplexCalculatorScene extends CalculatorScene {
         super(CalculatorMode.COMPLEX);
     }
 
-    @Override
-    public void onInitializationComplete() {
-
-    }
 }
