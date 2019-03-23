@@ -28,6 +28,9 @@ public class Main extends Application {
         calculatorScene.initializeScene();
 
         calculatorWindow.setScene(calculatorScene);
+
+        calculatorModel.readConfigInformation();
+
         calculatorWindow.show();
     }
 }

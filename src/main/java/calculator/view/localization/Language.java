@@ -5,15 +5,19 @@ import java.nio.charset.StandardCharsets;
 
 public enum Language {
 
-    ENGLISH("/lang/en_US.properties", StandardCharsets.UTF_8),
-    RUSSIAN("/lang/ru_RU.properties", StandardCharsets.UTF_8);
+    ENGLISH("/lang/en_US.properties", StandardCharsets.UTF_8,
+            LanguageProperties.getLanguageName("language.english")),
+    RUSSIAN("/lang/ru_RU.properties", StandardCharsets.UTF_8,
+            LanguageProperties.getLanguageName("language.russian"));
 
     private String localizationFile;
     private Charset charset;
+    private String languageName;
 
-    Language(String localizationFile, Charset charset) {
+    Language(String localizationFile, Charset charset, String languageName) {
         this.localizationFile = localizationFile;
         this.charset = charset;
+        this.languageName = languageName;
     }
 
     public String getLocalizationFile() {
@@ -22,5 +26,9 @@ public enum Language {
 
     public Charset getCharset() {
         return charset;
+    }
+
+    public String getLanguageName() {
+        return languageName;
     }
 }

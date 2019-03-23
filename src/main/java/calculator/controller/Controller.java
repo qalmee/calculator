@@ -1,6 +1,8 @@
 package calculator.controller;
 
+import calculator.model.CalculatorMode;
 import calculator.model.CalculatorModel;
+import calculator.view.localization.Language;
 
 public class Controller implements ControllerListener {
 
@@ -13,5 +15,15 @@ public class Controller implements ControllerListener {
     @Override
     public void updateDigitButtons(int base) {
         calculatorModel.updateDigitButtons(base);
+    }
+
+    @Override
+    public void updateLanguage(Language language) {
+        calculatorModel.setLanguageToConfig(language);
+    }
+
+    @Override
+    public void updateCalculatorMode(CalculatorMode calculatorMode) {
+        calculatorModel.setCalculatorModeToConfig(calculatorMode);
     }
 }

@@ -1,20 +1,26 @@
 package calculator.view.localization;
 
+import calculator.model.configuration.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class LanguageProperties {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LanguageProperties.class);
+    private static final String LANGUAGE_PROPERTIES_FILE = "/lang/languages.properties";
+    private static final Charset LANGUAGE_PROPERTIES_CHARSET = StandardCharsets.UTF_8;
     private static final Language DEFAULT_LANGUAGE = Language.ENGLISH;
 
     private static Properties defaultProperties;
     private static Properties properties;
+    private static Properties languages;
     private static Language language;
 
     private LanguageProperties() {
@@ -33,14 +39,31 @@ public class LanguageProperties {
         return value != null ? value : defaultProperties.getProperty(key);
     }
 
+    static synchronized String getLanguageName(String key) {
+        if (languages == null) {
+            initLanguagesPropertiesFile();
+        }
+        return languages.getProperty(key);
+    }
+
     private static void initProperties() {
         if (language == null) {
-            language = DEFAULT_LANGUAGE;
+            language = Config.getLanguage();
         }
         properties = new Properties();
         defaultProperties = new Properties();
         loadPropertiesFile(properties, language);
         loadPropertiesFile(defaultProperties, DEFAULT_LANGUAGE);
+    }
+
+    private static void initLanguagesPropertiesFile() {
+        languages = new Properties();
+        try (InputStream inputStream = LanguageProperties.class.getResourceAsStream(LANGUAGE_PROPERTIES_FILE);
+             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, LANGUAGE_PROPERTIES_CHARSET)) {
+            languages.load(inputStreamReader);
+        } catch (IOException e) {
+            LOGGER.error("Error loading language properties file " + LANGUAGE_PROPERTIES_FILE, e);
+        }
     }
 
     private static void loadPropertiesFile(Properties properties, Language language) {

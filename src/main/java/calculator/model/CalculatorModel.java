@@ -1,6 +1,8 @@
 package calculator.model;
 
+import calculator.model.configuration.Config;
 import calculator.model.observer.CalculatorObserver;
+import calculator.view.localization.Language;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,5 +23,17 @@ public class CalculatorModel {
             buttonsToUpdate.add(Integer.toString(i, 16).toUpperCase());
         }
         calculatorObserver.updateDigitButtons(buttonsToUpdate);
+    }
+
+    public void setLanguageToConfig(Language language) {
+        Config.setLanguage(language);
+    }
+
+    public void setCalculatorModeToConfig(CalculatorMode calculatorMode) {
+        Config.setCalculatorMode(calculatorMode);
+    }
+
+    public void readConfigInformation() {
+        calculatorObserver.updateCalculatorMode(Config.getCalculatorMode());
     }
 }

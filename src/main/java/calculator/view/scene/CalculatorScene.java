@@ -3,6 +3,7 @@ package calculator.view.scene;
 import calculator.controller.ControllerListener;
 import calculator.model.CalculatorMode;
 import calculator.model.observer.CalculatorObserver;
+import calculator.view.localization.Language;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -73,6 +74,11 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         }
     }
 
+    @Override
+    public void updateCalculatorMode(CalculatorMode calculatorMode) {
+        changeScene(calculatorMode);
+    }
+
     public void setControllerListener(ControllerListener controllerListener) {
         this.controllerListener = controllerListener;
     }
@@ -90,9 +96,26 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         setupMenuHelp();
     }
 
+    private Menu generateLanguageMenu() {
+        ToggleGroup languageToggleGroup = new ToggleGroup();
+        Menu languageMenu = new Menu(getProperty("calculator_scene.menu_language"));
+        for (Language language : Language.values()) {
+            RadioMenuItem languageMenuItem = new RadioMenuItem(language.getLanguageName());
+            languageMenuItem.setToggleGroup(languageToggleGroup);
+            languageMenu.getItems().add(languageMenuItem);
+
+            languageMenuItem.setOnAction(event -> changeLanguage(language));
+        }
+        return languageMenu;
+    }
+
     private void setupMenuFile() {
         Menu menuFile = new Menu(getProperty("calculator_scene.menu_file"));
+        Menu menuLanguage = generateLanguageMenu();
+        MenuItem separator = new SeparatorMenuItem();
         MenuItem menuItemExit = new MenuItem(getProperty("calculator_scene.menu_exit"));
+        menuFile.getItems().add(menuLanguage);
+        menuFile.getItems().add(separator);
         menuFile.getItems().addAll(menuItemExit);
         menuBar.getMenus().add(menuFile);
 
@@ -171,7 +194,6 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         addButtonsToGridPane();
     }
 
-
     private void addButtonsToGridPane() {
         int countRows = calculatorMode.getCountButtonsGridPaneColumns();
         int countColumns = calculatorMode.getCountButtonsGridPaneColumns();
@@ -220,19 +242,31 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         button.setFont(BUTTONS_FONT);
     }
 
+    private void changeLanguage(Language language) {
+        controllerListener.updateLanguage(language);
+        Alert needRestartAlert = new Alert(Alert.AlertType.INFORMATION);
+        needRestartAlert.setTitle(getProperty("calculator_scene.restart_alert_title"));
+        needRestartAlert.setHeaderText(null);
+        needRestartAlert.setContentText(getProperty("calculator_scene.restart_alert_message"));
+        needRestartAlert.showAndWait();
+    }
+
     private void changeScene(CalculatorMode mode) {
-        switch (mode) {
-            case FRACTION:
-                setupAndSetNewScene(new FractionCalculatorScene());
-                break;
-            case COMPLEX:
-                setupAndSetNewScene(new ComplexCalculatorScene());
-                break;
-            case P_NUMBER:
-                setupAndSetNewScene(new PNumberCalculatorScene());
-                break;
-            default:
-                break;
+        if (calculatorMode != mode) {
+            controllerListener.updateCalculatorMode(mode);
+            switch (mode) {
+                case FRACTION:
+                    setupAndSetNewScene(new FractionCalculatorScene());
+                    break;
+                case COMPLEX:
+                    setupAndSetNewScene(new ComplexCalculatorScene());
+                    break;
+                case P_NUMBER:
+                    setupAndSetNewScene(new PNumberCalculatorScene());
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
