@@ -36,4 +36,8 @@ public class CalculatorModel {
     public void readConfigInformation() {
         calculatorObserver.updateCalculatorMode(Config.getCalculatorMode());
     }
+
+    public void readLanguageFromConfig() {
+        calculatorObserver.updateLanguage(Config.getLanguage());
+    }
 }

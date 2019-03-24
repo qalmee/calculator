@@ -1,6 +1,5 @@
 package calculator.view.localization;
 
-import calculator.model.configuration.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,6 @@ public class LanguageProperties {
     private static final Logger LOGGER = LoggerFactory.getLogger(LanguageProperties.class);
     private static final String LANGUAGE_PROPERTIES_FILE = "/lang/languages.properties";
     private static final Charset LANGUAGE_PROPERTIES_CHARSET = StandardCharsets.UTF_8;
-    private static final Language DEFAULT_LANGUAGE = Language.ENGLISH;
 
     private static Properties defaultProperties;
     private static Properties properties;
@@ -24,7 +22,6 @@ public class LanguageProperties {
     private static Language language;
 
     private LanguageProperties() {
-
     }
 
     public static void setLanguage(Language language) {
@@ -48,12 +45,12 @@ public class LanguageProperties {
 
     private static void initProperties() {
         if (language == null) {
-            language = Config.getLanguage();
+            language = Language.DEFAULT_LANGUAGE;
         }
         properties = new Properties();
         defaultProperties = new Properties();
         loadPropertiesFile(properties, language);
-        loadPropertiesFile(defaultProperties, DEFAULT_LANGUAGE);
+        loadPropertiesFile(defaultProperties, Language.DEFAULT_LANGUAGE);
     }
 
     private static void initLanguagesPropertiesFile() {

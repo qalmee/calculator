@@ -10,6 +10,8 @@ public enum Language {
     RUSSIAN("/lang/ru_RU.properties", StandardCharsets.UTF_8,
             LanguageProperties.getLanguageName("language.russian"));
 
+    static final Language DEFAULT_LANGUAGE = Language.ENGLISH;
+
     private String localizationFile;
     private Charset charset;
     private String languageName;

@@ -4,6 +4,7 @@ import calculator.controller.ControllerListener;
 import calculator.model.CalculatorMode;
 import calculator.model.observer.CalculatorObserver;
 import calculator.view.localization.Language;
+import calculator.view.localization.LanguageProperties;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -77,6 +78,11 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     @Override
     public void updateCalculatorMode(CalculatorMode calculatorMode) {
         changeScene(calculatorMode);
+    }
+
+    @Override
+    public void updateLanguage(Language language) {
+        LanguageProperties.setLanguage(language);
     }
 
     public void setControllerListener(ControllerListener controllerListener) {
