@@ -177,6 +177,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         textFieldValue.setText("555");
         textFieldValue.setStyle("-fx-display-caret: false");
         textFieldValue.setCursor(Cursor.DEFAULT);
+        textFieldValue.setEditable(false);
 
         textFieldPreviousOperation = new TextField();
         textFieldPreviousOperation.setFont(TEXT_FIELD_PREVIOUS_OPERATION_FONT);
@@ -185,6 +186,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         textFieldPreviousOperation.setText("500+55 =");
         textFieldPreviousOperation.setStyle("-fx-display-caret: false");
         textFieldPreviousOperation.setCursor(Cursor.DEFAULT);
+        textFieldPreviousOperation.setEditable(false);
 
         mainPanel.getChildren().addAll(textFieldPreviousOperation, textFieldValue);
     }
