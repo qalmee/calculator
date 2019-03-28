@@ -96,12 +96,12 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
 
     @Override
     public void setResult(String result) {
-
+        textFieldValue.setText(result);
     }
 
     @Override
     public void setPreviousOperationText(String text) {
-
+        textFieldPreviousOperation.setText(text);
     }
 
     public void setControllerListener(ControllerListener controllerListener) {
