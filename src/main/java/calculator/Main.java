@@ -16,7 +16,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Stage calculatorWindow = new CalculatorWindow();
+
         CalculatorModel calculatorModel = new CalculatorModel();
         Controller controller = new Controller(calculatorModel);
 
@@ -24,11 +24,12 @@ public class Main extends Application {
         calculatorScene.setControllerListener(controller);
 
         calculatorModel.setCalculatorObserver(calculatorScene);
+        calculatorModel.readLanguageFromConfig();
 
         calculatorScene.initializeScene();
 
+        Stage calculatorWindow = new CalculatorWindow();
         calculatorWindow.setScene(calculatorScene);
-
         calculatorModel.readConfigInformation();
 
         calculatorWindow.show();

@@ -4,7 +4,10 @@ import calculator.controller.ControllerListener;
 import calculator.model.CalculatorMode;
 import calculator.model.observer.CalculatorObserver;
 import calculator.view.localization.Language;
+import calculator.view.localization.LanguageProperties;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
+import javafx.collections.ObservableMap;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,10 +15,13 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +46,8 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     private static final Font BUTTONS_FONT = Font.font(FONT_FAMILY, 15);
     private static final Font BUTTONS_DIGIT_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 15);
 
+    private static final Duration BUTTON_CLICK_EFFECT_DURATION = Duration.seconds(0.1);
+
     ControllerListener controllerListener;
     private CalculatorMode calculatorMode;
 
@@ -60,6 +68,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         setupTextFields();
         setupButtonsGridPane();
         setupButtons();
+        setupHotKeys();
     }
 
     @Override
@@ -77,6 +86,11 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     @Override
     public void updateCalculatorMode(CalculatorMode calculatorMode) {
         changeScene(calculatorMode);
+    }
+
+    @Override
+    public void updateLanguage(Language language) {
+        LanguageProperties.setLanguage(language);
     }
 
     public void setControllerListener(ControllerListener controllerListener) {
@@ -163,6 +177,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         textFieldValue.setText("555");
         textFieldValue.setStyle("-fx-display-caret: false");
         textFieldValue.setCursor(Cursor.DEFAULT);
+        textFieldValue.setEditable(false);
 
         textFieldPreviousOperation = new TextField();
         textFieldPreviousOperation.setFont(TEXT_FIELD_PREVIOUS_OPERATION_FONT);
@@ -171,6 +186,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         textFieldPreviousOperation.setText("500+55 =");
         textFieldPreviousOperation.setStyle("-fx-display-caret: false");
         textFieldPreviousOperation.setCursor(Cursor.DEFAULT);
+        textFieldPreviousOperation.setEditable(false);
 
         mainPanel.getChildren().addAll(textFieldPreviousOperation, textFieldValue);
     }
@@ -192,6 +208,31 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         List<CalculatorButtons> digitButtons = CalculatorButtons.getDigitButtons();
         digitButtons.forEach(button -> configureDigitButton(button.getButton()));
         addButtonsToGridPane();
+    }
+
+    private void setupHotKeys() {
+        ObservableMap<KeyCombination, Runnable> accelerators = this.getAccelerators();
+        CalculatorButtons[] buttons = CalculatorButtons.values();
+        Arrays.stream(buttons)
+                .filter(button -> button.getKeyCode() != null)
+                .forEach(button -> {
+                    KeyCombination keyCombination = new KeyCodeCombination(button.getKeyCode());
+                    Runnable runnable = () -> setMouseClickEffectAndRunAction(button.getButton());
+                    accelerators.put(keyCombination, runnable);
+                });
+    }
+
+    private void setMouseClickEffectAndRunAction(Button button) {
+        if (button.isDisabled()) {
+            return;
+        }
+        button.arm();
+        PauseTransition pause = new PauseTransition(BUTTON_CLICK_EFFECT_DURATION);
+        pause.setOnFinished(e -> {
+            button.disarm();
+            button.fire();
+        });
+        pause.play();
     }
 
     private void addButtonsToGridPane() {
