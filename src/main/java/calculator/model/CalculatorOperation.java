@@ -5,7 +5,11 @@ public enum CalculatorOperation {
     ADD("ADD"),
     SUBSTRACT("SUBSTRACT"),
     MULTIPLY("MULTIPLY"),
-    DIVIDE("DIVIDE");
+    DIVIDE("DIVIDE"),
+    REVERSE("REVERSE"),
+    NEGATE("NEGATE"),
+    SQUARE("SQUARE");
+
     //todo: continue list
 
 

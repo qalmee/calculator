@@ -20,4 +20,6 @@ public interface Number<T extends Number<T>> {
     T reverse();
 
     T negate();
+
+    T square();
 }

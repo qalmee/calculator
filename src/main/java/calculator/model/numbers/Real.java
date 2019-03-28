@@ -36,12 +36,17 @@ public class Real implements Number<Real> {
 
     @Override
     public Real reverse() {
-        return new Real(this.value.pow(-1));
+        return new Real(BigDecimal.ONE.divide(this.value, MAX_PRECISION, BigDecimal.ROUND_FLOOR));
     }
 
     @Override
     public Real negate() {
         return new Real(this.value.multiply(BigDecimal.ONE.negate()));
+    }
+
+    @Override
+    public Real square() {
+        return null;
     }
 
     @Override

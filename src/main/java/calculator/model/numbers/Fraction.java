@@ -61,6 +61,11 @@ public class Fraction implements Number<Fraction> {
         return new Fraction(this.numerator.negate(), this.denominator);
     }
 
+    @Override
+    public Fraction square() {
+        return null;
+    }
+
     public Fraction simplify() {
         BigInteger gcd = this.numerator.gcd(this.denominator);
         return new Fraction(this.numerator.divide(gcd), this.denominator.divide(gcd));

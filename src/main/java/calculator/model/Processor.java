@@ -17,25 +17,40 @@ public class Processor {
     }
 
     public void reset() {
-
+        resetLeftOperand();
+        resetRightOperand();
+        resetOperation();
     }
 
-    public void resetOperation(){
+    public void resetOperation() {
         operation = null;
     }
 
-    public void resetLeftOperand(){
+    public void resetLeftOperand() {
         leftResultOperand = null;
     }
 
-    public void resetRightOperand(){
+    public void resetRightOperand() {
         rightOperand = null;
     }
 
     public void operationRun() {
-        switch (operation){
+        switch (operation) {
             case ADD:
-                
+                break;
+            case SUBSTRACT:
+                break;
+            case MULTIPLY:
+                break;
+            case DIVIDE:
+                break;
+            case NEGATE:
+                break;
+            case REVERSE:
+                break;
+            default:
+                //throw
+
         }
 
     }
