@@ -2,6 +2,7 @@ package calculator.controller;
 
 import calculator.model.CalculatorMode;
 import calculator.model.CalculatorModel;
+import calculator.model.CalculatorOperation;
 import calculator.view.localization.Language;
 
 public class Controller implements ControllerListener {
@@ -25,5 +26,15 @@ public class Controller implements ControllerListener {
     @Override
     public void updateCalculatorMode(CalculatorMode calculatorMode) {
         calculatorModel.setCalculatorModeToConfig(calculatorMode);
+    }
+
+    @Override
+    public void actionButtonClicked(String number, CalculatorOperation operation, CalculatorMode mode) {
+
+    }
+
+    @Override
+    public void buttonEnterClicked(String number, CalculatorMode mode) {
+
     }
 }
