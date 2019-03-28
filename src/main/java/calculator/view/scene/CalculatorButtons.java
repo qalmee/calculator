@@ -1,11 +1,14 @@
 package calculator.view.scene;
 
 import calculator.model.CalculatorMode;
+import calculator.model.CalculatorOperation;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static calculator.view.localization.LanguageProperties.getProperty;
 
@@ -99,6 +102,14 @@ public enum CalculatorButtons {
             new Button(getProperty("complex_calculator_scene.buttonI")), KeyCode.I);
 
 
+    private static Map<Button, CalculatorOperation> actionButtons;
+
+    static {
+        actionButtons = new HashMap<>();
+        actionButtons.put(BUTTON_PLUS.getButton(), CalculatorOperation.ADD);
+
+    }
+
     private int rowInGridPane;
     private int columnInGridPane;
     private Button button;
@@ -123,6 +134,15 @@ public enum CalculatorButtons {
     public static List<CalculatorButtons> getPNumberDigitButtons() {
         return Arrays.asList(BUTTON_DIGIT_A, BUTTON_DIGIT_B, BUTTON_DIGIT_C,
                 BUTTON_DIGIT_D, BUTTON_DIGIT_E, BUTTON_DIGIT_F);
+    }
+
+    public static List<CalculatorButtons> getActionButtons() {
+        return Arrays.asList(BUTTON_PLUS, BUTTON_MINUS, BUTTON_MULTIPLY,
+                BUTTON_DIVIDE, BUTTON_PLUS_MINUS, BUTTON_REVERSE, BUTTON_SQUARE);
+    }
+
+    public static CalculatorOperation getCalculatorOperationFromButton(Button button) {
+        return actionButtons.get(button);
     }
 
     public int getRowInGridPane() {

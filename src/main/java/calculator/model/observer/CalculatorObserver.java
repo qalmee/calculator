@@ -12,4 +12,8 @@ public interface CalculatorObserver {
     void updateCalculatorMode(CalculatorMode calculatorMode);
 
     void updateLanguage(Language language);
+
+    void setResult(String result);
+
+    void setPreviousOperationText(String text);
 }

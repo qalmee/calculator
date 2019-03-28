@@ -2,6 +2,7 @@ package calculator.view.scene;
 
 import calculator.controller.ControllerListener;
 import calculator.model.CalculatorMode;
+import calculator.model.CalculatorOperation;
 import calculator.model.observer.CalculatorObserver;
 import calculator.view.localization.Language;
 import calculator.view.localization.LanguageProperties;
@@ -93,6 +94,16 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         LanguageProperties.setLanguage(language);
     }
 
+    @Override
+    public void setResult(String result) {
+
+    }
+
+    @Override
+    public void setPreviousOperationText(String text) {
+
+    }
+
     public void setControllerListener(ControllerListener controllerListener) {
         this.controllerListener = controllerListener;
     }
@@ -172,23 +183,21 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     private void setupTextFields() {
         textFieldValue = new TextField();
         textFieldValue.setFont(TEXT_FIELD_VALUE_FONT);
-        textFieldValue.setAlignment(Pos.BASELINE_RIGHT);
-        textFieldValue.setBackground(Background.EMPTY);
-        textFieldValue.setText("555");
-        textFieldValue.setStyle("-fx-display-caret: false");
-        textFieldValue.setCursor(Cursor.DEFAULT);
-        textFieldValue.setEditable(false);
+        setupTextFieldStyle(textFieldValue);
 
         textFieldPreviousOperation = new TextField();
         textFieldPreviousOperation.setFont(TEXT_FIELD_PREVIOUS_OPERATION_FONT);
-        textFieldPreviousOperation.setAlignment(Pos.BASELINE_RIGHT);
-        textFieldPreviousOperation.setBackground(Background.EMPTY);
-        textFieldPreviousOperation.setText("500+55 =");
-        textFieldPreviousOperation.setStyle("-fx-display-caret: false");
-        textFieldPreviousOperation.setCursor(Cursor.DEFAULT);
-        textFieldPreviousOperation.setEditable(false);
+        setupTextFieldStyle(textFieldPreviousOperation);
 
         mainPanel.getChildren().addAll(textFieldPreviousOperation, textFieldValue);
+    }
+
+    private void setupTextFieldStyle(TextField textField) {
+        textField.setAlignment(Pos.BASELINE_RIGHT);
+        textField.setBackground(Background.EMPTY);
+        textField.setStyle("-fx-display-caret: false");
+        textField.setCursor(Cursor.DEFAULT);
+        textField.setEditable(false);
     }
 
     private void setupButtonsGridPane() {
@@ -208,6 +217,10 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         List<CalculatorButtons> digitButtons = CalculatorButtons.getDigitButtons();
         digitButtons.forEach(button -> configureDigitButton(button.getButton()));
         addButtonsToGridPane();
+
+        setupClearButtons();
+        setupActionButtons();
+        setupEnterButton();
     }
 
     private void setupHotKeys() {
@@ -233,6 +246,45 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
             button.fire();
         });
         pause.play();
+    }
+
+    private void setupClearButtons() {
+        Button buttonGlobalClear = CalculatorButtons.BUTTON_GLOBAL_CLEAR.getButton();
+        Button buttonClearEntry = CalculatorButtons.BUTTON_CLEAR_ENTRY.getButton();
+        Button buttonBackSpace = CalculatorButtons.BUTTON_BACKSPACE.getButton();
+
+        buttonGlobalClear.setOnAction(event -> clearTextFields());
+        buttonClearEntry.setOnAction(event -> clearTextFields());
+
+        buttonBackSpace.setOnAction(event -> {
+            String textInTextField = textFieldValue.getText();
+            if (!textInTextField.isEmpty()) {
+                textFieldValue.setText(textInTextField.substring(0, textInTextField.length() - 1));
+            }
+        });
+    }
+
+    private void setupActionButtons() {
+        List<CalculatorButtons> actionButtons = CalculatorButtons.getActionButtons();
+        actionButtons.forEach(calculatorButton -> {
+            Button button = calculatorButton.getButton();
+            button.setOnAction(event -> {
+                String number = textFieldValue.getText();
+                CalculatorOperation calculatorOperation = CalculatorButtons.getCalculatorOperationFromButton(button);
+                controllerListener.actionButtonClicked(number, calculatorOperation, calculatorMode);
+            });
+        });
+    }
+
+    private void setupEnterButton() {
+        String number = textFieldValue.getText();
+        Button enterButton = CalculatorButtons.BUTTON_ENTER.getButton();
+        enterButton.setOnAction(event -> controllerListener.buttonEnterClicked(number, calculatorMode));
+    }
+
+    private void clearTextFields() {
+        textFieldValue.clear();
+        textFieldPreviousOperation.clear();
     }
 
     private void addButtonsToGridPane() {
@@ -320,6 +372,10 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
 
     void configureDigitButton(Button button) {
         button.setFont(BUTTONS_DIGIT_FONT);
+        button.setOnAction(event -> {
+            String digitText = button.getText();
+            textFieldValue.setText(textFieldValue.getText() + digitText);
+        });
     }
 
     void addElementToMainPanel(Node element) {
