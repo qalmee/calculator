@@ -27,6 +27,7 @@ public class PNumberCalculatorScene extends CalculatorScene {
     private static final int SLIDER_PADDING_TOP = 20;
 
     private static final String FONT_FAMILY = "System";
+    private static final String DEFAULT_VALUE = "0";
 
     private static final Font LABEL_TEXT_FONT = Font.font(FONT_FAMILY, 20);
 
@@ -46,8 +47,9 @@ public class PNumberCalculatorScene extends CalculatorScene {
         setupLabelBase();
         setupSliderBase();
         updateDigitButtonsOnStart();
+        setDefaultValue(DEFAULT_VALUE);
     }
-
+    
     private void setupPNumberButtons() {
         List<CalculatorButtons> pNumberDigitButtons = CalculatorButtons.getPNumberDigitButtons();
         pNumberDigitButtons.forEach(button -> configureDigitButton(button.getButton()));

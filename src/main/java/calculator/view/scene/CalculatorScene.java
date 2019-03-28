@@ -381,4 +381,8 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     void addElementToMainPanel(Node element) {
         mainPanel.getChildren().add(element);
     }
+
+    void setDefaultValue(String value) {
+        textFieldValue.setText(value);
+    }
 }
