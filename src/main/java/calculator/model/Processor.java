@@ -16,12 +16,28 @@ public class Processor {
 
     }
 
-    void Reset() {
+    public void reset() {
 
     }
 
+    public void resetOperation(){
+        operation = null;
+    }
+
+    public void resetLeftOperand(){
+        leftResultOperand = null;
+    }
+
+    public void resetRightOperand(){
+        rightOperand = null;
+    }
+
     public void operationRun() {
-        //todo
+        switch (operation){
+            case ADD:
+                
+        }
+
     }
 
     public CalculatorMode getCalculatorMode() {
