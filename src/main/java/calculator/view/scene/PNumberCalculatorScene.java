@@ -1,6 +1,7 @@
 package calculator.view.scene;
 
 import calculator.model.CalculatorMode;
+import calculator.view.scene.components.CalculatorButtons;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -36,7 +37,6 @@ public class PNumberCalculatorScene extends CalculatorScene {
 
     public PNumberCalculatorScene() {
         super(CalculatorMode.P_NUMBER);
-
     }
 
     @Override
@@ -49,7 +49,7 @@ public class PNumberCalculatorScene extends CalculatorScene {
         updateDigitButtonsOnStart();
         setDefaultValue(DEFAULT_VALUE);
     }
-    
+
     private void setupPNumberButtons() {
         List<CalculatorButtons> pNumberDigitButtons = CalculatorButtons.getPNumberDigitButtons();
         pNumberDigitButtons.forEach(button -> configureDigitButton(button.getButton()));

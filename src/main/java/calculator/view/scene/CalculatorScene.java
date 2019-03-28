@@ -6,8 +6,9 @@ import calculator.model.CalculatorOperation;
 import calculator.model.observer.CalculatorObserver;
 import calculator.view.localization.Language;
 import calculator.view.localization.LanguageProperties;
+import calculator.view.scene.components.CalculatorButtons;
+import calculator.view.scene.components.CalculatorMenu;
 import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.collections.ObservableMap;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -15,21 +16,22 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static calculator.view.localization.LanguageProperties.getProperty;
 
 public abstract class CalculatorScene extends Scene implements CalculatorObserver {
 
@@ -49,18 +51,23 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
 
     private static final Duration BUTTON_CLICK_EFFECT_DURATION = Duration.seconds(0.1);
 
+    private static Window window;
+
     ControllerListener controllerListener;
     private CalculatorMode calculatorMode;
 
     private VBox mainPanel;
     private GridPane buttonsGridPane;
-    private MenuBar menuBar;
     private TextField textFieldValue;
     private TextField textFieldPreviousOperation;
 
     CalculatorScene(CalculatorMode calculatorMode) {
         super(new VBox());
         this.calculatorMode = calculatorMode;
+    }
+
+    public static void setWindow(Window window) {
+        CalculatorScene.window = window;
     }
 
     public void initializeScene() {
@@ -113,71 +120,8 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     }
 
     private void setupMenu() {
-        menuBar = new MenuBar();
-        mainPanel.getChildren().add(menuBar);
-        setupMenuFile();
-        setupMenuEdit();
-        setupModeMenu();
-        setupMenuHelp();
-    }
-
-    private Menu generateLanguageMenu() {
-        ToggleGroup languageToggleGroup = new ToggleGroup();
-        Menu languageMenu = new Menu(getProperty("calculator_scene.menu_language"));
-        for (Language language : Language.values()) {
-            RadioMenuItem languageMenuItem = new RadioMenuItem(language.getLanguageName());
-            languageMenuItem.setToggleGroup(languageToggleGroup);
-            languageMenu.getItems().add(languageMenuItem);
-
-            languageMenuItem.setOnAction(event -> changeLanguage(language));
-        }
-        return languageMenu;
-    }
-
-    private void setupMenuFile() {
-        Menu menuFile = new Menu(getProperty("calculator_scene.menu_file"));
-        Menu menuLanguage = generateLanguageMenu();
-        MenuItem separator = new SeparatorMenuItem();
-        MenuItem menuItemExit = new MenuItem(getProperty("calculator_scene.menu_exit"));
-        menuFile.getItems().add(menuLanguage);
-        menuFile.getItems().add(separator);
-        menuFile.getItems().addAll(menuItemExit);
-        menuBar.getMenus().add(menuFile);
-
-        menuItemExit.setOnAction(event -> Platform.exit());
-    }
-
-    private void setupMenuEdit() {
-        Menu menuEdit = new Menu(getProperty("calculator_scene.menu_edit"));
-        MenuItem menuItemCopy = new MenuItem(getProperty("calculator_scene.menu_item_copy"));
-        MenuItem menuItemPaste = new MenuItem(getProperty("calculator_scene.menu_item_paste"));
-        menuEdit.getItems().addAll(menuItemCopy, menuItemPaste);
-        menuBar.getMenus().add(menuEdit);
-    }
-
-    private void setupModeMenu() {
-        ToggleGroup modeToggleGroup = new ToggleGroup();
-        Menu menuMode = new Menu(getProperty("calculator_scene.menu_mode"));
-        RadioMenuItem menuItemFraction = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_fraction"));
-        RadioMenuItem menuItemComplex = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_complex"));
-        RadioMenuItem menuItemPNumber = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_p-value"));
-        menuMode.getItems().addAll(menuItemFraction, menuItemComplex, menuItemPNumber);
-        menuBar.getMenus().add(menuMode);
-
-        menuItemFraction.setToggleGroup(modeToggleGroup);
-        menuItemComplex.setToggleGroup(modeToggleGroup);
-        menuItemPNumber.setToggleGroup(modeToggleGroup);
-
-        menuItemFraction.setOnAction(event -> changeScene(CalculatorMode.FRACTION));
-        menuItemComplex.setOnAction(event -> changeScene(CalculatorMode.COMPLEX));
-        menuItemPNumber.setOnAction(event -> changeScene(CalculatorMode.P_NUMBER));
-    }
-
-    private void setupMenuHelp() {
-        Menu menuHelp = new Menu(getProperty("calculator_scene.menu_help"));
-        MenuItem menuItemHelp = new MenuItem(getProperty("calculator_scene.menu_item_help"));
-        menuHelp.getItems().addAll(menuItemHelp);
-        menuBar.getMenus().add(menuHelp);
+        MenuBar calculatorMenu = new CalculatorMenu(controllerListener);
+        mainPanel.getChildren().add(calculatorMenu);
     }
 
     private void setupTextFields() {
@@ -335,18 +279,10 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         button.setFont(BUTTONS_FONT);
     }
 
-    private void changeLanguage(Language language) {
-        controllerListener.updateLanguage(language);
-        Alert needRestartAlert = new Alert(Alert.AlertType.INFORMATION);
-        needRestartAlert.setTitle(getProperty("calculator_scene.restart_alert_title"));
-        needRestartAlert.setHeaderText(null);
-        needRestartAlert.setContentText(getProperty("calculator_scene.restart_alert_message"));
-        needRestartAlert.showAndWait();
-    }
 
     private void changeScene(CalculatorMode mode) {
         if (calculatorMode != mode) {
-            controllerListener.updateCalculatorMode(mode);
+            this.calculatorMode = mode;
             switch (mode) {
                 case FRACTION:
                     setupAndSetNewScene(new FractionCalculatorScene());
@@ -364,7 +300,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     }
 
     private void setupAndSetNewScene(CalculatorScene calculatorScene) {
-        Stage calculatorWindow = (Stage) this.getWindow();
+        Stage calculatorWindow = (Stage) window;
         calculatorScene.setControllerListener(controllerListener);
         calculatorScene.initializeScene();
         calculatorWindow.setScene(calculatorScene);

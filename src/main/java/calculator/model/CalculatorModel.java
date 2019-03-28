@@ -31,6 +31,7 @@ public class CalculatorModel {
 
     public void setCalculatorModeToConfig(CalculatorMode calculatorMode) {
         Config.setCalculatorMode(calculatorMode);
+        calculatorObserver.updateCalculatorMode(calculatorMode);
     }
 
     public void readConfigInformation() {

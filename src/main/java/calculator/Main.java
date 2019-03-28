@@ -29,7 +29,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
         CalculatorModel calculatorModel = new CalculatorModel();
         Controller controller = new Controller(calculatorModel);
 
@@ -42,6 +41,8 @@ public class Main extends Application {
         calculatorScene.initializeScene();
 
         Stage calculatorWindow = new CalculatorWindow();
+        CalculatorScene.setWindow(calculatorWindow);
+
         calculatorWindow.setScene(calculatorScene);
         calculatorModel.readConfigInformation();
 

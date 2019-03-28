@@ -1,4 +1,4 @@
-package calculator.view.scene;
+package calculator.view.scene.components;
 
 import calculator.model.CalculatorMode;
 import calculator.model.CalculatorOperation;
