@@ -3,6 +3,7 @@ package calculator.view.scene.components;
 import calculator.controller.ControllerListener;
 import calculator.model.CalculatorMode;
 import calculator.view.localization.Language;
+import calculator.view.localization.LanguageProperties;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 
@@ -11,9 +12,11 @@ import static calculator.view.localization.LanguageProperties.getProperty;
 public class CalculatorMenu extends MenuBar {
 
     private ControllerListener controllerListener;
+    private CalculatorMode calculatorMode;
 
-    public CalculatorMenu(ControllerListener controllerListener) {
+    public CalculatorMenu(ControllerListener controllerListener, CalculatorMode calculatorMode) {
         this.controllerListener = controllerListener;
+        this.calculatorMode = calculatorMode;
         setupMenu();
     }
 
@@ -31,6 +34,9 @@ public class CalculatorMenu extends MenuBar {
             RadioMenuItem languageMenuItem = new RadioMenuItem(language.getLanguageName());
             languageMenuItem.setToggleGroup(languageToggleGroup);
             languageMenu.getItems().add(languageMenuItem);
+            if (LanguageProperties.getLanguage() == language) {
+                languageMenuItem.setSelected(true);
+            }
 
             languageMenuItem.setOnAction(event -> changeLanguage(language));
         }
@@ -74,6 +80,20 @@ public class CalculatorMenu extends MenuBar {
         menuItemFraction.setOnAction(event -> controllerListener.updateCalculatorMode(CalculatorMode.FRACTION));
         menuItemComplex.setOnAction(event -> controllerListener.updateCalculatorMode(CalculatorMode.COMPLEX));
         menuItemPNumber.setOnAction(event -> controllerListener.updateCalculatorMode(CalculatorMode.P_NUMBER));
+
+        switch (calculatorMode) {
+            case FRACTION:
+                menuItemFraction.setSelected(true);
+                break;
+            case COMPLEX:
+                menuItemComplex.setSelected(true);
+                break;
+            case P_NUMBER:
+                menuItemPNumber.setSelected(true);
+                break;
+            default:
+                break;
+        }
     }
 
     private void setupMenuHelp() {
