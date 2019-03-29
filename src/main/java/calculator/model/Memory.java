@@ -4,7 +4,7 @@ import calculator.model.numbers.Number;
 
 public class Memory <T extends Number<T>> {
 
-    private static final Memory INSTANCE = new Memory();
+    public static final Memory INSTANCE = new Memory();
     private Number<T> memoryValue;
 
     private Memory() {

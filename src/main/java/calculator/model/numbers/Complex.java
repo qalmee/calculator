@@ -1,6 +1,6 @@
 package calculator.model.numbers;
 
-import calculator.model.Utils.MathUtils;
+import calculator.model.utils.MathUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -48,7 +48,7 @@ public class Complex implements Number<Complex> {
 
     @Override
     public Complex square() {
-        return null;
+        return this.multiply(this);
     }
 
     public Complex scale(BigDecimal b) {
@@ -76,7 +76,6 @@ public class Complex implements Number<Complex> {
     public Complex negate() {
         return new Complex(this.real.negate(), this.imaginary.negate());
     }
-
 
     public Complex conjugate() {
         return new Complex(this.real, this.imaginary.negate());
