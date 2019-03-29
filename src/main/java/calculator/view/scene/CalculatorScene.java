@@ -150,6 +150,8 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         textField.setStyle("-fx-display-caret: false");
         textField.setCursor(Cursor.DEFAULT);
         textField.setEditable(false);
+        textField.setMouseTransparent(true);
+        textField.setFocusTraversable(false);
     }
 
     private void setupButtonsGridPane() {
