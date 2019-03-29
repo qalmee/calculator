@@ -37,4 +37,14 @@ public class Controller implements ControllerListener {
     public void buttonEnterClicked(String number, CalculatorMode mode) {
 
     }
+
+    @Override
+    public void buttonCopyClicked() {
+        calculatorModel.copyValueToClipboard();
+    }
+
+    @Override
+    public void buttonPasteClicked() {
+        calculatorModel.pasteValueFromClipboard();
+    }
 }

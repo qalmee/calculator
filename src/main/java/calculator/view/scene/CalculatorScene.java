@@ -19,6 +19,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
@@ -58,6 +60,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
 
     private boolean needClearResult;
 
+    private Clipboard clipboard;
     private VBox mainPanel;
     private GridPane buttonsGridPane;
     private TextField textFieldValue;
@@ -79,6 +82,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         setupButtonsGridPane();
         setupButtons();
         setupHotKeys();
+        setupClipboard();
         setStartValue();
     }
 
@@ -117,6 +121,19 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     @Override
     public void clearResultAfterEnteringDigit() {
         needClearResult = true;
+    }
+
+    @Override
+    public void copyValueToClipboard() {
+        ClipboardContent clipboardContent = new ClipboardContent();
+        clipboardContent.putString(textFieldValue.getText());
+        clipboard.setContent(clipboardContent);
+    }
+
+    @Override
+    public void pasteValueFromClipboard() {
+        String value = clipboard.getString();
+        textFieldValue.setText(value);
     }
 
     public void setControllerListener(ControllerListener controllerListener) {
@@ -200,6 +217,10 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
             button.fire();
         });
         pause.play();
+    }
+
+    private void setupClipboard() {
+        clipboard = Clipboard.getSystemClipboard();
     }
 
     private void setupClearButtons() {

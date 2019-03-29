@@ -41,4 +41,12 @@ public class CalculatorModel {
     public void readLanguageFromConfig() {
         calculatorObserver.updateLanguage(Config.getLanguage());
     }
+
+    public void copyValueToClipboard() {
+        calculatorObserver.copyValueToClipboard();
+    }
+
+    public void pasteValueFromClipboard() {
+        calculatorObserver.pasteValueFromClipboard();
+    }
 }

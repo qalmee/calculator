@@ -18,4 +18,8 @@ public interface CalculatorObserver {
     void setPreviousOperationText(String text);
 
     void clearResultAfterEnteringDigit();
+
+    void copyValueToClipboard();
+
+    void pasteValueFromClipboard();
 }

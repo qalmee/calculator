@@ -6,6 +6,9 @@ import calculator.view.localization.Language;
 import calculator.view.localization.LanguageProperties;
 import javafx.application.Platform;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 
 import static calculator.view.localization.LanguageProperties.getProperty;
 
@@ -53,6 +56,7 @@ public class CalculatorMenu extends MenuBar {
         menuFile.getItems().addAll(menuItemExit);
         this.getMenus().add(menuFile);
 
+        menuItemExit.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
         menuItemExit.setOnAction(event -> Platform.exit());
     }
 
@@ -62,6 +66,11 @@ public class CalculatorMenu extends MenuBar {
         MenuItem menuItemPaste = new MenuItem(getProperty("calculator_scene.menu_item_paste"));
         menuEdit.getItems().addAll(menuItemCopy, menuItemPaste);
         this.getMenus().add(menuEdit);
+
+        menuItemCopy.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN));
+        menuItemPaste.setAccelerator(new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN));
+        menuItemCopy.setOnAction(event -> controllerListener.buttonCopyClicked());
+        menuItemPaste.setOnAction(event -> controllerListener.buttonPasteClicked());
     }
 
     private void setupModeMenu() {

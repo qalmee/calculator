@@ -15,4 +15,8 @@ public interface ControllerListener {
     void actionButtonClicked(String number, CalculatorOperation operation, CalculatorMode mode);
 
     void buttonEnterClicked(String number, CalculatorMode mode);
+
+    void buttonCopyClicked();
+
+    void buttonPasteClicked();
 }
