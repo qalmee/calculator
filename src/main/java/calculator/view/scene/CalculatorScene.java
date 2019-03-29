@@ -56,6 +56,8 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     ControllerListener controllerListener;
     private CalculatorMode calculatorMode;
 
+    private boolean needClearResult;
+
     private VBox mainPanel;
     private GridPane buttonsGridPane;
     private TextField textFieldValue;
@@ -109,6 +111,11 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     @Override
     public void setPreviousOperationText(String text) {
         textFieldPreviousOperation.setText(text);
+    }
+
+    @Override
+    public void clearResultAfterEnteringDigit() {
+        needClearResult = true;
     }
 
     public void setControllerListener(ControllerListener controllerListener) {
@@ -310,6 +317,10 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         button.setFont(BUTTONS_DIGIT_FONT);
         button.setOnAction(event -> {
             String digitText = button.getText();
+            if (needClearResult) {
+                needClearResult = false;
+                textFieldValue.clear();
+            }
             textFieldValue.setText(textFieldValue.getText() + digitText);
         });
     }
