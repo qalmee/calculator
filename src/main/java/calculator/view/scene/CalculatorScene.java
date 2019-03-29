@@ -79,6 +79,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         setupButtonsGridPane();
         setupButtons();
         setupHotKeys();
+        setStartValue();
     }
 
     @Override
@@ -313,6 +314,11 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         calculatorWindow.setScene(calculatorScene);
     }
 
+    private void setStartValue() {
+        String startValue = calculatorMode.getStartValue();
+        textFieldValue.setText(startValue);
+    }
+
     void configureDigitButton(Button button) {
         button.setFont(BUTTONS_DIGIT_FONT);
         button.setOnAction(event -> {
@@ -327,9 +333,5 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
 
     void addElementToMainPanel(Node element) {
         mainPanel.getChildren().add(element);
-    }
-
-    void setDefaultValue(String value) {
-        textFieldValue.setText(value);
     }
 }
