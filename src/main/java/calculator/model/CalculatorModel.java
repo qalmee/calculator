@@ -52,6 +52,8 @@ public class CalculatorModel {
 
     public void operationPressed(String valueOnDisplay, CalculatorOperation operation) {
         //todo: how to convert String into number ?
+
+        //ControlUnit.INSTANCE.operatorPressed(valueOnDisplay, operation);
     }
 
     public void equalsPressed(String valueOnDisplay) {
