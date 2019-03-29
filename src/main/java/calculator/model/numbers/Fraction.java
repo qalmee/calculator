@@ -63,7 +63,7 @@ public class Fraction implements Number<Fraction> {
 
     @Override
     public Fraction square() {
-        return null;
+        return this.multiply(this);
     }
 
     public Fraction simplify() {

@@ -46,7 +46,7 @@ public class Real implements Number<Real> {
 
     @Override
     public Real square() {
-        return null;
+        return this.multiply(this);
     }
 
     @Override

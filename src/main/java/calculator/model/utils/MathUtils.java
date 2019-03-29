@@ -1,15 +1,17 @@
-package calculator.model.Utils;
+package calculator.model.utils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import static calculator.model.numbers.Number.EPS;
-import static calculator.model.numbers.Number.MAX_PRECISION;
 import static java.math.BigDecimal.ROUND_FLOOR;
 
 public final class MathUtils {
 
     private static final int TAYLOR_SERIES_LENGTH = 30;
+    private static final int MAX_PRECISION = 100;
+    private static final int MAX_COMPARE_PRECISION = 90;
+    private static final BigDecimal EPS = BigDecimal.ONE
+            .divide(BigDecimal.TEN.pow(MAX_COMPARE_PRECISION), MAX_COMPARE_PRECISION, BigDecimal.ROUND_FLOOR);
 
     private MathUtils() {
     }
@@ -50,7 +52,7 @@ public final class MathUtils {
         return taylorCos(a).divide(taylorSin(a), MAX_PRECISION, ROUND_FLOOR);
     }
 
-    private static BigDecimal ATan(BigDecimal a) {
+    private static BigDecimal aTan(BigDecimal a) {
         BigDecimal addend = a;
         BigDecimal denominator = BigDecimal.ONE;
         BigDecimal ans = BigDecimal.ZERO;
@@ -67,13 +69,13 @@ public final class MathUtils {
             return BigDecimal.valueOf(Math.PI / 4.0).multiply(BigDecimal.valueOf(a.compareTo(BigDecimal.ZERO)));
         } else if (a.abs().compareTo(BigDecimal.ONE) > 0) {
             BigDecimal abs_a = a.abs();
-            BigDecimal result = BigDecimal.valueOf(Math.PI / 2.0).subtract(ATan(BigDecimal.ONE.divide(abs_a, MAX_PRECISION, ROUND_FLOOR)));
+            BigDecimal result = BigDecimal.valueOf(Math.PI / 2.0).subtract(aTan(BigDecimal.ONE.divide(abs_a, MAX_PRECISION, ROUND_FLOOR)));
             if (a.compareTo(BigDecimal.ZERO) < 0) {
                 result = result.negate();
             }
             return result;
         } else {
-            return ATan(a);
+            return aTan(a);
         }
     }
 

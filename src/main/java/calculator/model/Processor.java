@@ -2,18 +2,16 @@ package calculator.model;
 
 import calculator.model.numbers.Number;
 
-public class Processor {
+public class Processor<T extends Number<T>> {
 
     public static final Processor INSTANCE = new Processor();
     private CalculatorMode calculatorMode;
     private CalculatorOperation operation;
-    private CalculatorState state;
 
     private Number leftResultOperand;
     private Number rightOperand;
 
     private Processor() {
-
     }
 
     public void reset() {
@@ -35,24 +33,41 @@ public class Processor {
     }
 
     public void operationRun() {
+        if (leftResultOperand == null || operation == null) {
+            throw new IllegalStateException("Left operand or operation is not set");
+        }
+        if (rightOperand == null && (
+                operation == CalculatorOperation.ADD ||
+                        operation == CalculatorOperation.SUBSTRACT ||
+                        operation == CalculatorOperation.MULTIPLY ||
+                        operation == CalculatorOperation.DIVIDE)) {
+            throw new IllegalStateException("Right operand is not set");
+        }
         switch (operation) {
             case ADD:
+                leftResultOperand = leftResultOperand.add(rightOperand);
                 break;
             case SUBSTRACT:
+                leftResultOperand = leftResultOperand.subtract(rightOperand);
                 break;
             case MULTIPLY:
+                leftResultOperand = leftResultOperand.multiply(rightOperand);
                 break;
             case DIVIDE:
+                leftResultOperand = leftResultOperand.divide(rightOperand);
                 break;
             case NEGATE:
+                leftResultOperand = leftResultOperand.negate();
                 break;
             case REVERSE:
+                leftResultOperand = leftResultOperand.reverse();
+                break;
+            case SQUARE:
+                leftResultOperand = leftResultOperand.square();
                 break;
             default:
                 //throw
-
         }
-
     }
 
     public CalculatorMode getCalculatorMode() {
@@ -87,11 +102,15 @@ public class Processor {
         this.operation = operation;
     }
 
-    public CalculatorState getState() {
-        return state;
+    public boolean rightOperandSet() {
+        return rightOperand != null;
     }
 
-    public void setState(CalculatorState state) {
-        this.state = state;
+    public boolean leftOperandSet() {
+        return leftResultOperand != null;
+    }
+
+    public boolean operationSet() {
+        return operation != null;
     }
 }
