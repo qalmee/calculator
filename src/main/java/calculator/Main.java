@@ -28,8 +28,6 @@ public class Main extends Application {
         calculatorScene.initializeScene();
 
         Stage calculatorWindow = new CalculatorWindow();
-        CalculatorScene.setWindow(calculatorWindow);
-
         calculatorWindow.setScene(calculatorScene);
         calculatorModel.readConfigInformation();
 

@@ -52,9 +52,6 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     private static final Font BUTTONS_DIGIT_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 15);
 
     private static final Duration BUTTON_CLICK_EFFECT_DURATION = Duration.seconds(0.1);
-
-    private static Window window;
-
     ControllerListener controllerListener;
     private CalculatorMode calculatorMode;
 
@@ -69,10 +66,6 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     CalculatorScene(CalculatorMode calculatorMode) {
         super(new VBox());
         this.calculatorMode = calculatorMode;
-    }
-
-    public static void setWindow(Window window) {
-        CalculatorScene.window = window;
     }
 
     public void initializeScene() {
@@ -331,10 +324,11 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     }
 
     private void setupAndSetNewScene(CalculatorScene calculatorScene) {
-        Stage calculatorWindow = (Stage) window;
+        Window calculatorWindow = this.getWindow();
         calculatorScene.setControllerListener(controllerListener);
         calculatorScene.initializeScene();
-        calculatorWindow.setScene(calculatorScene);
+        ((Stage) calculatorWindow).setScene(calculatorScene);
+        controllerListener.setNewObserver(calculatorScene);
     }
 
     private void setStartValue() {

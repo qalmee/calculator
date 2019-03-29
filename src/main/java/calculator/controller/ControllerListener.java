@@ -2,9 +2,12 @@ package calculator.controller;
 
 import calculator.model.CalculatorMode;
 import calculator.model.CalculatorOperation;
+import calculator.model.observer.CalculatorObserver;
 import calculator.view.localization.Language;
 
 public interface ControllerListener {
+
+    void setNewObserver(CalculatorObserver calculatorObserver);
 
     void updateDigitButtons(int base);
 

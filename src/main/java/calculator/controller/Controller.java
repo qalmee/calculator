@@ -3,6 +3,7 @@ package calculator.controller;
 import calculator.model.CalculatorMode;
 import calculator.model.CalculatorModel;
 import calculator.model.CalculatorOperation;
+import calculator.model.observer.CalculatorObserver;
 import calculator.view.localization.Language;
 
 public class Controller implements ControllerListener {
@@ -11,6 +12,11 @@ public class Controller implements ControllerListener {
 
     public Controller(CalculatorModel calculatorModel) {
         this.calculatorModel = calculatorModel;
+    }
+
+    @Override
+    public void setNewObserver(CalculatorObserver calculatorObserver) {
+        calculatorModel.setCalculatorObserver(calculatorObserver);
     }
 
     @Override
