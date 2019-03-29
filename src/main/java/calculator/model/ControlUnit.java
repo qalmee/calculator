@@ -5,9 +5,9 @@ import calculator.model.numbers.Number;
 public class ControlUnit {
     public static final ControlUnit INSTANCE = new ControlUnit();
     //    Memory memory;
-    Processor processor;
-    CalculatorState state;
-    Number resultValue;
+    private Processor processor;
+    private CalculatorState state;
+    private Number resultValue;
 
     private ControlUnit() {
         resetCalculator();
@@ -39,6 +39,7 @@ public class ControlUnit {
                 processor.operationRun();
                 break;
         }
+        resultValue = processor.getLeftResultOperand();
     }
 
     public void operatorPressed(Number valueOnDisplay, CalculatorOperation operation) {
@@ -68,6 +69,7 @@ public class ControlUnit {
                 processor.resetRightOperand();
                 break;
         }
+        resultValue = processor.getLeftResultOperand();
     }
 
     public void memoryOperationPressed(Number valueOnDisplay, MemoryOperations operation) {
@@ -76,6 +78,7 @@ public class ControlUnit {
                 Memory.INSTANCE.memoryAdd(valueOnDisplay);
                 break;
             case MEMORY_READ:
+                resultValue = Memory.INSTANCE.memoryRead();
                 break;
             case MEMORY_SAVE:
                 Memory.INSTANCE.memorySave(valueOnDisplay);
@@ -86,7 +89,7 @@ public class ControlUnit {
         }
     }
 
-    public void pasteFromClipboard(Number value) {
-
+    public Number getResultValue() {
+        return resultValue;
     }
 }
