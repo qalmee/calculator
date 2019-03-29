@@ -1,6 +1,6 @@
 package calculator.model;
 
-public enum MemoryOperations {
+public enum MemoryOperation {
     MEMORY_ADD,
     MEMORY_CLEAR,
     MEMORY_SAVE,

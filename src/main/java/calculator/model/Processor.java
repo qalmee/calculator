@@ -5,7 +5,6 @@ import calculator.model.numbers.Number;
 public class Processor<T extends Number<T>> {
 
     public static final Processor INSTANCE = new Processor();
-    private CalculatorMode calculatorMode;
     private CalculatorOperation operation;
 
     private Number leftResultOperand;
@@ -68,14 +67,6 @@ public class Processor<T extends Number<T>> {
             default:
                 //throw
         }
-    }
-
-    public CalculatorMode getCalculatorMode() {
-        return calculatorMode;
-    }
-
-    public void setCalculatorMode(CalculatorMode calculatorMode) {
-        this.calculatorMode = calculatorMode;
     }
 
     public Number getLeftResultOperand() {
