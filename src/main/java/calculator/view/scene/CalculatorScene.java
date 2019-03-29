@@ -306,7 +306,6 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
 
     private void changeScene(CalculatorMode mode) {
         if (calculatorMode != mode) {
-            this.calculatorMode = mode;
             switch (mode) {
                 case FRACTION:
                     setupAndSetNewScene(new FractionCalculatorScene());
