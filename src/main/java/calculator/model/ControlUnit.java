@@ -72,7 +72,7 @@ public class ControlUnit {
         resultValue = processor.getLeftResultOperand();
     }
 
-    public void memoryOperationPressed(Number valueOnDisplay, MemoryOperations operation) {
+    public void memoryOperationPressed(Number valueOnDisplay, MemoryOperation operation) {
         switch (operation) {
             case MEMORY_ADD:
                 Memory.INSTANCE.memoryAdd(valueOnDisplay);
