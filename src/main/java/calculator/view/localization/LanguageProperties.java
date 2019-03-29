@@ -28,6 +28,10 @@ public class LanguageProperties {
         LanguageProperties.language = language;
     }
 
+    public static Language getLanguage() {
+        return language == null ? Language.DEFAULT_LANGUAGE : language;
+    }
+
     public static synchronized String getProperty(String key) {
         if (properties == null) {
             initProperties();

@@ -127,7 +127,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     }
 
     private void setupMenu() {
-        MenuBar calculatorMenu = new CalculatorMenu(controllerListener);
+        MenuBar calculatorMenu = new CalculatorMenu(controllerListener, calculatorMode);
         mainPanel.getChildren().add(calculatorMenu);
     }
 
