@@ -24,6 +24,10 @@ public interface ControllerListener {
 
     void buttonDigitClicked();
 
+    void buttonClearEntryClicked();
+
+    void buttonGlobalClearClicked();
+
     void buttonCopyClicked();
 
     void buttonPasteClicked();

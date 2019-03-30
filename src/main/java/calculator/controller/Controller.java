@@ -56,6 +56,16 @@ public class Controller implements ControllerListener {
     }
 
     @Override
+    public void buttonClearEntryClicked() {
+
+    }
+
+    @Override
+    public void buttonGlobalClearClicked() {
+
+    }
+
+    @Override
     public void buttonCopyClicked() {
         calculatorModel.copyValueToClipboard();
     }

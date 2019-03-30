@@ -231,8 +231,15 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         Button buttonClearEntry = CalculatorButtons.BUTTON_CLEAR_ENTRY.getButton();
         Button buttonBackSpace = CalculatorButtons.BUTTON_BACKSPACE.getButton();
 
-        buttonGlobalClear.setOnAction(event -> clearTextFields());
-        buttonClearEntry.setOnAction(event -> clearTextFields());
+        buttonGlobalClear.setOnAction(event -> {
+            clearTextFields();
+            controllerListener.buttonGlobalClearClicked();
+        });
+
+        buttonClearEntry.setOnAction(event -> {
+            clearTextFields();
+            controllerListener.buttonClearEntryClicked();
+        });
 
         buttonBackSpace.setOnAction(event -> {
             String textInTextField = textFieldValue.getText();
