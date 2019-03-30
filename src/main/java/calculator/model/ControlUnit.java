@@ -45,6 +45,7 @@ public class ControlUnit {
     }
 
     public void operatorPressed(Number valueOnDisplay, CalculatorOperation operation) {
+        //todo: operation is unary = do the math;
         switch (state) {
             case START:
                 Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);

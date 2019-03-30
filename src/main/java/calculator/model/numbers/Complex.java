@@ -143,4 +143,9 @@ public class Complex implements Number<Complex> {
     public int hashCode() {
         return Objects.hash(real, imaginary);
     }
+
+    @Override
+    public BigDecimal toBigDecimal() {
+        return null;
+    }
 }

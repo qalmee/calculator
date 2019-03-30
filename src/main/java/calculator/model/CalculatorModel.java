@@ -32,6 +32,7 @@ public class CalculatorModel {
     }
 
     public void setCalculatorModeToConfig(CalculatorMode calculatorMode) {
+        ControlUnit.INSTANCE.resetCalculator();
         Config.setCalculatorMode(calculatorMode);
         calculatorObserver.updateCalculatorMode(calculatorMode);
     }
@@ -65,6 +66,7 @@ public class CalculatorModel {
     public void equalsPressed(String valueOnDisplay, CalculatorMode calculatorMode) {
         Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
         ControlUnit.INSTANCE.equalsPressed(number);
+        calculatorObserver.clearResultAfterEnteringDigit();
         if (ControlUnit.INSTANCE.needToSetResult()) {
             calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
             ControlUnit.INSTANCE.resultIsSet();

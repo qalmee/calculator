@@ -66,4 +66,9 @@ public class Real implements Number<Real> {
     public int hashCode() {
         return Objects.hash(value);
     }
+
+    @Override
+    public BigDecimal toBigDecimal() {
+        return null;
+    }
 }

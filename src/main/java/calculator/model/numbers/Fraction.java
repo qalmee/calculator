@@ -1,5 +1,6 @@
 package calculator.model.numbers;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
 
@@ -96,5 +97,10 @@ public class Fraction implements Number<Fraction> {
     @Override
     public int hashCode() {
         return Objects.hash(numerator, denominator);
+    }
+
+    @Override
+    public BigDecimal toBigDecimal() {
+        return null;
     }
 }
