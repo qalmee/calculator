@@ -26,6 +26,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -43,6 +44,9 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     private static final int BUTTON_HEIGHT = 30;
     private static final int ROW_CONSTRAINS_HEIGHT = 40;
     private static final int COLUMN_CONSTRAINS_WIDTH = 65;
+    private static final int TEXT_FIELD_HEIGHT = 65;
+    private static final int TEXT_FIELD_VALUE_MAX_TEXT_WIDTH_PIXELS = 380;
+    private static final int TEXT_FIELD_VALUE_MAX_TEXT_LENGTH = 40;
 
     private static final String FONT_FAMILY = "System";
 
@@ -145,6 +149,8 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     private void setupTextFields() {
         textFieldValue = new TextField();
         textFieldValue.setFont(TEXT_FIELD_VALUE_FONT);
+        textFieldValue.setPrefSize(Region.USE_PREF_SIZE, TEXT_FIELD_HEIGHT);
+        textFieldValue.textProperty().addListener((observable, oldValue, newValue) -> configureTextInTextFieldValue());
         setupTextFieldStyle(textFieldValue);
 
         textFieldPreviousOperation = new TextField();
@@ -155,7 +161,7 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     }
 
     private void setupTextFieldStyle(TextField textField) {
-        textField.setAlignment(Pos.BASELINE_RIGHT);
+        textField.setAlignment(Pos.TOP_RIGHT);
         textField.setBackground(Background.EMPTY);
         textField.setStyle("-fx-display-caret: false");
         textField.setCursor(Cursor.DEFAULT);
@@ -303,7 +309,6 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         button.setFont(BUTTONS_FONT);
     }
 
-
     private void changeScene(CalculatorMode mode) {
         if (calculatorMode != mode) {
             switch (mode) {
@@ -333,6 +338,23 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     private void setStartValue() {
         String startValue = calculatorMode.getStartValue();
         textFieldValue.setText(startValue);
+    }
+
+    private void configureTextInTextFieldValue() {
+        String text = textFieldValue.getText();
+        if (text.length() >= TEXT_FIELD_VALUE_MAX_TEXT_LENGTH) {
+            textFieldValue.setText(text.substring(0, text.length() - 1));
+        }
+        double textWidth;
+        Font textFont = TEXT_FIELD_VALUE_FONT;
+        do {
+            Text formattedText = new Text(text);
+            formattedText.setFont(textFont);
+            textWidth = formattedText.getLayoutBounds().getWidth();
+            textFont = Font.font(textFont.getFamily(), FontWeight.BOLD, textFont.getSize() - 1);
+        } while (textWidth > TEXT_FIELD_VALUE_MAX_TEXT_WIDTH_PIXELS);
+        textFont = Font.font(textFont.getFamily(), FontWeight.BOLD, textFont.getSize() + 1);
+        textFieldValue.setFont(textFont);
     }
 
     void configureDigitButton(Button button) {
