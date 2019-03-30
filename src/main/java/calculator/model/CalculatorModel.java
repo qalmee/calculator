@@ -55,13 +55,20 @@ public class CalculatorModel {
     public void operationPressed(String valueOnDisplay, CalculatorOperation operation, CalculatorMode calculatorMode) {
         Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
         ControlUnit.INSTANCE.operatorPressed(number, operation);
-        calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
+        calculatorObserver.clearResultAfterEnteringDigit();
+        if (ControlUnit.INSTANCE.needToSetResult()) {
+            calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
+            ControlUnit.INSTANCE.resultIsSet();
+        }
     }
 
     public void equalsPressed(String valueOnDisplay, CalculatorMode calculatorMode) {
         Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
         ControlUnit.INSTANCE.equalsPressed(number);
-        calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
+        if (ControlUnit.INSTANCE.needToSetResult()) {
+            calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
+            ControlUnit.INSTANCE.resultIsSet();
+        }
     }
 
     public void memoryOperationPressed(String valueOnDisplay, MemoryOperation operation, CalculatorMode calculatorMode) {

@@ -4,18 +4,19 @@ import calculator.model.numbers.Number;
 
 public class ControlUnit {
     public static final ControlUnit INSTANCE = new ControlUnit();
-    private Processor processor;
     private CalculatorState state;
     private Number resultValue;
+    private boolean needToSetResult;
 
     private ControlUnit() {
         resetCalculator();
     }
 
     public void resetCalculator() {
-        processor.reset();
+        Processor.INSTANCE.reset();
         Memory.INSTANCE.memoryClear();
         state = CalculatorState.START;
+        needToSetResult = false;
     }
 
     public void equalsPressed(Number valueOnDisplay) {
@@ -25,50 +26,54 @@ public class ControlUnit {
             case FIRST_OPERAND_INPUT:
                 break;
             case OPERATOR_SET:
-                processor.setRightOperand(valueOnDisplay);
-                processor.operationRun();
+                Processor.INSTANCE.setRightOperand(valueOnDisplay);
+                Processor.INSTANCE.operationRun();
+                needToSetResult = true;
                 state = CalculatorState.EQUALS_PRESSED;
                 break;
             case SECOND_OPERAND_INPUT:
-                processor.setRightOperand(valueOnDisplay);
-                processor.operationRun();
+                Processor.INSTANCE.setRightOperand(valueOnDisplay);
+                Processor.INSTANCE.operationRun();
+                needToSetResult = true;
                 state = CalculatorState.EQUALS_PRESSED;
                 break;
             case EQUALS_PRESSED:
-                processor.operationRun();
+                Processor.INSTANCE.operationRun();
+                needToSetResult = true;
                 break;
         }
-        resultValue = processor.getLeftResultOperand();
+        resultValue = Processor.INSTANCE.getLeftResultOperand();
     }
 
     public void operatorPressed(Number valueOnDisplay, CalculatorOperation operation) {
         switch (state) {
             case START:
-                processor.setLeftResultOperand(valueOnDisplay);
-                processor.setOperation(operation);
+                Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);
+                Processor.INSTANCE.setOperation(operation);
                 state = CalculatorState.OPERATOR_SET;
                 break;
             case FIRST_OPERAND_INPUT:
-                processor.setLeftResultOperand(valueOnDisplay);
-                processor.setOperation(operation);
+                Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);
+                Processor.INSTANCE.setOperation(operation);
                 state = CalculatorState.OPERATOR_SET;
                 break;
             case OPERATOR_SET:
-                processor.setOperation(operation);
+                Processor.INSTANCE.setOperation(operation);
                 break;
             case SECOND_OPERAND_INPUT:
-                processor.setRightOperand(valueOnDisplay);
-                processor.operationRun();
-                processor.setOperation(operation);
-                processor.resetRightOperand();
+                Processor.INSTANCE.setRightOperand(valueOnDisplay);
+                Processor.INSTANCE.operationRun();
+                needToSetResult = true;
+                Processor.INSTANCE.setOperation(operation);
+                Processor.INSTANCE.resetRightOperand();
                 state = CalculatorState.OPERATOR_SET;
                 break;
             case EQUALS_PRESSED:
-                processor.setOperation(operation);
-                processor.resetRightOperand();
+                Processor.INSTANCE.setOperation(operation);
+                Processor.INSTANCE.resetRightOperand();
                 break;
         }
-        resultValue = processor.getLeftResultOperand();
+        resultValue = Processor.INSTANCE.getLeftResultOperand();
     }
 
     public void memoryOperationPressed(Number valueOnDisplay, MemoryOperation operation) {
@@ -92,4 +97,11 @@ public class ControlUnit {
         return resultValue;
     }
 
+    public boolean needToSetResult() {
+        return needToSetResult;
+    }
+
+    public void resultIsSet() {
+        this.needToSetResult = false;
+    }
 }
