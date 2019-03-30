@@ -267,9 +267,11 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     }
 
     private void setupEnterButton() {
-        String number = textFieldValue.getText();
         Button enterButton = CalculatorButtons.BUTTON_ENTER.getButton();
-        enterButton.setOnAction(event -> controllerListener.buttonEnterClicked(number, calculatorMode));
+        enterButton.setOnAction(event -> {
+            String number = textFieldValue.getText();
+            controllerListener.buttonEnterClicked(number, calculatorMode);
+        });
     }
 
     private void setupDotButton() {
