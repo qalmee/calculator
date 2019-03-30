@@ -4,13 +4,14 @@ import calculator.model.numbers.Number;
 
 public class ControlUnit {
     public static final ControlUnit INSTANCE = new ControlUnit();
-    //    Memory memory;
     private Processor processor;
     private CalculatorState state;
     private Number resultValue;
+    private CalculatorMode calculatorMode;
 
     private ControlUnit() {
         resetCalculator();
+        calculatorMode = CalculatorMode.BASIC;
     }
 
     public void resetCalculator() {
@@ -91,5 +92,13 @@ public class ControlUnit {
 
     public Number getResultValue() {
         return resultValue;
+    }
+
+    public CalculatorMode getCalculatorMode() {
+        return calculatorMode;
+    }
+
+    public void setCalculatorMode(CalculatorMode calculatorMode) {
+        this.calculatorMode = calculatorMode;
     }
 }
