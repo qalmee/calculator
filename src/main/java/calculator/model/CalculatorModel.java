@@ -76,6 +76,8 @@ public class CalculatorModel {
         ControlUnit.INSTANCE.memoryOperationPressed(number, operation);
         if (operation == MemoryOperation.MEMORY_READ) {
             calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
+            ControlUnit.INSTANCE.enteringNewValue();
+            calculatorObserver.clearResultAfterEnteringDigit();
         }
     }
 
@@ -83,8 +85,12 @@ public class CalculatorModel {
         ControlUnit.INSTANCE.enteringNewValue();
     }
 
-    public void reset() {
+    public void clear() {
         ControlUnit.INSTANCE.resetCalculator();
+    }
+
+    public void clearEntry(){
+        ControlUnit.INSTANCE.enteringNewValue();
     }
 
 

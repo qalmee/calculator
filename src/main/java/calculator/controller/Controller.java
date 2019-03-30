@@ -42,7 +42,7 @@ public class Controller implements ControllerListener {
 
     @Override
     public void memoryButtonClicked(String number, MemoryOperation memoryOperation, CalculatorMode mode) {
-
+        calculatorModel.memoryOperationPressed(number, memoryOperation, mode);
     }
 
     @Override
@@ -57,12 +57,12 @@ public class Controller implements ControllerListener {
 
     @Override
     public void buttonClearEntryClicked() {
-
+        calculatorModel.clearEntry();
     }
 
     @Override
     public void buttonGlobalClearClicked() {
-
+        calculatorModel.clear();
     }
 
     @Override

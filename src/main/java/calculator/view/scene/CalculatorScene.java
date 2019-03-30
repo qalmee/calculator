@@ -108,6 +108,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     @Override
     public void setResult(String result) {
+        System.out.println(result);
         textFieldValue.setText(result);
     }
 

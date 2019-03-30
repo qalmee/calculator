@@ -64,12 +64,10 @@ public class ControlUnit {
                 Processor.INSTANCE.operationRun();
                 needToSetResult = true;
                 Processor.INSTANCE.setOperation(operation);
-                Processor.INSTANCE.resetRightOperand();
                 state = CalculatorState.OPERATOR_SET;
                 break;
             case EQUALS_PRESSED:
                 Processor.INSTANCE.setOperation(operation);
-                Processor.INSTANCE.resetRightOperand();
                 break;
         }
         resultValue = Processor.INSTANCE.getLeftResultOperand();
@@ -105,7 +103,7 @@ public class ControlUnit {
     }
 
     public void enteringNewValue(){
-        if (state == CalculatorState.OPERATOR_SET){
+        if (state == CalculatorState.OPERATOR_SET || state == CalculatorState.EQUALS_PRESSED){
             state = CalculatorState.SECOND_OPERAND_INPUT;
         }
         else if (state == CalculatorState.START){
