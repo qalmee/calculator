@@ -22,6 +22,8 @@ public interface ControllerListener {
 
     void buttonEnterClicked(String number, CalculatorMode mode);
 
+    void buttonDigitClicked();
+
     void buttonCopyClicked();
 
     void buttonPasteClicked();

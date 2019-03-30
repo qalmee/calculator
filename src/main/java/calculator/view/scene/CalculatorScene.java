@@ -399,6 +399,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
                 textFieldValue.clear();
             }
             textFieldValue.setText(textFieldValue.getText() + digitText);
+            controllerListener.buttonDigitClicked();
         });
     }
 

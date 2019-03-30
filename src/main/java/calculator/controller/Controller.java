@@ -51,6 +51,11 @@ public class Controller implements ControllerListener {
     }
 
     @Override
+    public void buttonDigitClicked() {
+
+    }
+
+    @Override
     public void buttonCopyClicked() {
         calculatorModel.copyValueToClipboard();
     }
