@@ -37,7 +37,7 @@ public class Controller implements ControllerListener {
 
     @Override
     public void actionButtonClicked(String number, CalculatorOperation operation, CalculatorMode mode) {
-
+        calculatorModel.operationPressed(number, operation, mode);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Controller implements ControllerListener {
 
     @Override
     public void buttonEnterClicked(String number, CalculatorMode mode) {
-
+        calculatorModel.equalsPressed(number, mode);
     }
 
     @Override
