@@ -37,7 +37,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class CalculatorScene extends Scene implements CalculatorObserver {
+public class CalculatorScene extends Scene implements CalculatorObserver {
 
     private static final int MAIN_PANEL_PADDING_SIZE = 5;
 
@@ -332,6 +332,9 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
     private void changeScene(CalculatorMode mode) {
         if (calculatorMode != mode) {
             switch (mode) {
+                case BASIC:
+                    setupAndSetNewScene(new CalculatorScene(CalculatorMode.BASIC));
+                    break;
                 case FRACTION:
                     setupAndSetNewScene(new FractionCalculatorScene());
                     break;
