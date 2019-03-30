@@ -3,6 +3,7 @@ package calculator.view.scene;
 import calculator.controller.ControllerListener;
 import calculator.model.CalculatorMode;
 import calculator.model.CalculatorOperation;
+import calculator.model.MemoryOperation;
 import calculator.model.observer.CalculatorObserver;
 import calculator.view.localization.Language;
 import calculator.view.localization.LanguageProperties;
@@ -150,7 +151,8 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         textFieldValue = new TextField();
         textFieldValue.setFont(TEXT_FIELD_VALUE_FONT);
         textFieldValue.setPrefSize(Region.USE_PREF_SIZE, TEXT_FIELD_HEIGHT);
-        textFieldValue.textProperty().addListener((observable, oldValue, newValue) -> configureTextInTextFieldValue());
+        textFieldValue.textProperty().addListener((observable, oldValue, newValue) ->
+                configureTextInTextFieldValue(oldValue, newValue));
         setupTextFieldStyle(textFieldValue);
 
         textFieldPreviousOperation = new TextField();
@@ -190,7 +192,9 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
 
         setupClearButtons();
         setupActionButtons();
+        setupMemoryButtons();
         setupEnterButton();
+        setupDotButton();
     }
 
     private void setupHotKeys() {
@@ -250,10 +254,26 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         });
     }
 
+    private void setupMemoryButtons() {
+        List<CalculatorButtons> memoryButtons = CalculatorButtons.getMemoryButtons();
+        memoryButtons.forEach(calculatorButton -> {
+            Button button = calculatorButton.getButton();
+            button.setOnAction(event -> {
+                String number = textFieldValue.getText();
+                MemoryOperation memoryOperation = CalculatorButtons.getMemoryOperationFromButton(button);
+                controllerListener.memoryButtonClicked(number, memoryOperation, calculatorMode);
+            });
+        });
+    }
+
     private void setupEnterButton() {
         String number = textFieldValue.getText();
         Button enterButton = CalculatorButtons.BUTTON_ENTER.getButton();
         enterButton.setOnAction(event -> controllerListener.buttonEnterClicked(number, calculatorMode));
+    }
+
+    private void setupDotButton() {
+
     }
 
     private void clearTextFields() {
@@ -340,11 +360,21 @@ public abstract class CalculatorScene extends Scene implements CalculatorObserve
         textFieldValue.setText(startValue);
     }
 
-    private void configureTextInTextFieldValue() {
-        String text = textFieldValue.getText();
-        if (text.length() >= TEXT_FIELD_VALUE_MAX_TEXT_LENGTH) {
-            textFieldValue.setText(text.substring(0, text.length() - 1));
+    private void configureTextInTextFieldValue(String oldValue, String newValue) {
+        if (newValue.length() >= TEXT_FIELD_VALUE_MAX_TEXT_LENGTH) {
+            textFieldValue.setText(newValue.substring(0, newValue.length() - 1));
         }
+        if (newValue.isEmpty()) {
+            textFieldValue.setText(calculatorMode.getStartValue());
+        }
+        if (oldValue.equals(calculatorMode.getStartValue()) && !newValue.isEmpty()) {
+            textFieldValue.setText(newValue.substring(1));
+        }
+        configureValueTextFieldFont();
+    }
+
+    private void configureValueTextFieldFont() {
+        String text = textFieldValue.getText();
         double textWidth;
         Font textFont = TEXT_FIELD_VALUE_FONT;
         do {
