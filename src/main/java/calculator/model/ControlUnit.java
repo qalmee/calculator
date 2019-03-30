@@ -14,7 +14,6 @@ public class ControlUnit {
 
     public void resetCalculator() {
         Processor.INSTANCE.reset();
-        Memory.INSTANCE.memoryClear();
         state = CalculatorState.START;
         needToSetResult = false;
     }
@@ -103,5 +102,14 @@ public class ControlUnit {
 
     public void resultIsSet() {
         this.needToSetResult = false;
+    }
+
+    public void enteringNewValue(){
+        if (state == CalculatorState.OPERATOR_SET){
+            state = CalculatorState.SECOND_OPERAND_INPUT;
+        }
+        else if (state == CalculatorState.START){
+            state = CalculatorState.FIRST_OPERAND_INPUT;
+        }
     }
 }

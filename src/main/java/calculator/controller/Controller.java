@@ -52,7 +52,7 @@ public class Controller implements ControllerListener {
 
     @Override
     public void buttonDigitClicked() {
-
+        calculatorModel.digitButtonPressed();
     }
 
     @Override

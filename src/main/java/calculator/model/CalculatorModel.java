@@ -74,9 +74,18 @@ public class CalculatorModel {
     public void memoryOperationPressed(String valueOnDisplay, MemoryOperation operation, CalculatorMode calculatorMode) {
         Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
         ControlUnit.INSTANCE.memoryOperationPressed(number, operation);
-        if (operation == MemoryOperation.MEMORY_READ){
+        if (operation == MemoryOperation.MEMORY_READ) {
             calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
         }
     }
+
+    public void digitButtonPressed() {
+        ControlUnit.INSTANCE.enteringNewValue();
+    }
+
+    public void reset() {
+        ControlUnit.INSTANCE.resetCalculator();
+    }
+
 
 }
