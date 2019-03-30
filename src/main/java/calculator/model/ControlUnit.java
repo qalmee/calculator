@@ -7,11 +7,9 @@ public class ControlUnit {
     private Processor processor;
     private CalculatorState state;
     private Number resultValue;
-    private CalculatorMode calculatorMode;
 
     private ControlUnit() {
         resetCalculator();
-        calculatorMode = CalculatorMode.BASIC;
     }
 
     public void resetCalculator() {
@@ -94,11 +92,4 @@ public class ControlUnit {
         return resultValue;
     }
 
-    public CalculatorMode getCalculatorMode() {
-        return calculatorMode;
-    }
-
-    public void setCalculatorMode(CalculatorMode calculatorMode) {
-        this.calculatorMode = calculatorMode;
-    }
 }

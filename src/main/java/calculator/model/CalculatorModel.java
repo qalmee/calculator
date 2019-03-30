@@ -33,7 +33,6 @@ public class CalculatorModel {
 
     public void setCalculatorModeToConfig(CalculatorMode calculatorMode) {
         Config.setCalculatorMode(calculatorMode);
-        ControlUnit.INSTANCE.setCalculatorMode(calculatorMode);
         calculatorObserver.updateCalculatorMode(calculatorMode);
     }
 
@@ -53,20 +52,20 @@ public class CalculatorModel {
         calculatorObserver.pasteValueFromClipboard();
     }
 
-    public void operationPressed(String valueOnDisplay, CalculatorOperation operation) {
-        Number number = NumberConverter.stringToNumber(valueOnDisplay, ControlUnit.INSTANCE.getCalculatorMode());
+    public void operationPressed(String valueOnDisplay, CalculatorOperation operation, CalculatorMode calculatorMode) {
+        Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
         ControlUnit.INSTANCE.operatorPressed(number, operation);
         calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
     }
 
-    public void equalsPressed(String valueOnDisplay) {
-        Number number = NumberConverter.stringToNumber(valueOnDisplay, ControlUnit.INSTANCE.getCalculatorMode());
+    public void equalsPressed(String valueOnDisplay, CalculatorMode calculatorMode) {
+        Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
         ControlUnit.INSTANCE.equalsPressed(number);
         calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
     }
 
-    public void memoryOperationPressed(String valueOnDisplay, MemoryOperation operation) {
-        Number number = NumberConverter.stringToNumber(valueOnDisplay, ControlUnit.INSTANCE.getCalculatorMode());
+    public void memoryOperationPressed(String valueOnDisplay, MemoryOperation operation, CalculatorMode calculatorMode) {
+        Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
         ControlUnit.INSTANCE.memoryOperationPressed(number, operation);
         if (operation == MemoryOperation.MEMORY_READ){
             calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
