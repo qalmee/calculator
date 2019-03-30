@@ -380,8 +380,8 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         if (newValue.isEmpty()) {
             textFieldValue.setText(calculatorMode.getStartValue());
         }
-        if (oldValue.equals(calculatorMode.getStartValue()) && !newValue.isEmpty()) {
-            textFieldValue.setText(newValue.substring(1));
+        if (oldValue.equals(calculatorMode.getStartValue()) && newValue.contains(calculatorMode.getStartValue())) {
+            textFieldValue.setText(newValue.replaceAll(calculatorMode.getStartValue(), ""));
         }
         configureValueTextFieldFont();
     }
