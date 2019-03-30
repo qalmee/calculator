@@ -22,7 +22,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -202,9 +201,9 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         ObservableMap<KeyCombination, Runnable> accelerators = this.getAccelerators();
         CalculatorButtons[] buttons = CalculatorButtons.values();
         Arrays.stream(buttons)
-                .filter(button -> button.getKeyCode() != null)
+                .filter(button -> button.getKeyCodeCombination() != null)
                 .forEach(button -> {
-                    KeyCombination keyCombination = new KeyCodeCombination(button.getKeyCode());
+                    KeyCombination keyCombination = button.getKeyCodeCombination();
                     Runnable runnable = () -> setMouseClickEffectAndRunAction(button.getButton());
                     accelerators.put(keyCombination, runnable);
                 });
