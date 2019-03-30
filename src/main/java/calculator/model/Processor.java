@@ -1,6 +1,9 @@
 package calculator.model;
 
+import calculator.model.numbers.Complex;
 import calculator.model.numbers.Number;
+
+import java.math.BigDecimal;
 
 public class Processor<T extends Number<T>> {
 
@@ -36,10 +39,11 @@ public class Processor<T extends Number<T>> {
             throw new IllegalStateException("Left operand or operation is not set");
         }
         if (rightOperand == null && (
-                operation == CalculatorOperation.ADD ||
+                        operation == CalculatorOperation.ADD ||
                         operation == CalculatorOperation.SUBSTRACT ||
                         operation == CalculatorOperation.MULTIPLY ||
-                        operation == CalculatorOperation.DIVIDE)) {
+                        operation == CalculatorOperation.DIVIDE ||
+                        operation == CalculatorOperation.POW)) {
             throw new IllegalStateException("Right operand is not set");
         }
         switch (operation) {
@@ -63,6 +67,19 @@ public class Processor<T extends Number<T>> {
                 break;
             case SQUARE:
                 leftResultOperand = leftResultOperand.square();
+                break;
+            case ABS:
+                leftResultOperand = new Complex(((Complex)(leftResultOperand)).module(), BigDecimal.ZERO);
+                break;
+            case DEG:
+                //wtf????
+                leftResultOperand = new Complex(((Complex)(leftResultOperand)).complexArgument(), BigDecimal.ZERO);
+                break;
+            case POW:
+                leftResultOperand =(((Complex)(leftResultOperand)).pow(rightOperand.toBigDecimal().intValue()));
+                break;
+            case RAD:
+                leftResultOperand = new Complex(((Complex)(leftResultOperand)).complexArgument(), BigDecimal.ZERO);
                 break;
             default:
                 //throw

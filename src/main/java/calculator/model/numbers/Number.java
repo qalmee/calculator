@@ -22,4 +22,6 @@ public interface Number<T extends Number<T>> {
     T negate();
 
     T square();
+
+    BigDecimal toBigDecimal();
 }
