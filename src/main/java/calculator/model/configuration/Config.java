@@ -10,8 +10,8 @@ public class Config {
     private static final String APPLICATION_NODE_NAME = "calculator";
     private static final String LANGUAGE_KEY = "language";
     private static final String CALCULATOR_MODE_KEY = "calculator_mode";
-    private static final String DEFAULT_LANGUAGE_KEY = "ENGLISH";
-    private static final String DEFAULT_CALCULATOR_MODE_KEY = "FRACTION";
+    private static final String DEFAULT_LANGUAGE_KEY = Language.ENGLISH.name();
+    private static final String DEFAULT_CALCULATOR_MODE_KEY = CalculatorMode.BASIC.name();
 
     private static Preferences preferences;
 
