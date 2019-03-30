@@ -282,7 +282,13 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     }
 
     private void setupDotButton() {
-
+        Button dotButton = CalculatorButtons.BUTTON_DOT.getButton();
+        String commaSymbol = dotButton.getText();
+        dotButton.setOnAction(event -> {
+            if (!textFieldValue.getText().contains(commaSymbol)) {
+                textFieldValue.appendText(dotButton.getText());
+            }
+        });
     }
 
     private void clearTextFields() {
