@@ -1,7 +1,9 @@
 package calculator.model;
 
 import calculator.model.configuration.Config;
+import calculator.model.numbers.Number;
 import calculator.model.observer.CalculatorObserver;
+import calculator.model.utils.NumberConverter;
 import calculator.view.localization.Language;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class CalculatorModel {
 
     public void setCalculatorModeToConfig(CalculatorMode calculatorMode) {
         Config.setCalculatorMode(calculatorMode);
+        ControlUnit.INSTANCE.setCalculatorMode(calculatorMode);
         calculatorObserver.updateCalculatorMode(calculatorMode);
     }
 
@@ -51,17 +54,23 @@ public class CalculatorModel {
     }
 
     public void operationPressed(String valueOnDisplay, CalculatorOperation operation) {
-        //todo: how to convert String into number ?
-
-        //ControlUnit.INSTANCE.operatorPressed(valueOnDisplay, operation);
+        Number number = NumberConverter.stringToNumber(valueOnDisplay, ControlUnit.INSTANCE.getCalculatorMode());
+        ControlUnit.INSTANCE.operatorPressed(number, operation);
+        calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
     }
 
     public void equalsPressed(String valueOnDisplay) {
-
+        Number number = NumberConverter.stringToNumber(valueOnDisplay, ControlUnit.INSTANCE.getCalculatorMode());
+        ControlUnit.INSTANCE.equalsPressed(number);
+        calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
     }
 
-    public void memoryOperationPressed(MemoryOperation operation) {
-
+    public void memoryOperationPressed(String valueOnDisplay, MemoryOperation operation) {
+        Number number = NumberConverter.stringToNumber(valueOnDisplay, ControlUnit.INSTANCE.getCalculatorMode());
+        ControlUnit.INSTANCE.memoryOperationPressed(number, operation);
+        if (operation == MemoryOperation.MEMORY_READ){
+            calculatorObserver.setResult(ControlUnit.INSTANCE.getResultValue().toString());
+        }
     }
 
 }

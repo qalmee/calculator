@@ -51,9 +51,7 @@ public class Real implements Number<Real> {
 
     @Override
     public String toString() {
-        return "Real{" +
-                "value=" + value +
-                '}';
+        return value.toString();
     }
 
     @Override
