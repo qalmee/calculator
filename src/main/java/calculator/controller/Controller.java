@@ -3,6 +3,7 @@ package calculator.controller;
 import calculator.model.CalculatorMode;
 import calculator.model.CalculatorModel;
 import calculator.model.CalculatorOperation;
+import calculator.model.MemoryOperation;
 import calculator.model.observer.CalculatorObserver;
 import calculator.view.localization.Language;
 
@@ -36,6 +37,11 @@ public class Controller implements ControllerListener {
 
     @Override
     public void actionButtonClicked(String number, CalculatorOperation operation, CalculatorMode mode) {
+
+    }
+
+    @Override
+    public void memoryButtonClicked(String number, MemoryOperation memoryOperation, CalculatorMode mode) {
 
     }
 

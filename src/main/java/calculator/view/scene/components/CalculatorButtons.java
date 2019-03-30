@@ -2,6 +2,7 @@ package calculator.view.scene.components;
 
 import calculator.model.CalculatorMode;
 import calculator.model.CalculatorOperation;
+import calculator.model.MemoryOperation;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 
@@ -67,8 +68,8 @@ public enum CalculatorButtons {
             new Button(getProperty("calculator_scene.button_memory_clear")), null),
     BUTTON_MEMORY_SAVE(2, 0, CalculatorMode.BASIC,
             new Button(getProperty("calculator_scene.button_memory_save")), null),
-    BUTTON_MEMORY_COPY(3, 0, CalculatorMode.BASIC,
-            new Button(getProperty("calculator_scene.button_memory_copy")), null),
+    BUTTON_MEMORY_READ(3, 0, CalculatorMode.BASIC,
+            new Button(getProperty("calculator_scene.button_memory_read")), null),
     BUTTON_MEMORY_ADD(4, 0, CalculatorMode.BASIC,
             new Button(getProperty("calculator_scene.button_memory_add")), null),
 
@@ -103,6 +104,7 @@ public enum CalculatorButtons {
 
 
     private static Map<Button, CalculatorOperation> actionButtons;
+    private static Map<Button, MemoryOperation> memoryButtons;
 
     static {
         actionButtons = new HashMap<>();
@@ -113,6 +115,12 @@ public enum CalculatorButtons {
         actionButtons.put(BUTTON_REVERSE.getButton(), CalculatorOperation.REVERSE);
         actionButtons.put(BUTTON_SQUARE.getButton(), CalculatorOperation.SQUARE);
         actionButtons.put(BUTTON_PLUS_MINUS.getButton(), CalculatorOperation.NEGATE);
+
+        memoryButtons = new HashMap<>();
+        memoryButtons.put(BUTTON_MEMORY_ADD.getButton(), MemoryOperation.MEMORY_ADD);
+        memoryButtons.put(BUTTON_MEMORY_SAVE.getButton(), MemoryOperation.MEMORY_SAVE);
+        memoryButtons.put(BUTTON_MEMORY_READ.getButton(), MemoryOperation.MEMORY_READ);
+        memoryButtons.put(BUTTON_MEMORY_CLEAR.getButton(), MemoryOperation.MEMORY_CLEAR);
     }
 
     private int rowInGridPane;
@@ -146,8 +154,16 @@ public enum CalculatorButtons {
                 BUTTON_DIVIDE, BUTTON_PLUS_MINUS, BUTTON_REVERSE, BUTTON_SQUARE);
     }
 
+    public static List<CalculatorButtons> getMemoryButtons() {
+        return Arrays.asList(BUTTON_MEMORY_ADD, BUTTON_MEMORY_CLEAR, BUTTON_MEMORY_READ, BUTTON_MEMORY_SAVE);
+    }
+
     public static CalculatorOperation getCalculatorOperationFromButton(Button button) {
         return actionButtons.get(button);
+    }
+
+    public static MemoryOperation getMemoryOperationFromButton(Button button) {
+        return memoryButtons.get(button);
     }
 
     public int getRowInGridPane() {
