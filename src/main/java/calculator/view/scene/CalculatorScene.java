@@ -342,6 +342,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         button.setPrefWidth(BUTTON_WIDTH);
         button.setPrefHeight(BUTTON_HEIGHT);
         button.setFont(BUTTONS_FONT);
+        button.setFocusTraversable(false);
     }
 
     private void changeScene(CalculatorMode mode) {
