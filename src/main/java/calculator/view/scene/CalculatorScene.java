@@ -20,9 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -206,6 +204,19 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
                     KeyCombination keyCombination = button.getKeyCodeCombination();
                     Runnable runnable = () -> setMouseClickEffectAndRunAction(button.getButton());
                     accelerators.put(keyCombination, runnable);
+
+                    if (button.equals(CalculatorButtons.BUTTON_MULTIPLY)) {
+                        accelerators.put(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.SHIFT_DOWN), runnable);
+                    }
+                    if (button.equals(CalculatorButtons.BUTTON_PLUS)) {
+                        accelerators.put(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.SHIFT_DOWN), runnable);
+                    }
+                    if (button.equals(CalculatorButtons.BUTTON_MINUS)) {
+                        accelerators.put(new KeyCodeCombination(KeyCode.MINUS), runnable);
+                    }
+                    if (button.equals(CalculatorButtons.BUTTON_DIVIDE)) {
+                        accelerators.put(new KeyCodeCombination(KeyCode.SLASH), runnable);
+                    }
                 });
     }
 

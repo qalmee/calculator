@@ -49,9 +49,9 @@ public enum CalculatorButtons {
             0, 5, new Button(getProperty("calculator_scene.button_divide"))),
     BUTTON_MULTIPLY(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.MULTIPLY),
             1, 5, new Button(getProperty("calculator_scene.button_multiply"))),
-    BUTTON_MINUS(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.MINUS),
+    BUTTON_MINUS(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.SUBTRACT),
             2, 5, new Button(getProperty("calculator_scene.button_minus"))),
-    BUTTON_PLUS(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.PLUS),
+    BUTTON_PLUS(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.ADD),
             3, 5, new Button(getProperty("calculator_scene.button_plus"))),
 
     BUTTON_SQUARE(CalculatorMode.BASIC, null,
