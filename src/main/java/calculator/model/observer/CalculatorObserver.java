@@ -1,6 +1,7 @@
 package calculator.model.observer;
 
 import calculator.model.calculatorStats.CalculatorMode;
+import calculator.view.ErrorState;
 import calculator.view.localization.Language;
 
 import java.util.List;
@@ -25,5 +26,5 @@ public interface CalculatorObserver {
 
     void pasteValueFromClipboard();
 
-    void setErrorState();
+    void setErrorState(ErrorState errorState);
 }

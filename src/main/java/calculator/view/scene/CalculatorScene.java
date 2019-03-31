@@ -5,11 +5,13 @@ import calculator.model.calculatorStats.CalculatorMode;
 import calculator.model.calculatorStats.CalculatorOperation;
 import calculator.model.memory.MemoryOperation;
 import calculator.model.observer.CalculatorObserver;
+import calculator.view.ErrorState;
 import calculator.view.localization.Language;
 import calculator.view.localization.LanguageProperties;
 import calculator.view.scene.components.CalculatorButtons;
 import calculator.view.scene.components.CalculatorMenu;
 import javafx.animation.PauseTransition;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -63,6 +65,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     private boolean needClearResult;
     private boolean backSpaceEnabled;
+    private boolean isErrorState;
 
     private Clipboard clipboard;
     private VBox mainPanel;
@@ -147,8 +150,10 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     }
 
     @Override
-    public void setErrorState() {
-        System.out.println("ERROR!!!");
+    public void setErrorState(ErrorState errorState) {
+        textFieldValue.setText(errorState.getErrorStateText());
+        isErrorState = true;
+        setButtonsStateDueToAnError(true);
     }
 
     public void setControllerListener(ControllerListener controllerListener) {
@@ -273,16 +278,19 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         Button buttonBackSpace = CalculatorButtons.BUTTON_BACKSPACE.getButton();
 
         buttonGlobalClear.setOnAction(event -> {
+            clearTextFieldValueIfError();
             clearTextFields();
             controllerListener.buttonGlobalClearClicked();
         });
 
         buttonClearEntry.setOnAction(event -> {
+            clearTextFieldValueIfError();
             clearTextFields();
             controllerListener.buttonClearEntryClicked();
         });
 
         buttonBackSpace.setOnAction(event -> {
+            clearTextFieldValueIfError();
             String textInTextField = textFieldValue.getText();
             if (backSpaceEnabled) {
                 textFieldValue.setText(textInTextField.substring(0, textInTextField.length() - 1));
@@ -330,6 +338,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private void setupEnterButton() {
         Button enterButton = CalculatorButtons.BUTTON_ENTER.getButton();
         enterButton.setOnAction(event -> {
+            clearTextFieldValueIfError();
             String number = textFieldValue.getText();
             controllerListener.buttonEnterClicked(number, calculatorMode);
         });
@@ -345,7 +354,27 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         });
     }
 
+    private void setButtonsStateDueToAnError(boolean value) {
+        List<CalculatorButtons> notDisabledButtons = new ArrayList<>();
+        notDisabledButtons.addAll(CalculatorButtons.getDigitButtons());
+        notDisabledButtons.addAll(CalculatorButtons.getAllClearButtons());
+        notDisabledButtons.add(CalculatorButtons.BUTTON_ENTER);
+
+        ObservableList<Node> elementToGridPane = buttonsGridPane.getChildren();
+        for (Node element : elementToGridPane) {
+            if (element instanceof Button) {
+                boolean setNewState = notDisabledButtons.stream()
+                        .map(CalculatorButtons::getButton)
+                        .noneMatch(button -> button.equals(element));
+                if (setNewState) {
+                    element.setDisable(value);
+                }
+            }
+        }
+    }
+
     private void clearTextFields() {
+        needClearResult = false;
         textFieldValue.clear();
         textFieldPreviousOperation.clear();
     }
@@ -433,6 +462,14 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         textFieldValue.setText(startValue);
     }
 
+    private void clearTextFieldValueIfError() {
+        if (isErrorState) {
+            isErrorState = false;
+            clearTextFields();
+            setButtonsStateDueToAnError(false);
+        }
+    }
+
     private void configureTextInTextFieldValue(String oldValue, String newValue) {
         if (newValue.length() >= TEXT_FIELD_VALUE_MAX_TEXT_LENGTH) {
             textFieldValue.setText(newValue.substring(0, newValue.length() - 1));
@@ -463,6 +500,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     void configureDigitButton(Button button) {
         button.setFont(BUTTONS_DIGIT_FONT);
         button.setOnAction(event -> {
+            clearTextFieldValueIfError();
             String digitText = button.getText();
             if (needClearResult) {
                 needClearResult = false;

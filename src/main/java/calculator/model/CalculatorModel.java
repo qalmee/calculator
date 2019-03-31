@@ -9,6 +9,7 @@ import calculator.model.observer.CalculatorObserver;
 import calculator.model.utils.ConverterPToP;
 import calculator.model.utils.Exceptions.DivisionByZeroException;
 import calculator.model.utils.NumberConverter;
+import calculator.view.ErrorState;
 import calculator.view.localization.Language;
 
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class CalculatorModel {
         try {
             ControlUnit.INSTANCE.operatorPressed(number, operation);
         } catch (DivisionByZeroException e) {
-            calculatorObserver.setErrorState();
+            calculatorObserver.setErrorState(ErrorState.DIVISION_BY_ZERO);
             calculatorObserver.clearResultAfterEnteringDigit();
             calculatorObserver.setResult(e.getMessage());
             setHistoryOnDisplay(calculatorMode);
@@ -107,7 +108,7 @@ public class CalculatorModel {
         try {
             ControlUnit.INSTANCE.equalsPressed(number);
         } catch (DivisionByZeroException e) {
-            calculatorObserver.setErrorState();
+            calculatorObserver.setErrorState(ErrorState.DIVISION_BY_ZERO);
             calculatorObserver.clearResultAfterEnteringDigit();
             calculatorObserver.setResult(e.getMessage());
             setHistoryOnDisplay(calculatorMode);

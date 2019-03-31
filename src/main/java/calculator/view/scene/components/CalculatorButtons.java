@@ -159,6 +159,10 @@ public enum CalculatorButtons {
         return Arrays.asList(BUTTON_MEMORY_ADD, BUTTON_MEMORY_CLEAR, BUTTON_MEMORY_READ, BUTTON_MEMORY_SAVE);
     }
 
+    public static List<CalculatorButtons> getAllClearButtons() {
+        return Arrays.asList(BUTTON_CLEAR_ENTRY, BUTTON_GLOBAL_CLEAR, BUTTON_BACKSPACE);
+    }
+
     public static CalculatorOperation getCalculatorOperationFromButton(Button button) {
         return actionButtons.get(button);
     }

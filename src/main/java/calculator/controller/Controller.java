@@ -31,6 +31,11 @@ public class Controller implements ControllerListener {
     }
 
     @Override
+    public void checkPastedValue(String value) {
+
+    }
+
+    @Override
     public void convertValue(String value, int currentBase, int newBase) {
         calculatorModel.convertAll(value, currentBase, newBase);
     }
