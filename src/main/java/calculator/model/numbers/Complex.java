@@ -1,6 +1,7 @@
 package calculator.model.numbers;
 
 import calculator.model.utils.MathUtils;
+import calculator.model.utils.NumberConstant;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -126,7 +127,7 @@ public class Complex implements Number<Complex> {
 
     @Override
     public String toString() {
-        return real.toString() + imaginary.toString() + "i";
+        return real.toPlainString() + imaginary.toPlainString() + "i";
     }
 
     @Override
@@ -137,6 +138,11 @@ public class Complex implements Number<Complex> {
 
         return real.subtract(complex.real).abs().compareTo(EPS) < 0 &&
                 imaginary.subtract(complex.imaginary).abs().compareTo(EPS) < 0;
+    }
+
+    @Override
+    public boolean equals(NumberConstant constant) {
+        return this.equals(constant.getComplex());
     }
 
     @Override

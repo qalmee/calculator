@@ -146,6 +146,11 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         textFieldValue.setText(value);
     }
 
+    @Override
+    public void setErrorState() {
+        System.out.println("ERROR!!!");
+    }
+
     public void setControllerListener(ControllerListener controllerListener) {
         this.controllerListener = controllerListener;
     }
