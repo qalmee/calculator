@@ -62,6 +62,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private CalculatorMode calculatorMode;
 
     private boolean needClearResult;
+    private boolean backSpaceEnabled;
 
     private Clipboard clipboard;
     private VBox mainPanel;
@@ -72,6 +73,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     CalculatorScene(CalculatorMode calculatorMode) {
         super(new VBox());
         this.calculatorMode = calculatorMode;
+        backSpaceEnabled = true;
     }
 
     public void initializeScene() {
@@ -105,6 +107,11 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     @Override
     public void updateLanguage(Language language) {
         LanguageProperties.setLanguage(language);
+    }
+
+    @Override
+    public void setBackSpaceEnabled(boolean value) {
+        backSpaceEnabled = value;
     }
 
     @Override
@@ -268,7 +275,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
         buttonBackSpace.setOnAction(event -> {
             String textInTextField = textFieldValue.getText();
-            controllerListener.buttonBackSpaceClicked(textInTextField);
+            //todo backspace
         });
     }
 
