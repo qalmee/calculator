@@ -33,6 +33,12 @@ public class ControlUnit {
             case START:
                 break;
             case FIRST_OPERAND_INPUT:
+                if (Processor.INSTANCE.getRightOperand() != null && Processor.INSTANCE.getOperation() != null) {
+                    Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);
+                    Processor.INSTANCE.operationRun();
+                    needToSetResult = true;
+                    state = CalculatorState.EQUALS_PRESSED;
+                }
                 break;
             case OPERATOR_SET:
                 Processor.INSTANCE.setRightOperand(valueOnDisplay);
