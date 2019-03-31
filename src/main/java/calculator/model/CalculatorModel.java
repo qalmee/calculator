@@ -81,7 +81,6 @@ public class CalculatorModel {
             calculatorObserver.setResult(dotsToCommas(result));
             ControlUnit.INSTANCE.resultIsSet();
         }
-        System.out.println(LocalHistory.INSTANCE.toString());
         if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
             calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(currentBase)));
         } else {
@@ -125,7 +124,6 @@ public class CalculatorModel {
             ControlUnit.INSTANCE.enteringNewValue();
             calculatorObserver.clearResultAfterEnteringDigit();
         }
-        //System.out.println(LocalHistory.INSTANCE.toString());
 
     }
 
