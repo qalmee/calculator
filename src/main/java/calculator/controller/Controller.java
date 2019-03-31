@@ -26,6 +26,11 @@ public class Controller implements ControllerListener {
     }
 
     @Override
+    public void convertValue(String value, int currentBase, int newBase) {
+
+    }
+
+    @Override
     public void updateLanguage(Language language) {
         calculatorModel.setLanguageToConfig(language);
     }

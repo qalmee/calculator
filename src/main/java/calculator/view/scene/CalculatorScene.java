@@ -20,9 +20,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -36,6 +35,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static calculator.view.localization.LanguageProperties.getProperty;
+
 public class CalculatorScene extends Scene implements CalculatorObserver {
 
     private static final int MAIN_PANEL_PADDING_SIZE = 5;
@@ -44,6 +45,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private static final int BUTTON_HEIGHT = 30;
     private static final int ROW_CONSTRAINS_HEIGHT = 40;
     private static final int COLUMN_CONSTRAINS_WIDTH = 65;
+    private static final int TEXT_FIELD_WIDTH = 415;
     private static final int TEXT_FIELD_HEIGHT = 65;
     private static final int TEXT_FIELD_VALUE_MAX_TEXT_WIDTH_PIXELS = 380;
     private static final int TEXT_FIELD_VALUE_MAX_TEXT_LENGTH = 40;
@@ -150,7 +152,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private void setupTextFields() {
         textFieldValue = new TextField();
         textFieldValue.setFont(TEXT_FIELD_VALUE_FONT);
-        textFieldValue.setPrefSize(Region.USE_PREF_SIZE, TEXT_FIELD_HEIGHT);
+        textFieldValue.setPrefSize(TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
         textFieldValue.textProperty().addListener((observable, oldValue, newValue) ->
                 configureTextInTextFieldValue(oldValue, newValue));
         setupTextFieldStyle(textFieldValue);
@@ -206,7 +208,31 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
                     KeyCombination keyCombination = button.getKeyCodeCombination();
                     Runnable runnable = () -> setMouseClickEffectAndRunAction(button.getButton());
                     accelerators.put(keyCombination, runnable);
+
+                    if (button.equals(CalculatorButtons.BUTTON_MULTIPLY)) {
+                        accelerators.put(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.SHIFT_DOWN), runnable);
+                    }
+                    if (button.equals(CalculatorButtons.BUTTON_PLUS)) {
+                        accelerators.put(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.SHIFT_DOWN), runnable);
+                    }
+                    if (button.equals(CalculatorButtons.BUTTON_MINUS)) {
+                        accelerators.put(new KeyCodeCombination(KeyCode.MINUS), runnable);
+                    }
+                    if (button.equals(CalculatorButtons.BUTTON_DIVIDE)) {
+                        accelerators.put(new KeyCodeCombination(KeyCode.SLASH), runnable);
+                    }
                 });
+        addHotKeysToNumericKeyboardDigits();
+    }
+
+    private void addHotKeysToNumericKeyboardDigits() {
+        ObservableMap<KeyCombination, Runnable> accelerators = this.getAccelerators();
+        CalculatorButtons.getDigitButtons().forEach(button -> {
+            KeyCombination keyCombination = new KeyCodeCombination(
+                    KeyCode.valueOf("NUMPAD" + button.getButton().getText()));
+            Runnable runnable = () -> setMouseClickEffectAndRunAction(button.getButton());
+            accelerators.put(keyCombination, runnable);
+        });
     }
 
     private void setMouseClickEffectAndRunAction(Button button) {
@@ -271,6 +297,19 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
                 controllerListener.memoryButtonClicked(number, memoryOperation, calculatorMode);
             });
         });
+        addTooltipsToMemoryButtons();
+    }
+
+    private void addTooltipsToMemoryButtons() {
+        Button buttonMemoryAdd = CalculatorButtons.BUTTON_MEMORY_ADD.getButton();
+        Button buttonMemoryClear = CalculatorButtons.BUTTON_MEMORY_CLEAR.getButton();
+        Button buttonMemoryRead = CalculatorButtons.BUTTON_MEMORY_READ.getButton();
+        Button buttonMemorySave = CalculatorButtons.BUTTON_MEMORY_SAVE.getButton();
+
+        buttonMemoryAdd.setTooltip(new Tooltip(getProperty("calculator_scene.tooltip_button_memory_add")));
+        buttonMemoryClear.setTooltip(new Tooltip(getProperty("calculator_scene.tooltip_button_memory_clear")));
+        buttonMemoryRead.setTooltip(new Tooltip(getProperty("calculator_scene.tooltip_button_memory_read")));
+        buttonMemorySave.setTooltip(new Tooltip(getProperty("calculator_scene.tooltip_button_memory_save")));
     }
 
     private void setupEnterButton() {
@@ -421,5 +460,9 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     void addElementToMainPanel(Node element) {
         mainPanel.getChildren().add(element);
+    }
+
+    String getValueFromTextFieldValue() {
+        return textFieldValue.getText();
     }
 }

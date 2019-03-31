@@ -12,6 +12,8 @@ public interface ControllerListener {
 
     void updateDigitButtons(int base);
 
+    void convertValue(String value, int currentBase, int newBase);
+
     void updateLanguage(Language language);
 
     void updateCalculatorMode(CalculatorMode calculatorMode);
