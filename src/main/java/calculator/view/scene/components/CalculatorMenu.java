@@ -41,7 +41,11 @@ public class CalculatorMenu extends MenuBar {
                 languageMenuItem.setSelected(true);
             }
 
-            languageMenuItem.setOnAction(event -> changeLanguage(language));
+            languageMenuItem.setOnAction(event -> {
+                if (!languageMenuItem.isSelected()) {
+                    changeLanguage(language);
+                }
+            });
         }
         return languageMenu;
     }
