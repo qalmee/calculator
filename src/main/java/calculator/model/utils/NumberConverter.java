@@ -1,6 +1,6 @@
 package calculator.model.utils;
 
-import calculator.model.CalculatorMode;
+import calculator.model.calculatorStats.CalculatorMode;
 import calculator.model.numbers.Complex;
 import calculator.model.numbers.Fraction;
 import calculator.model.numbers.Number;

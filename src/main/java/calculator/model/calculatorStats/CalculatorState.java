@@ -1,4 +1,4 @@
-package calculator.model;
+package calculator.model.calculatorStats;
 
 public enum CalculatorState {
     ERROR(0),

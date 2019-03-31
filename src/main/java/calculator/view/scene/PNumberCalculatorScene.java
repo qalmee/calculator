@@ -1,6 +1,6 @@
 package calculator.view.scene;
 
-import calculator.model.CalculatorMode;
+import calculator.model.calculatorStats.CalculatorMode;
 import calculator.view.scene.components.CalculatorButtons;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

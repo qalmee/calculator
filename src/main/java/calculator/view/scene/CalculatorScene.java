@@ -1,9 +1,9 @@
 package calculator.view.scene;
 
 import calculator.controller.ControllerListener;
-import calculator.model.CalculatorMode;
-import calculator.model.CalculatorOperation;
-import calculator.model.MemoryOperation;
+import calculator.model.calculatorStats.CalculatorMode;
+import calculator.model.calculatorStats.CalculatorOperation;
+import calculator.model.memory.MemoryOperation;
 import calculator.model.observer.CalculatorObserver;
 import calculator.view.localization.Language;
 import calculator.view.localization.LanguageProperties;
@@ -109,7 +109,6 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     @Override
     public void setResult(String result) {
-        System.out.println(result);
         textFieldValue.setText(result);
     }
 

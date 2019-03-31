@@ -1,49 +1,110 @@
 package calculator.model;
 
+import calculator.model.calculatorStats.CalculatorOperation;
+import calculator.model.numbers.Number;
+import calculator.model.utils.DTO.ExpressionNode;
+import calculator.model.utils.DTO.ExpressionOperand;
+import calculator.model.utils.DTO.ExpressionOperation;
+
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 public class LocalHistory {
 
     public static LocalHistory INSTANCE = new LocalHistory();
 
-    private String history;
-    private LocalHistory(){
-        history = "";
+    private LinkedList<ExpressionNode> historyList;
+
+    private LocalHistory() {
+        historyList = new LinkedList<>();
     }
 
-    public void reset(){
-        history = "";
+    public void reset() {
+        historyList.clear();
     }
 
-    public String getHistory(){
-        return history;
+//    public String add(Number number, CalculatorOperation operation){
+//        if (operation.isUnary()){
+//            history += operation.getMathSign() + "(" + number.toString() + ") ";
+//            historyList.addLast(new ExpressionOperation(operation));
+//            historyList.addLast(new ExpressionOperand(number));
+//        }
+//        else{
+//            history += number.toString() + " " + operation.getMathSign() + " ";
+//            historyList.addLast(new ExpressionOperand(number));
+//            historyList.addLast(new ExpressionOperation(operation));
+//        }
+//        return history;
+//    }
+
+    public void addNumber(Number number) {
+        historyList.addLast(new ExpressionOperand(number));
     }
 
-    public String add(Number number, CalculatorOperation operation){
-        if (operation.isUnary()){
-            history += operation.getMathSign() + "(" + number.toString() + ") ";
+    public void addOperation(CalculatorOperation operation) {
+        if (operation.isUnary()) {
+            addUnaryOperation(operation);
+        } else {
+            addBinaryOperation(operation);
         }
-        else{
-            history += number.toString() + " " + operation.getMathSign() + " ";
-        }
-        return history;
     }
 
-    public String changeLastOperation(CalculatorOperation operation){
-        if (operation.isUnary()){
-            throw new IllegalArgumentException("Attempt to change binary to unary operation");
+    public void addBinaryOperation(CalculatorOperation operation) {
+        if (operation.isUnary()) {
+            throw new IllegalArgumentException("Operation must be binary");
         }
-        if (history.isEmpty()){
-            throw new NoSuchElementException("History string is empty");
+        historyList.addLast(new ExpressionOperation(operation));
+    }
+
+    public void addUnaryOperation(CalculatorOperation operation) {
+        if (!operation.isUnary()) {
+            throw new IllegalArgumentException("Operation must be unary");
         }
-        String mathSign = history.substring(history.length() - 2).trim();
-        for (CalculatorOperation t : CalculatorOperation.values()){
-            if (mathSign.equals(t.getMathSign())){
-                history = history.substring(history.length() - 2) + operation.getMathSign() + " ";
-                return history;
+        ExpressionNode operand = historyList.removeLast();
+        if (!(operand instanceof ExpressionOperand)) {
+            throw new NoSuchElementException("Last element of History must be operand");
+        }
+        ((ExpressionOperand) (operand)).addUnaryOperation(operation);
+        historyList.addLast(operand);
+    }
+
+    public void changeLastOperation(CalculatorOperation operation) {
+        if (operation.isUnary()) {
+            throw new IllegalArgumentException("Operation must be binary");
+        }
+        if (!(historyList.getLast() instanceof ExpressionOperation)) {
+            throw new NoSuchElementException("Last element of History must be operand");
+        }
+        historyList.removeLast();
+        historyList.addLast(new ExpressionOperation(operation));
+    }
+
+    public boolean lastIsOperand() {
+        return (historyList.getLast() instanceof ExpressionOperand);
+    }
+
+    public boolean historyIsEmpty() {
+        return historyList.isEmpty();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (ExpressionNode node : historyList) {
+            sb.append(node.toString());
+        }
+        return sb.toString();
+    }
+
+    public String toString(int base) {
+        StringBuilder sb = new StringBuilder();
+        for (ExpressionNode node : historyList) {
+            if (node instanceof ExpressionOperand) {
+                sb.append(((ExpressionOperand) node).toString(base));
+            } else {
+                sb.append(node.toString());
             }
         }
-        throw new NoSuchElementException("At the end of history string no operation signs was found");
+        return sb.toString();
     }
-
 }

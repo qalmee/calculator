@@ -13,6 +13,16 @@ public class ConverterPToP {
 
     }
 
+    public static String convert10ToPAdaptive(String valueString, int base) {
+        String result = convert10ToP(valueString, base, MAX_PRECISION);
+        return cutTrailingZeros(result);
+    }
+
+    public static String convertPTo10Adaptive(String valueString, int base) {
+        String result = convertPTo10(valueString, base, MAX_PRECISION);
+        return cutTrailingZeros(result);
+    }
+
     public static String convert10ToP(String valueString, int base, int precision) {
         checkArguments(valueString, base, precision);
         valueString = valueString.toUpperCase();

@@ -1,4 +1,4 @@
-package calculator.model;
+package calculator.model.memory;
 
 import calculator.model.numbers.Number;
 

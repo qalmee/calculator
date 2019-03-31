@@ -1,9 +1,9 @@
 package calculator.controller;
 
-import calculator.model.CalculatorMode;
 import calculator.model.CalculatorModel;
-import calculator.model.CalculatorOperation;
-import calculator.model.MemoryOperation;
+import calculator.model.calculatorStats.CalculatorMode;
+import calculator.model.calculatorStats.CalculatorOperation;
+import calculator.model.memory.MemoryOperation;
 import calculator.model.observer.CalculatorObserver;
 import calculator.view.localization.Language;
 
@@ -32,7 +32,7 @@ public class Controller implements ControllerListener {
 
     @Override
     public void convertValue(String value, int currentBase, int newBase) {
-
+        calculatorModel.convertAll(value, currentBase, newBase);
     }
 
     @Override

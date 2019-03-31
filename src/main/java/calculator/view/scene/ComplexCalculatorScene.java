@@ -1,6 +1,6 @@
 package calculator.view.scene;
 
-import calculator.model.CalculatorMode;
+import calculator.model.calculatorStats.CalculatorMode;
 
 public class ComplexCalculatorScene extends CalculatorScene {
 

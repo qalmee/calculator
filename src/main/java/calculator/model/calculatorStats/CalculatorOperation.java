@@ -1,4 +1,4 @@
-package calculator.model;
+package calculator.model.calculatorStats;
 
 public enum CalculatorOperation {
 
@@ -9,6 +9,7 @@ public enum CalculatorOperation {
     REVERSE("REVERSE", true, "1/"),
     NEGATE("NEGATE", true, "-"),
     SQUARE("SQUARE", true, "sqr"),
+    BACKSPACE("BACKSPACE", true, "OMEGA_LUL"),
     //only for complex:
     ABS("ABS", true, "abs"),
     RAD("RAD", true, "rad"),

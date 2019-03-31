@@ -1,7 +1,7 @@
 package calculator.view.scene.components;
 
 import calculator.controller.ControllerListener;
-import calculator.model.CalculatorMode;
+import calculator.model.calculatorStats.CalculatorMode;
 import calculator.view.localization.Language;
 import calculator.view.localization.LanguageProperties;
 import javafx.application.Platform;

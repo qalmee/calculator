@@ -1,5 +1,9 @@
 package calculator.model;
 
+import calculator.model.calculatorStats.CalculatorOperation;
+import calculator.model.calculatorStats.CalculatorState;
+import calculator.model.memory.Memory;
+import calculator.model.memory.MemoryOperation;
 import calculator.model.numbers.Number;
 
 public class ControlUnit {
@@ -7,6 +11,7 @@ public class ControlUnit {
     private CalculatorState state;
     private Number resultValue;
     private boolean needToSetResult;
+    private boolean newValue;
 
     private ControlUnit() {
         resetCalculator();
@@ -16,8 +21,11 @@ public class ControlUnit {
         Processor.INSTANCE.reset();
         state = CalculatorState.START;
         needToSetResult = false;
+        LocalHistory.INSTANCE.reset();
+        newValue = true;
     }
 
+    @SuppressWarnings("Duplicates")
     public void equalsPressed(Number valueOnDisplay) {
         switch (state) {
             case START:
@@ -41,9 +49,12 @@ public class ControlUnit {
                 needToSetResult = true;
                 break;
         }
+        LocalHistory.INSTANCE.reset();
+        newValue = true;
         resultValue = Processor.INSTANCE.getLeftResultOperand();
     }
 
+    @SuppressWarnings("Duplicates")
     public void operatorPressed(Number valueOnDisplay, CalculatorOperation operation) {
         switch (state) {
             case START:
@@ -53,8 +64,12 @@ public class ControlUnit {
                     Processor.INSTANCE.operationRun();
                     state = CalculatorState.START;
                     needToSetResult = true;
+
+                    addNumberAndUnaryOperation(valueOnDisplay, operation);
                 } else {
                     state = CalculatorState.OPERATOR_SET;
+                    addNumberAndBinaryOperation(valueOnDisplay, operation);
+                    newValue = true;
                 }
                 break;
             case FIRST_OPERAND_INPUT:
@@ -64,8 +79,12 @@ public class ControlUnit {
                     Processor.INSTANCE.operationRun();
                     state = CalculatorState.START;
                     needToSetResult = true;
+
+                    addNumberAndUnaryOperation(valueOnDisplay, operation);
                 } else {
+                    addNumberAndBinaryOperation(valueOnDisplay, operation);
                     state = CalculatorState.OPERATOR_SET;
+                    newValue = true;
                 }
                 break;
             case OPERATOR_SET:
@@ -82,9 +101,13 @@ public class ControlUnit {
                     Processor.INSTANCE.setOperation(operationInProcessor);
                     needToSetResult = true;
                     state = CalculatorState.SECOND_OPERAND_INPUT;
+
+                    addNumberAndUnaryOperation(valueOnDisplay, operation);
                     return;
                 } else {
                     Processor.INSTANCE.setOperation(operation);
+                    changeBinaryOperation(operation);
+                    newValue = true;
                 }
                 break;
             case SECOND_OPERAND_INPUT:
@@ -95,18 +118,25 @@ public class ControlUnit {
                     Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);
 
                     Processor.INSTANCE.operationRun();
+                    resultValue = Processor.INSTANCE.getLeftResultOperand();
 
                     Processor.INSTANCE.setRightOperand(Processor.INSTANCE.getLeftResultOperand());
                     Processor.INSTANCE.setLeftResultOperand(leftOPerand);
                     Processor.INSTANCE.setOperation(operationInProcessor);
                     needToSetResult = true;
                     state = CalculatorState.SECOND_OPERAND_INPUT;
+
+                    addNumberAndUnaryOperation(valueOnDisplay, operation);
+                    return;
                 } else {
                     Processor.INSTANCE.setRightOperand(valueOnDisplay);
                     Processor.INSTANCE.operationRun();
                     needToSetResult = true;
                     Processor.INSTANCE.setOperation(operation);
                     state = CalculatorState.OPERATOR_SET;
+
+                    newValue = true;
+                    addNumberAndBinaryOperation(valueOnDisplay, operation);
                 }
                 break;
             case EQUALS_PRESSED:
@@ -114,6 +144,10 @@ public class ControlUnit {
                 if (operation.isUnary()) {
                     Processor.INSTANCE.operationRun();
                     needToSetResult = true;
+
+                    addNumberAndUnaryOperation(valueOnDisplay, operation);
+                } else {
+                    addNumberAndBinaryOperation(valueOnDisplay, operation);
                 }
                 break;
         }
@@ -156,4 +190,31 @@ public class ControlUnit {
             state = CalculatorState.FIRST_OPERAND_INPUT;
         }
     }
+
+    private void addUnaryOperation(CalculatorOperation operation) {
+        LocalHistory.INSTANCE.addUnaryOperation(operation);
+    }
+
+    private void addNumberAndBinaryOperation(Number number, CalculatorOperation operation) {
+        if (LocalHistory.INSTANCE.historyIsEmpty() || !LocalHistory.INSTANCE.lastIsOperand()) {
+            LocalHistory.INSTANCE.addNumber(number);
+        }
+        LocalHistory.INSTANCE.addBinaryOperation(operation);
+
+    }
+
+    private void addNumberAndUnaryOperation(Number number, CalculatorOperation operation) {
+        if (newValue) {
+            LocalHistory.INSTANCE.addNumber(number);
+            LocalHistory.INSTANCE.addUnaryOperation(operation);
+            newValue = false;
+        } else {
+            LocalHistory.INSTANCE.addUnaryOperation(operation);
+        }
+    }
+
+    private void changeBinaryOperation(CalculatorOperation operation) {
+        LocalHistory.INSTANCE.changeLastOperation(operation);
+    }
+
 }

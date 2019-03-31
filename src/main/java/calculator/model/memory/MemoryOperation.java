@@ -1,4 +1,4 @@
-package calculator.model;
+package calculator.model.memory;
 
 public enum MemoryOperation {
     MEMORY_ADD,

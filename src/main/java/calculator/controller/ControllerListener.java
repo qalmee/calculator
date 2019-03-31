@@ -1,8 +1,8 @@
 package calculator.controller;
 
-import calculator.model.CalculatorMode;
-import calculator.model.CalculatorOperation;
-import calculator.model.MemoryOperation;
+import calculator.model.calculatorStats.CalculatorMode;
+import calculator.model.calculatorStats.CalculatorOperation;
+import calculator.model.memory.MemoryOperation;
 import calculator.model.observer.CalculatorObserver;
 import calculator.view.localization.Language;
 

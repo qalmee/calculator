@@ -1,5 +1,6 @@
 package calculator.model;
 
+import calculator.model.calculatorStats.CalculatorOperation;
 import calculator.model.numbers.Complex;
 import calculator.model.numbers.Number;
 
