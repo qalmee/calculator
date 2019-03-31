@@ -461,4 +461,8 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     void addElementToMainPanel(Node element) {
         mainPanel.getChildren().add(element);
     }
+
+    String getValueFromTextFieldValue() {
+        return textFieldValue.getText();
+    }
 }
