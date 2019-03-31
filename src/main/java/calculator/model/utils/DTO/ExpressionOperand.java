@@ -31,7 +31,7 @@ public class ExpressionOperand implements ExpressionNode {
         if (!operation.isUnary()) {
             throw new IllegalArgumentException("Operation must be unary");
         }
-        unaryOperations.addLast(new ExpressionOperation(operation));
+        unaryOperations.addFirst(new ExpressionOperation(operation));
     }
 
     @Override

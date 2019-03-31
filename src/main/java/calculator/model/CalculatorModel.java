@@ -158,7 +158,4 @@ public class CalculatorModel {
     private String commasToDots(String s) {
         return s.replaceAll(",", ".");
     }
-
-
-
 }
