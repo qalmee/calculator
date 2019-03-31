@@ -7,7 +7,7 @@ public enum CalculatorOperation {
     MULTIPLY("MULTIPLY", false, "*"),
     DIVIDE("DIVIDE", false, "/"),
     REVERSE("REVERSE", true, "1/"),
-    NEGATE("NEGATE", true, "-"),
+    NEGATE("NEGATE", true, "negate"),
     SQUARE("SQUARE", true, "sqr"),
     BACKSPACE("BACKSPACE", true, "OMEGA_LUL"),
     //only for complex:
