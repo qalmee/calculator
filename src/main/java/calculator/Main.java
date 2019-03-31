@@ -3,7 +3,6 @@ package calculator;
 import calculator.controller.Controller;
 import calculator.model.CalculatorModel;
 import calculator.view.scene.CalculatorScene;
-import calculator.view.scene.PNumberCalculatorScene;
 import calculator.view.window.CalculatorWindow;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -19,7 +18,7 @@ public class Main extends Application {
         CalculatorModel calculatorModel = new CalculatorModel();
         Controller controller = new Controller(calculatorModel);
 
-        CalculatorScene calculatorScene = new PNumberCalculatorScene();
+        CalculatorScene calculatorScene = new CalculatorScene();
         calculatorScene.setControllerListener(controller);
 
         calculatorModel.setCalculatorObserver(calculatorScene);

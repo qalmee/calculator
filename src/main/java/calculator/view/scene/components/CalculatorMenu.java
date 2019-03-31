@@ -17,6 +17,8 @@ public class CalculatorMenu extends MenuBar {
     private ControllerListener controllerListener;
     private CalculatorMode calculatorMode;
 
+    private Language selectedLanguage;
+
     public CalculatorMenu(ControllerListener controllerListener, CalculatorMode calculatorMode) {
         this.controllerListener = controllerListener;
         this.calculatorMode = calculatorMode;
@@ -39,9 +41,17 @@ public class CalculatorMenu extends MenuBar {
             languageMenu.getItems().add(languageMenuItem);
             if (LanguageProperties.getLanguage() == language) {
                 languageMenuItem.setSelected(true);
+                selectedLanguage = language;
             }
 
-            languageMenuItem.setOnAction(event -> changeLanguage(language));
+            languageMenuItem.setOnAction(event -> {
+                RadioMenuItem currentLanguageMenuItem = (RadioMenuItem) event.getSource();
+                String languageName = currentLanguageMenuItem.getText();
+                if (!languageName.equals(selectedLanguage.getLanguageName())) {
+                    changeLanguage(language);
+                    selectedLanguage = Language.getLanguageFromLanguageName(languageName);
+                }
+            });
         }
         return languageMenu;
     }

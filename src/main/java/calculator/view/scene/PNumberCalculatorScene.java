@@ -13,7 +13,7 @@ import java.util.List;
 
 import static calculator.view.localization.LanguageProperties.getProperty;
 
-public class PNumberCalculatorScene extends CalculatorScene {
+class PNumberCalculatorScene extends CalculatorScene {
 
     private static final int SLIDER_MIN_VALUE = 2;
     private static final int SLIDER_MAX_VALUE = 16;
@@ -34,7 +34,7 @@ public class PNumberCalculatorScene extends CalculatorScene {
     private HBox bottomPanel;
     private Slider sliderBase;
 
-    public PNumberCalculatorScene() {
+    PNumberCalculatorScene() {
         super(CalculatorMode.P_NUMBER);
     }
 
