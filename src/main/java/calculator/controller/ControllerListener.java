@@ -28,8 +28,6 @@ public interface ControllerListener {
 
     void buttonDigitClicked();
 
-    void buttonBackSpaceClicked(String number);
-
     void buttonClearEntryClicked();
 
     void buttonGlobalClearClicked();

@@ -66,11 +66,6 @@ public class Controller implements ControllerListener {
     }
 
     @Override
-    public void buttonBackSpaceClicked(String number) {
-
-    }
-
-    @Override
     public void buttonClearEntryClicked() {
         calculatorModel.clearEntry();
     }

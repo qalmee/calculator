@@ -13,6 +13,8 @@ public interface CalculatorObserver {
 
     void updateLanguage(Language language);
 
+    void setBackSpaceEnabled(boolean value);
+
     void setResult(String result);
 
     void setPreviousOperationText(String text);
