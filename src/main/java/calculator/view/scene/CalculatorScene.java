@@ -268,9 +268,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
         buttonBackSpace.setOnAction(event -> {
             String textInTextField = textFieldValue.getText();
-            if (!textInTextField.isEmpty()) {
-                textFieldValue.setText(textInTextField.substring(0, textInTextField.length() - 1));
-            }
+            controllerListener.buttonBackSpaceClicked(textInTextField);
         });
     }
 
