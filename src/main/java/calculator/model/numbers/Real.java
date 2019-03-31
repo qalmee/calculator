@@ -53,7 +53,7 @@ public class Real implements Number<Real> {
 
     @Override
     public String toString() {
-        return value.toString();
+        return value.toPlainString();
     }
 
     @Override

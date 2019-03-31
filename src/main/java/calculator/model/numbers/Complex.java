@@ -127,7 +127,7 @@ public class Complex implements Number<Complex> {
 
     @Override
     public String toString() {
-        return real.toString() + imaginary.toString() + "i";
+        return real.toPlainString() + imaginary.toPlainString() + "i";
     }
 
     @Override
