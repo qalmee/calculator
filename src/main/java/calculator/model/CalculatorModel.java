@@ -143,8 +143,8 @@ public class CalculatorModel {
             }
             calculatorObserver.setResult(dotsToCommas(result));
             ControlUnit.INSTANCE.enteringNewValue();
-            calculatorObserver.clearResultAfterEnteringDigit();
         }
+        calculatorObserver.clearResultAfterEnteringDigit();
 
     }
 
@@ -158,7 +158,7 @@ public class CalculatorModel {
         calculatorObserver.setBackSpaceEnabled(true);
     }
 
-    public void clearEntry(){
+    public void clearEntry() {
         ControlUnit.INSTANCE.enteringNewValue();
         calculatorObserver.setBackSpaceEnabled(true);
     }

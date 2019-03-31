@@ -25,6 +25,14 @@ public class ControlUnit {
         newValue = true;
     }
 
+    private void debug() {
+        System.out.println(Processor.INSTANCE.getLeftResultOperand());
+        System.out.println(Processor.INSTANCE.getOperation());
+        System.out.println(Processor.INSTANCE.getRightOperand());
+        System.out.println(state);
+        System.out.println();
+    }
+
     @SuppressWarnings("Duplicates")
     public void equalsPressed(Number valueOnDisplay) {
         switch (state) {
@@ -33,6 +41,12 @@ public class ControlUnit {
             case START:
                 break;
             case FIRST_OPERAND_INPUT:
+                if (Processor.INSTANCE.getRightOperand() != null && Processor.INSTANCE.getOperation() != null) {
+                    Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);
+                    Processor.INSTANCE.operationRun();
+                    needToSetResult = true;
+                    state = CalculatorState.EQUALS_PRESSED;
+                }
                 break;
             case OPERATOR_SET:
                 Processor.INSTANCE.setRightOperand(valueOnDisplay);
