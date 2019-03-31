@@ -85,6 +85,7 @@ public class PNumberCalculatorScene extends CalculatorScene {
 
     private void setupSliderBaseUpdateListener() {
         sliderBase.valueProperty().addListener((observable, oldBase, newBase) -> {
+            controllerListener.setNewBase(newBase.intValue());
             controllerListener.updateDigitButtons(newBase.intValue());
             controllerListener.convertValue(getValueFromTextFieldValue(), oldBase.intValue(), newBase.intValue());
         });

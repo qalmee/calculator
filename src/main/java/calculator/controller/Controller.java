@@ -21,6 +21,11 @@ public class Controller implements ControllerListener {
     }
 
     @Override
+    public void setNewBase(int newBase) {
+
+    }
+
+    @Override
     public void updateDigitButtons(int base) {
         calculatorModel.updateDigitButtons(base);
     }

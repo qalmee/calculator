@@ -10,6 +10,8 @@ public interface ControllerListener {
 
     void setNewObserver(CalculatorObserver calculatorObserver);
 
+    void setNewBase(int newBase);
+
     void updateDigitButtons(int base);
 
     void convertValue(String value, int currentBase, int newBase);
