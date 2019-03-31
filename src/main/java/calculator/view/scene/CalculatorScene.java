@@ -20,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -33,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static calculator.view.localization.LanguageProperties.getProperty;
 
 public class CalculatorScene extends Scene implements CalculatorObserver {
 
@@ -230,7 +233,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
             accelerators.put(keyCombination, runnable);
         });
     }
-    
+
     private void setMouseClickEffectAndRunAction(Button button) {
         if (button.isDisabled()) {
             return;
@@ -293,6 +296,19 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
                 controllerListener.memoryButtonClicked(number, memoryOperation, calculatorMode);
             });
         });
+        addTooltipsToMemoryButtons();
+    }
+
+    private void addTooltipsToMemoryButtons() {
+        Button buttonMemoryAdd = CalculatorButtons.BUTTON_MEMORY_ADD.getButton();
+        Button buttonMemoryClear = CalculatorButtons.BUTTON_MEMORY_CLEAR.getButton();
+        Button buttonMemoryRead = CalculatorButtons.BUTTON_MEMORY_READ.getButton();
+        Button buttonMemorySave = CalculatorButtons.BUTTON_MEMORY_SAVE.getButton();
+
+        buttonMemoryAdd.setTooltip(new Tooltip(getProperty("calculator_scene.tooltip_button_memory_add")));
+        buttonMemoryClear.setTooltip(new Tooltip(getProperty("calculator_scene.tooltip_button_memory_clear")));
+        buttonMemoryRead.setTooltip(new Tooltip(getProperty("calculator_scene.tooltip_button_memory_read")));
+        buttonMemorySave.setTooltip(new Tooltip(getProperty("calculator_scene.tooltip_button_memory_save")));
     }
 
     private void setupEnterButton() {
