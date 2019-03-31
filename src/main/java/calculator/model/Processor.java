@@ -50,7 +50,6 @@ public class Processor<T extends Number<T>> {
             throw new IllegalStateException("Right operand is not set");
         }
         switch (operation) {
-            //todo: add check for Ex values
             case ADD:
                 leftResultOperand = leftResultOperand.add(rightOperand);
                 break;
