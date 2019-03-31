@@ -2,18 +2,18 @@ package calculator.model;
 
 public enum CalculatorOperation {
 
-    ADD("ADD", false),
-    SUBSTRACT("SUBSTRACT", false),
-    MULTIPLY("MULTIPLY", false),
-    DIVIDE("DIVIDE", false),
-    REVERSE("REVERSE", true),
-    NEGATE("NEGATE", true),
-    SQUARE("SQUARE", true),
+    ADD("ADD", false, "+"),
+    SUBTRACT("SUBTRACT", false, "-"),
+    MULTIPLY("MULTIPLY", false, "*"),
+    DIVIDE("DIVIDE", false, "/"),
+    REVERSE("REVERSE", true, "1/"),
+    NEGATE("NEGATE", true, "-"),
+    SQUARE("SQUARE", true, "sqr"),
     //only for complex:
-    ABS("ABS", true),
-    RAD("RAD", true),
-    DEG("DEG", true),
-    POW("POW", false);
+    ABS("ABS", true, "abs"),
+    RAD("RAD", true, "rad"),
+    DEG("DEG", true, "deg"),
+    POW("POW", false, "^");
 
 
     //todo: continue list
@@ -21,13 +21,19 @@ public enum CalculatorOperation {
 
     private String calculatorOperation;
     private boolean unary;
+    private String mathSign;
 
-    CalculatorOperation(String operation, boolean unaryFlag) {
+    CalculatorOperation(String operation, boolean unaryFlag, String mS) {
         calculatorOperation = operation;
         unary = unaryFlag;
+        mathSign = mS;
     }
 
     public boolean isUnary() {
         return unary;
+    }
+
+    public String getMathSign() {
+        return mathSign;
     }
 }

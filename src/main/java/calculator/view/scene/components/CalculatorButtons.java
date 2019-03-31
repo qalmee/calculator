@@ -110,7 +110,7 @@ public enum CalculatorButtons {
     static {
         actionButtons = new HashMap<>();
         actionButtons.put(BUTTON_PLUS.getButton(), CalculatorOperation.ADD);
-        actionButtons.put(BUTTON_MINUS.getButton(), CalculatorOperation.SUBSTRACT);
+        actionButtons.put(BUTTON_MINUS.getButton(), CalculatorOperation.SUBTRACT);
         actionButtons.put(BUTTON_MULTIPLY.getButton(), CalculatorOperation.MULTIPLY);
         actionButtons.put(BUTTON_DIVIDE.getButton(), CalculatorOperation.DIVIDE);
         actionButtons.put(BUTTON_REVERSE.getButton(), CalculatorOperation.REVERSE);

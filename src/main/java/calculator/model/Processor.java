@@ -40,7 +40,7 @@ public class Processor<T extends Number<T>> {
         }
         if (rightOperand == null && (
                         operation == CalculatorOperation.ADD ||
-                        operation == CalculatorOperation.SUBSTRACT ||
+                        operation == CalculatorOperation.SUBTRACT ||
                         operation == CalculatorOperation.MULTIPLY ||
                         operation == CalculatorOperation.DIVIDE ||
                         operation == CalculatorOperation.POW)) {
@@ -50,7 +50,7 @@ public class Processor<T extends Number<T>> {
             case ADD:
                 leftResultOperand = leftResultOperand.add(rightOperand);
                 break;
-            case SUBSTRACT:
+            case SUBTRACT:
                 leftResultOperand = leftResultOperand.subtract(rightOperand);
                 break;
             case MULTIPLY:
