@@ -151,11 +151,11 @@ public class CalculatorModel {
         currentBase = newBase;
     }
 
-    public String dotsToCommas(String s) {
+    private String dotsToCommas(String s) {
         return s.replaceAll("\\.", ",");
     }
 
-    public String commasToDots(String s) {
+    private String commasToDots(String s) {
         return s.replaceAll(",", ".");
     }
 
