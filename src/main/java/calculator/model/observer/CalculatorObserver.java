@@ -24,4 +24,6 @@ public interface CalculatorObserver {
     void copyValueToClipboard();
 
     void pasteValueFromClipboard();
+
+    void setErrorState();
 }

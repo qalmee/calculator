@@ -7,6 +7,7 @@ import calculator.model.memory.MemoryOperation;
 import calculator.model.numbers.Number;
 import calculator.model.observer.CalculatorObserver;
 import calculator.model.utils.ConverterPToP;
+import calculator.model.utils.Exceptions.DivisionByZeroException;
 import calculator.model.utils.NumberConverter;
 import calculator.view.localization.Language;
 
@@ -45,6 +46,7 @@ public class CalculatorModel {
         resetModel();
         Config.setCalculatorMode(calculatorMode);
         calculatorObserver.updateCalculatorMode(calculatorMode);
+        calculatorObserver.setBackSpaceEnabled(true);
     }
 
     public void readConfigInformation() {
@@ -71,7 +73,17 @@ public class CalculatorModel {
         }
         Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
 
-        ControlUnit.INSTANCE.operatorPressed(number, operation);
+        try {
+            ControlUnit.INSTANCE.operatorPressed(number, operation);
+        } catch (DivisionByZeroException e) {
+            calculatorObserver.setErrorState();
+            calculatorObserver.clearResultAfterEnteringDigit();
+            calculatorObserver.setResult(e.getMessage());
+            setHistoryOnDisplay(calculatorMode);
+            ControlUnit.INSTANCE.resetCalculator();
+            return;
+        }
+
         calculatorObserver.clearResultAfterEnteringDigit();
         if (ControlUnit.INSTANCE.needToSetResult()) {
             String result = ControlUnit.INSTANCE.getResultValue().toString();
@@ -81,11 +93,8 @@ public class CalculatorModel {
             calculatorObserver.setResult(dotsToCommas(result));
             ControlUnit.INSTANCE.resultIsSet();
         }
-        if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
-            calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(currentBase)));
-        } else {
-            calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString()));
-        }
+        setHistoryOnDisplay(calculatorMode);
+        calculatorObserver.setBackSpaceEnabled(false);
     }
 
     @SuppressWarnings("Duplicates")
@@ -95,7 +104,17 @@ public class CalculatorModel {
             valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, currentBase);
         }
         Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
-        ControlUnit.INSTANCE.equalsPressed(number);
+        try {
+            ControlUnit.INSTANCE.equalsPressed(number);
+        } catch (DivisionByZeroException e) {
+            calculatorObserver.setErrorState();
+            calculatorObserver.clearResultAfterEnteringDigit();
+            calculatorObserver.setResult(e.getMessage());
+            setHistoryOnDisplay(calculatorMode);
+            ControlUnit.INSTANCE.resetCalculator();
+            return;
+        }
+
         calculatorObserver.clearResultAfterEnteringDigit();
         if (ControlUnit.INSTANCE.needToSetResult()) {
             String result = ControlUnit.INSTANCE.getResultValue().toString();
@@ -106,6 +125,7 @@ public class CalculatorModel {
             ControlUnit.INSTANCE.resultIsSet();
         }
         calculatorObserver.setPreviousOperationText("");
+        calculatorObserver.setBackSpaceEnabled(true);
     }
 
     public void memoryOperationPressed(String valueOnDisplay, MemoryOperation operation, CalculatorMode calculatorMode) {
@@ -129,15 +149,17 @@ public class CalculatorModel {
 
     public void digitButtonPressed() {
         ControlUnit.INSTANCE.enteringNewValue();
+        calculatorObserver.setBackSpaceEnabled(true);
     }
 
     public void clear() {
         ControlUnit.INSTANCE.resetCalculator();
+        calculatorObserver.setBackSpaceEnabled(true);
     }
 
     public void clearEntry(){
-
         ControlUnit.INSTANCE.enteringNewValue();
+        calculatorObserver.setBackSpaceEnabled(true);
     }
 
     public void convertAll(String valueOnDisplay, int oldBase, int newBase) {
@@ -155,5 +177,13 @@ public class CalculatorModel {
 
     private String commasToDots(String s) {
         return s.replaceAll(",", ".");
+    }
+
+    private void setHistoryOnDisplay(CalculatorMode calculatorMode) {
+        if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
+            calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(currentBase)));
+        } else {
+            calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString()));
+        }
     }
 }

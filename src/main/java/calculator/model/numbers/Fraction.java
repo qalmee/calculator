@@ -1,5 +1,7 @@
 package calculator.model.numbers;
 
+import calculator.model.utils.NumberConstant;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
@@ -92,6 +94,11 @@ public class Fraction implements Number<Fraction> {
         Fraction fraction = (Fraction) o;
         return numerator.equals(fraction.numerator) &&
                 denominator.equals(fraction.denominator);
+    }
+
+    @Override
+    public boolean equals(NumberConstant constant) {
+        return this.equals(constant.getFraction());
     }
 
     @Override

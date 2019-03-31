@@ -1,5 +1,7 @@
 package calculator.model.numbers;
 
+import calculator.model.utils.NumberConstant;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -60,6 +62,11 @@ public class Real implements Number<Real> {
         if (o == null || getClass() != o.getClass()) return false;
         Real real = (Real) o;
         return value.subtract(real.value).abs().compareTo(EPS) < 0;
+    }
+
+    @Override
+    public boolean equals(NumberConstant constant) {
+        return this.equals(constant.getReal());
     }
 
     @Override

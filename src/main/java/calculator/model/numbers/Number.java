@@ -1,5 +1,7 @@
 package calculator.model.numbers;
 
+import calculator.model.utils.NumberConstant;
+
 import java.math.BigDecimal;
 
 public interface Number<T extends Number<T>> {
@@ -22,6 +24,8 @@ public interface Number<T extends Number<T>> {
     T negate();
 
     T square();
+
+    boolean equals(NumberConstant constant);
 
     BigDecimal toBigDecimal();
 }

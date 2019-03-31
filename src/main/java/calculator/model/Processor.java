@@ -3,6 +3,8 @@ package calculator.model;
 import calculator.model.calculatorStats.CalculatorOperation;
 import calculator.model.numbers.Complex;
 import calculator.model.numbers.Number;
+import calculator.model.utils.Exceptions.DivisionByZeroException;
+import calculator.model.utils.NumberConstant;
 
 import java.math.BigDecimal;
 
@@ -48,6 +50,7 @@ public class Processor<T extends Number<T>> {
             throw new IllegalStateException("Right operand is not set");
         }
         switch (operation) {
+            //todo: add check for Ex values
             case ADD:
                 leftResultOperand = leftResultOperand.add(rightOperand);
                 break;
@@ -58,6 +61,9 @@ public class Processor<T extends Number<T>> {
                 leftResultOperand = leftResultOperand.multiply(rightOperand);
                 break;
             case DIVIDE:
+                if (rightOperand.equals(NumberConstant.ZERO)) {
+                    throw new DivisionByZeroException("Cannot divide by zero");
+                }
                 leftResultOperand = leftResultOperand.divide(rightOperand);
                 break;
             case NEGATE:

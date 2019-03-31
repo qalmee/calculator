@@ -28,6 +28,8 @@ public class ControlUnit {
     @SuppressWarnings("Duplicates")
     public void equalsPressed(Number valueOnDisplay) {
         switch (state) {
+            case ERROR:
+                break;
             case START:
                 break;
             case FIRST_OPERAND_INPUT:
@@ -48,6 +50,8 @@ public class ControlUnit {
                 Processor.INSTANCE.operationRun();
                 needToSetResult = true;
                 break;
+            default:
+                break;
         }
         LocalHistory.INSTANCE.reset();
         newValue = true;
@@ -57,18 +61,20 @@ public class ControlUnit {
     @SuppressWarnings("Duplicates")
     public void operatorPressed(Number valueOnDisplay, CalculatorOperation operation) {
         switch (state) {
+            case ERROR:
+                break;
             case START:
                 Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);
                 Processor.INSTANCE.setOperation(operation);
                 if (operation.isUnary()) {
+                    addNumberAndUnaryOperation(valueOnDisplay, operation);
+
                     Processor.INSTANCE.operationRun();
                     state = CalculatorState.START;
                     needToSetResult = true;
-
-                    addNumberAndUnaryOperation(valueOnDisplay, operation);
                 } else {
-                    state = CalculatorState.OPERATOR_SET;
                     addNumberAndBinaryOperation(valueOnDisplay, operation);
+                    state = CalculatorState.OPERATOR_SET;
                     newValue = true;
                 }
                 break;
@@ -76,11 +82,11 @@ public class ControlUnit {
                 Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);
                 Processor.INSTANCE.setOperation(operation);
                 if (operation.isUnary()) {
+                    addNumberAndUnaryOperation(valueOnDisplay, operation);
+
                     Processor.INSTANCE.operationRun();
                     state = CalculatorState.START;
                     needToSetResult = true;
-
-                    addNumberAndUnaryOperation(valueOnDisplay, operation);
                 } else {
                     addNumberAndBinaryOperation(valueOnDisplay, operation);
                     state = CalculatorState.OPERATOR_SET;
@@ -89,6 +95,8 @@ public class ControlUnit {
                 break;
             case OPERATOR_SET:
                 if (operation.isUnary()) {
+                    addNumberAndUnaryOperation(valueOnDisplay, operation);
+
                     Number leftOPerand = Processor.INSTANCE.getLeftResultOperand();
                     CalculatorOperation operationInProcessor = Processor.INSTANCE.getOperation();
                     Processor.INSTANCE.setOperation(operation);
@@ -101,17 +109,17 @@ public class ControlUnit {
                     Processor.INSTANCE.setOperation(operationInProcessor);
                     needToSetResult = true;
                     state = CalculatorState.SECOND_OPERAND_INPUT;
-
-                    addNumberAndUnaryOperation(valueOnDisplay, operation);
                     return;
                 } else {
-                    Processor.INSTANCE.setOperation(operation);
                     changeBinaryOperation(operation);
+                    Processor.INSTANCE.setOperation(operation);
                     newValue = true;
                 }
                 break;
             case SECOND_OPERAND_INPUT:
                 if (operation.isUnary()) {
+                    addNumberAndUnaryOperation(valueOnDisplay, operation);
+
                     Number leftOPerand = Processor.INSTANCE.getLeftResultOperand();
                     CalculatorOperation operationInProcessor = Processor.INSTANCE.getOperation();
                     Processor.INSTANCE.setOperation(operation);
@@ -125,27 +133,25 @@ public class ControlUnit {
                     Processor.INSTANCE.setOperation(operationInProcessor);
                     needToSetResult = true;
                     state = CalculatorState.SECOND_OPERAND_INPUT;
-
-                    addNumberAndUnaryOperation(valueOnDisplay, operation);
                     return;
                 } else {
+                    addNumberAndBinaryOperation(valueOnDisplay, operation);
+
                     Processor.INSTANCE.setRightOperand(valueOnDisplay);
                     Processor.INSTANCE.operationRun();
                     needToSetResult = true;
                     Processor.INSTANCE.setOperation(operation);
                     state = CalculatorState.OPERATOR_SET;
-
                     newValue = true;
-                    addNumberAndBinaryOperation(valueOnDisplay, operation);
                 }
                 break;
             case EQUALS_PRESSED:
                 Processor.INSTANCE.setOperation(operation);
                 if (operation.isUnary()) {
+                    addNumberAndUnaryOperation(valueOnDisplay, operation);
+
                     Processor.INSTANCE.operationRun();
                     needToSetResult = true;
-
-                    addNumberAndUnaryOperation(valueOnDisplay, operation);
                 } else {
                     addNumberAndBinaryOperation(valueOnDisplay, operation);
                 }
