@@ -280,7 +280,9 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
         buttonBackSpace.setOnAction(event -> {
             String textInTextField = textFieldValue.getText();
-            //todo backspace
+            if (backSpaceEnabled) {
+                textFieldValue.setText(textInTextField.substring(0, textInTextField.length() - 1));
+            }
         });
     }
 
