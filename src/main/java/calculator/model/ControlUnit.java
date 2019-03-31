@@ -25,6 +25,14 @@ public class ControlUnit {
         newValue = true;
     }
 
+    private void debug() {
+        System.out.println(Processor.INSTANCE.getLeftResultOperand());
+        System.out.println(Processor.INSTANCE.getOperation());
+        System.out.println(Processor.INSTANCE.getRightOperand());
+        System.out.println(state);
+        System.out.println();
+    }
+
     @SuppressWarnings("Duplicates")
     public void equalsPressed(Number valueOnDisplay) {
         switch (state) {
