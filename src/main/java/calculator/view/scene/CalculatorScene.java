@@ -70,6 +70,10 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private TextField textFieldValue;
     private TextField textFieldPreviousOperation;
 
+    public CalculatorScene() {
+        this(CalculatorMode.BASIC);
+    }
+
     CalculatorScene(CalculatorMode calculatorMode) {
         super(new VBox());
         this.calculatorMode = calculatorMode;
