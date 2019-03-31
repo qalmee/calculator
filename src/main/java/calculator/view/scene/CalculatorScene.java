@@ -218,8 +218,19 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
                         accelerators.put(new KeyCodeCombination(KeyCode.SLASH), runnable);
                     }
                 });
+        addHotKeysToNumericKeyboardDigits();
     }
 
+    private void addHotKeysToNumericKeyboardDigits() {
+        ObservableMap<KeyCombination, Runnable> accelerators = this.getAccelerators();
+        CalculatorButtons.getDigitButtons().forEach(button -> {
+            KeyCombination keyCombination = new KeyCodeCombination(
+                    KeyCode.valueOf("NUMPAD" + button.getButton().getText()));
+            Runnable runnable = () -> setMouseClickEffectAndRunAction(button.getButton());
+            accelerators.put(keyCombination, runnable);
+        });
+    }
+    
     private void setMouseClickEffectAndRunAction(Button button) {
         if (button.isDisabled()) {
             return;
