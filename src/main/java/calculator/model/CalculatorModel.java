@@ -65,6 +65,7 @@ public class CalculatorModel {
 
     @SuppressWarnings("Duplicates")
     public void operationPressed(String valueOnDisplay, CalculatorOperation operation, CalculatorMode calculatorMode) {
+        valueOnDisplay = commasToDots(valueOnDisplay);
         if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
             valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, currentBase);
         }
@@ -77,19 +78,20 @@ public class CalculatorModel {
             if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
                 result = ConverterPToP.convert10ToPAdaptive(result, currentBase);
             }
-            calculatorObserver.setResult(result);
+            calculatorObserver.setResult(dotsToCommas(result));
             ControlUnit.INSTANCE.resultIsSet();
         }
         System.out.println(LocalHistory.INSTANCE.toString());
         if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
-            calculatorObserver.setPreviousOperationText(LocalHistory.INSTANCE.toString(currentBase));
+            calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(currentBase)));
         } else {
-            calculatorObserver.setPreviousOperationText(LocalHistory.INSTANCE.toString());
+            calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString()));
         }
     }
 
     @SuppressWarnings("Duplicates")
     public void equalsPressed(String valueOnDisplay, CalculatorMode calculatorMode) {
+        valueOnDisplay = commasToDots(valueOnDisplay);
         if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
             valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, currentBase);
         }
@@ -101,13 +103,14 @@ public class CalculatorModel {
             if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
                 result = ConverterPToP.convert10ToPAdaptive(result, currentBase);
             }
-            calculatorObserver.setResult(result);
+            calculatorObserver.setResult(dotsToCommas(result));
             ControlUnit.INSTANCE.resultIsSet();
         }
         calculatorObserver.setPreviousOperationText("");
     }
 
     public void memoryOperationPressed(String valueOnDisplay, MemoryOperation operation, CalculatorMode calculatorMode) {
+        valueOnDisplay = commasToDots(valueOnDisplay);
         if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
             valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, currentBase);
         }
@@ -118,7 +121,7 @@ public class CalculatorModel {
             if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
                 result = ConverterPToP.convert10ToPAdaptive(result, currentBase);
             }
-            calculatorObserver.setResult(result);
+            calculatorObserver.setResult(dotsToCommas(result));
             ControlUnit.INSTANCE.enteringNewValue();
             calculatorObserver.clearResultAfterEnteringDigit();
         }
@@ -140,11 +143,20 @@ public class CalculatorModel {
     }
 
     public void convertAll(String valueOnDisplay, int oldBase, int newBase) {
+        valueOnDisplay = commasToDots(valueOnDisplay);
         String result = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, oldBase); //todo: precision ?
         result = ConverterPToP.convert10ToPAdaptive(result, newBase);
-        calculatorObserver.setResult(result);
-        calculatorObserver.setPreviousOperationText(LocalHistory.INSTANCE.toString(newBase));
+        calculatorObserver.setResult(dotsToCommas(result));
+        calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(newBase)));
         currentBase = newBase;
+    }
+
+    public String dotsToCommas(String s) {
+        return s.replaceAll("\\.", ",");
+    }
+
+    public String commasToDots(String s) {
+        return s.replaceAll(",", ".");
     }
 
 
