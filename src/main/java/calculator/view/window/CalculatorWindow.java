@@ -22,6 +22,7 @@ public class CalculatorWindow extends Stage {
         this.setTitle(getProperty("calculator_window.title"));
         this.getIcons().add(new Image(getClass().getResourceAsStream("/icons/window_icon.png")));
         this.setResizable(false);
+        this.sizeToScene();
 
         window.addEventHandler(WindowEvent.WINDOW_SHOWN, event -> {
             Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();

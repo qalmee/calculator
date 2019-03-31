@@ -45,6 +45,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private static final int BUTTON_HEIGHT = 30;
     private static final int ROW_CONSTRAINS_HEIGHT = 40;
     private static final int COLUMN_CONSTRAINS_WIDTH = 65;
+    private static final int TEXT_FIELD_WIDTH = 415;
     private static final int TEXT_FIELD_HEIGHT = 65;
     private static final int TEXT_FIELD_VALUE_MAX_TEXT_WIDTH_PIXELS = 380;
     private static final int TEXT_FIELD_VALUE_MAX_TEXT_LENGTH = 40;
@@ -151,7 +152,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private void setupTextFields() {
         textFieldValue = new TextField();
         textFieldValue.setFont(TEXT_FIELD_VALUE_FONT);
-        textFieldValue.setPrefSize(Region.USE_PREF_SIZE, TEXT_FIELD_HEIGHT);
+        textFieldValue.setPrefSize(TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
         textFieldValue.textProperty().addListener((observable, oldValue, newValue) ->
                 configureTextInTextFieldValue(oldValue, newValue));
         setupTextFieldStyle(textFieldValue);
