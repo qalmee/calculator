@@ -168,7 +168,6 @@ public class CalculatorModel {
         result = ConverterPToP.convert10ToPAdaptive(result, newBase);
         calculatorObserver.setResult(dotsToCommas(result));
         calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(newBase)));
-        currentBase = newBase;
     }
 
     private String dotsToCommas(String s) {
@@ -199,5 +198,9 @@ public class CalculatorModel {
         }
         digitButtonPressed();
         calculatorObserver.setResult(number.toString());
+    }
+
+    public void setBase(int base) {
+        currentBase = base;
     }
 }

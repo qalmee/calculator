@@ -22,7 +22,7 @@ public class Controller implements ControllerListener {
 
     @Override
     public void setNewBase(int newBase) {
-
+        calculatorModel.setBase(newBase);
     }
 
     @Override

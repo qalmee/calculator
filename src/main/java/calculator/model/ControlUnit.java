@@ -60,6 +60,7 @@ public class ControlUnit {
                 state = CalculatorState.EQUALS_PRESSED;
                 break;
             case EQUALS_PRESSED:
+                Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);
                 Processor.INSTANCE.operationRun();
                 needToSetResult = true;
                 break;
