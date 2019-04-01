@@ -79,7 +79,6 @@ public class CalculatorModel {
         } catch (DivisionByZeroException e) {
             calculatorObserver.setErrorState(ErrorState.DIVISION_BY_ZERO);
             calculatorObserver.clearResultAfterEnteringDigit();
-            calculatorObserver.setResult(e.getMessage());
             setHistoryOnDisplay(calculatorMode);
             ControlUnit.INSTANCE.resetCalculator();
             return;
@@ -110,7 +109,6 @@ public class CalculatorModel {
         } catch (DivisionByZeroException e) {
             calculatorObserver.setErrorState(ErrorState.DIVISION_BY_ZERO);
             calculatorObserver.clearResultAfterEnteringDigit();
-            calculatorObserver.setResult(e.getMessage());
             setHistoryOnDisplay(calculatorMode);
             ControlUnit.INSTANCE.resetCalculator();
             return;
@@ -129,6 +127,7 @@ public class CalculatorModel {
         calculatorObserver.setBackSpaceEnabled(true);
     }
 
+    @SuppressWarnings("Duplicates")
     public void memoryOperationPressed(String valueOnDisplay, MemoryOperation operation, CalculatorMode calculatorMode) {
         valueOnDisplay = commasToDots(valueOnDisplay);
         if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
@@ -165,7 +164,7 @@ public class CalculatorModel {
 
     public void convertAll(String valueOnDisplay, int oldBase, int newBase) {
         valueOnDisplay = commasToDots(valueOnDisplay);
-        String result = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, oldBase); //todo: precision ?
+        String result = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, oldBase);
         result = ConverterPToP.convert10ToPAdaptive(result, newBase);
         calculatorObserver.setResult(dotsToCommas(result));
         calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(newBase)));
@@ -186,5 +185,19 @@ public class CalculatorModel {
         } else {
             calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString()));
         }
+    }
+
+    public void parseClipboardString(String data, CalculatorMode calculatorMode) {
+        Number number;
+        try {
+            number = NumberConverter.stringToNumber(data, calculatorMode);
+        } catch (RuntimeException e) {
+            calculatorObserver.setErrorState(ErrorState.WRONG_DATA);
+            calculatorObserver.clearResultAfterEnteringDigit();
+            ControlUnit.INSTANCE.resetCalculator();
+            return;
+        }
+        digitButtonPressed();
+        calculatorObserver.setResult(number.toString());
     }
 }

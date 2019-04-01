@@ -35,6 +35,7 @@ public class ControlUnit {
 
     @SuppressWarnings("Duplicates")
     public void equalsPressed(Number valueOnDisplay) {
+        debug();
         switch (state) {
             case ERROR:
                 break;
@@ -72,6 +73,7 @@ public class ControlUnit {
 
     @SuppressWarnings("Duplicates")
     public void operatorPressed(Number valueOnDisplay, CalculatorOperation operation) {
+        debug();
         CalculatorOperation operationInProcessor;
         switch (state) {
             case ERROR:
@@ -166,6 +168,7 @@ public class ControlUnit {
     }
 
     public void memoryOperationPressed(Number valueOnDisplay, MemoryOperation operation) {
+        debug();
         switch (operation) {
             case MEMORY_ADD:
                 Memory.INSTANCE.memoryAdd(valueOnDisplay);

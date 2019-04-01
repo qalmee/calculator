@@ -14,7 +14,7 @@ public interface ControllerListener {
 
     void updateDigitButtons(int base);
 
-    void checkPastedValue(String value);
+    void checkPastedValue(String value, CalculatorMode calculatorMode);
 
     void convertValue(String value, int currentBase, int newBase);
 

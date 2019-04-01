@@ -31,8 +31,8 @@ public class Controller implements ControllerListener {
     }
 
     @Override
-    public void checkPastedValue(String value) {
-
+    public void checkPastedValue(String value, CalculatorMode calculatorMode) {
+        calculatorModel.parseClipboardString(value, calculatorMode);
     }
 
     @Override
