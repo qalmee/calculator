@@ -1,6 +1,6 @@
 package calculator.view.scene;
 
-import calculator.model.calculatorStats.CalculatorMode;
+import calculator.model.stats.CalculatorMode;
 
 class FractionCalculatorScene extends CalculatorScene {
 

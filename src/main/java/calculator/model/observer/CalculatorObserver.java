@@ -1,6 +1,6 @@
 package calculator.model.observer;
 
-import calculator.model.calculatorStats.CalculatorMode;
+import calculator.model.stats.CalculatorMode;
 import calculator.view.ErrorState;
 import calculator.view.localization.Language;
 

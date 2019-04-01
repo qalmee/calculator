@@ -1,17 +1,17 @@
 package calculator.model;
 
-import calculator.model.calculatorStats.CalculatorOperation;
 import calculator.model.numbers.Number;
-import calculator.model.utils.DTO.ExpressionNode;
-import calculator.model.utils.DTO.ExpressionOperand;
-import calculator.model.utils.DTO.ExpressionOperation;
+import calculator.model.stats.CalculatorOperation;
+import calculator.model.utils.dto.ExpressionNode;
+import calculator.model.utils.dto.ExpressionOperand;
+import calculator.model.utils.dto.ExpressionOperation;
 
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 public class LocalHistory {
 
-    public static LocalHistory INSTANCE = new LocalHistory();
+    public static final LocalHistory INSTANCE = new LocalHistory();
 
     private LinkedList<ExpressionNode> historyList;
 
@@ -22,20 +22,6 @@ public class LocalHistory {
     public void reset() {
         historyList.clear();
     }
-
-//    public String add(Number number, CalculatorOperation operation){
-//        if (operation.isUnary()){
-//            history += operation.getMathSign() + "(" + number.toString() + ") ";
-//            historyList.addLast(new ExpressionOperation(operation));
-//            historyList.addLast(new ExpressionOperand(number));
-//        }
-//        else{
-//            history += number.toString() + " " + operation.getMathSign() + " ";
-//            historyList.addLast(new ExpressionOperand(number));
-//            historyList.addLast(new ExpressionOperation(operation));
-//        }
-//        return history;
-//    }
 
     public void addNumber(Number number) {
         historyList.addLast(new ExpressionOperand(number));

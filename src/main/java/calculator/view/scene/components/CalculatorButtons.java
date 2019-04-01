@@ -1,8 +1,8 @@
 package calculator.view.scene.components;
 
-import calculator.model.calculatorStats.CalculatorMode;
-import calculator.model.calculatorStats.CalculatorOperation;
 import calculator.model.memory.MemoryOperation;
+import calculator.model.stats.CalculatorMode;
+import calculator.model.stats.CalculatorOperation;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;

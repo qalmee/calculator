@@ -1,6 +1,6 @@
-package calculator.model.utils.DTO;
+package calculator.model.utils.dto;
 
-import calculator.model.calculatorStats.CalculatorOperation;
+import calculator.model.stats.CalculatorOperation;
 
 public class ExpressionOperation implements ExpressionNode {
 

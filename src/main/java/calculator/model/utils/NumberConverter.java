@@ -1,10 +1,10 @@
 package calculator.model.utils;
 
-import calculator.model.calculatorStats.CalculatorMode;
 import calculator.model.numbers.Complex;
 import calculator.model.numbers.Fraction;
 import calculator.model.numbers.Number;
 import calculator.model.numbers.Real;
+import calculator.model.stats.CalculatorMode;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

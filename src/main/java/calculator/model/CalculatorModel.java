@@ -1,14 +1,14 @@
 package calculator.model;
 
-import calculator.model.calculatorStats.CalculatorMode;
-import calculator.model.calculatorStats.CalculatorOperation;
 import calculator.model.configuration.Config;
 import calculator.model.memory.MemoryOperation;
 import calculator.model.numbers.Number;
 import calculator.model.observer.CalculatorObserver;
+import calculator.model.stats.CalculatorMode;
+import calculator.model.stats.CalculatorOperation;
 import calculator.model.utils.ConverterPToP;
-import calculator.model.utils.Exceptions.DivisionByZeroException;
 import calculator.model.utils.NumberConverter;
+import calculator.model.utils.exceptions.DivisionByZeroException;
 import calculator.view.ErrorState;
 import calculator.view.localization.Language;
 

@@ -1,10 +1,11 @@
-package calculator.model.utils.DTO;
+package calculator.model.utils.dto;
 
-import calculator.model.calculatorStats.CalculatorOperation;
 import calculator.model.numbers.Number;
+import calculator.model.stats.CalculatorOperation;
 import calculator.model.utils.ConverterPToP;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class ExpressionOperand implements ExpressionNode {
     private Number number;
@@ -23,7 +24,7 @@ public class ExpressionOperand implements ExpressionNode {
         this.number = number;
     }
 
-    public LinkedList<ExpressionOperation> getUnaryOperations() {
+    public List<ExpressionOperation> getUnaryOperations() {
         return unaryOperations;
     }
 

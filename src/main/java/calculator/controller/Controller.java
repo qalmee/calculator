@@ -1,10 +1,10 @@
 package calculator.controller;
 
 import calculator.model.CalculatorModel;
-import calculator.model.calculatorStats.CalculatorMode;
-import calculator.model.calculatorStats.CalculatorOperation;
 import calculator.model.memory.MemoryOperation;
 import calculator.model.observer.CalculatorObserver;
+import calculator.model.stats.CalculatorMode;
+import calculator.model.stats.CalculatorOperation;
 import calculator.view.localization.Language;
 
 public class Controller implements ControllerListener {

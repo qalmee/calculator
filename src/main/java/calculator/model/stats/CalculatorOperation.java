@@ -1,4 +1,4 @@
-package calculator.model.calculatorStats;
+package calculator.model.stats;
 
 public enum CalculatorOperation {
 
@@ -17,15 +17,12 @@ public enum CalculatorOperation {
     POW("POW", false, "^");
 
 
-    //todo: continue list
-
-
-    private String calculatorOperation;
+    private String name;
     private boolean unary;
     private String mathSign;
 
     CalculatorOperation(String operation, boolean unaryFlag, String mS) {
-        calculatorOperation = operation;
+        name = operation;
         unary = unaryFlag;
         mathSign = mS;
     }
