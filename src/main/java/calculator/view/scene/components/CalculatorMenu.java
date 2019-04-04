@@ -128,14 +128,24 @@ public class CalculatorMenu extends MenuBar {
         MenuItem separator = new SeparatorMenuItem();
         menuHelp.getItems().addAll(menuItemHelp, separator, menuItemAbout);
         this.getMenus().add(menuHelp);
+
+        menuItemHelp.setOnAction(event -> createInformationAlert(getProperty("calculator_scene.help_alert_title"),
+                getProperty("calculator_scene.help_alert_message")));
+        menuItemAbout.setOnAction(event -> createInformationAlert(getProperty("calculator_scene.about_alert_title"),
+                getProperty("calculator_scene.about_alert_message")));
     }
 
     private void changeLanguage(Language language) {
         controllerListener.updateLanguage(language);
+        createInformationAlert(getProperty("calculator_scene.restart_alert_title"),
+                getProperty("calculator_scene.restart_alert_message"));
+    }
+
+    private void createInformationAlert(String title, String contentText) {
         Alert needRestartAlert = new Alert(Alert.AlertType.INFORMATION);
-        needRestartAlert.setTitle(getProperty("calculator_scene.restart_alert_title"));
+        needRestartAlert.setTitle(title);
         needRestartAlert.setHeaderText(null);
-        needRestartAlert.setContentText(getProperty("calculator_scene.restart_alert_message"));
+        needRestartAlert.setContentText(contentText);
         needRestartAlert.showAndWait();
     }
 }
