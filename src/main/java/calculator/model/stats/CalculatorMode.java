@@ -1,4 +1,4 @@
-package calculator.model.calculatorStats;
+package calculator.model.stats;
 
 public enum CalculatorMode {
 

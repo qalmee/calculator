@@ -1,10 +1,10 @@
 package calculator.model;
 
-import calculator.model.calculatorStats.CalculatorOperation;
-import calculator.model.calculatorStats.CalculatorState;
 import calculator.model.memory.Memory;
 import calculator.model.memory.MemoryOperation;
 import calculator.model.numbers.Number;
+import calculator.model.stats.CalculatorOperation;
+import calculator.model.stats.CalculatorState;
 
 public class ControlUnit {
     public static final ControlUnit INSTANCE = new ControlUnit();
@@ -19,7 +19,7 @@ public class ControlUnit {
 
     public void resetCalculator() {
         Processor.INSTANCE.reset();
-        state = CalculatorState.START;
+        state = CalculatorState.FIRST_OPERAND_INPUT;
         needToSetResult = false;
         LocalHistory.INSTANCE.reset();
         newValue = true;
@@ -35,10 +35,9 @@ public class ControlUnit {
 
     @SuppressWarnings("Duplicates")
     public void equalsPressed(Number valueOnDisplay) {
+        debug();
         switch (state) {
             case ERROR:
-                break;
-            case START:
                 break;
             case FIRST_OPERAND_INPUT:
                 if (Processor.INSTANCE.getRightOperand() != null && Processor.INSTANCE.getOperation() != null) {
@@ -61,6 +60,7 @@ public class ControlUnit {
                 state = CalculatorState.EQUALS_PRESSED;
                 break;
             case EQUALS_PRESSED:
+                Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);
                 Processor.INSTANCE.operationRun();
                 needToSetResult = true;
                 break;
@@ -74,33 +74,22 @@ public class ControlUnit {
 
     @SuppressWarnings("Duplicates")
     public void operatorPressed(Number valueOnDisplay, CalculatorOperation operation) {
+        debug();
+        CalculatorOperation operationInProcessor;
         switch (state) {
             case ERROR:
-                break;
-            case START:
-                Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);
-                Processor.INSTANCE.setOperation(operation);
-                if (operation.isUnary()) {
-                    addNumberAndUnaryOperation(valueOnDisplay, operation);
-
-                    Processor.INSTANCE.operationRun();
-                    state = CalculatorState.START;
-                    needToSetResult = true;
-                } else {
-                    addNumberAndBinaryOperation(valueOnDisplay, operation);
-                    state = CalculatorState.OPERATOR_SET;
-                    newValue = true;
-                }
                 break;
             case FIRST_OPERAND_INPUT:
                 Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);
                 Processor.INSTANCE.setOperation(operation);
                 if (operation.isUnary()) {
                     addNumberAndUnaryOperation(valueOnDisplay, operation);
+                    operationInProcessor = Processor.INSTANCE.getOperation();
 
                     Processor.INSTANCE.operationRun();
-                    state = CalculatorState.START;
+                    state = CalculatorState.FIRST_OPERAND_INPUT;
                     needToSetResult = true;
+                    Processor.INSTANCE.setOperation(operationInProcessor);
                 } else {
                     addNumberAndBinaryOperation(valueOnDisplay, operation);
                     state = CalculatorState.OPERATOR_SET;
@@ -111,15 +100,15 @@ public class ControlUnit {
                 if (operation.isUnary()) {
                     addNumberAndUnaryOperation(valueOnDisplay, operation);
 
-                    Number leftOPerand = Processor.INSTANCE.getLeftResultOperand();
-                    CalculatorOperation operationInProcessor = Processor.INSTANCE.getOperation();
+                    Number leftOperand = Processor.INSTANCE.getLeftResultOperand();
+                    operationInProcessor = Processor.INSTANCE.getOperation();
                     Processor.INSTANCE.setOperation(operation);
 
                     Processor.INSTANCE.operationRun();
                     resultValue = Processor.INSTANCE.getLeftResultOperand();
 
                     Processor.INSTANCE.setRightOperand(Processor.INSTANCE.getLeftResultOperand());
-                    Processor.INSTANCE.setLeftResultOperand(leftOPerand);
+                    Processor.INSTANCE.setLeftResultOperand(leftOperand);
                     Processor.INSTANCE.setOperation(operationInProcessor);
                     needToSetResult = true;
                     state = CalculatorState.SECOND_OPERAND_INPUT;
@@ -135,7 +124,7 @@ public class ControlUnit {
                     addNumberAndUnaryOperation(valueOnDisplay, operation);
 
                     Number leftOPerand = Processor.INSTANCE.getLeftResultOperand();
-                    CalculatorOperation operationInProcessor = Processor.INSTANCE.getOperation();
+                    operationInProcessor = Processor.INSTANCE.getOperation();
                     Processor.INSTANCE.setOperation(operation);
                     Processor.INSTANCE.setLeftResultOperand(valueOnDisplay);
 
@@ -163,18 +152,24 @@ public class ControlUnit {
                 Processor.INSTANCE.setOperation(operation);
                 if (operation.isUnary()) {
                     addNumberAndUnaryOperation(valueOnDisplay, operation);
+                    operationInProcessor = Processor.INSTANCE.getOperation();
 
                     Processor.INSTANCE.operationRun();
                     needToSetResult = true;
+                    Processor.INSTANCE.setOperation(operationInProcessor);
                 } else {
                     addNumberAndBinaryOperation(valueOnDisplay, operation);
+                    state = CalculatorState.OPERATOR_SET;
                 }
+                break;
+            default:
                 break;
         }
         resultValue = Processor.INSTANCE.getLeftResultOperand();
     }
 
     public void memoryOperationPressed(Number valueOnDisplay, MemoryOperation operation) {
+        debug();
         switch (operation) {
             case MEMORY_ADD:
                 Memory.INSTANCE.memoryAdd(valueOnDisplay);
@@ -187,6 +182,8 @@ public class ControlUnit {
                 break;
             case MEMORY_CLEAR:
                 Memory.INSTANCE.memoryClear();
+                break;
+            default:
                 break;
         }
     }
@@ -204,9 +201,9 @@ public class ControlUnit {
     }
 
     public void enteringNewValue() {
-        if (state == CalculatorState.OPERATOR_SET || state == CalculatorState.EQUALS_PRESSED) {
+        if (state == CalculatorState.OPERATOR_SET) {
             state = CalculatorState.SECOND_OPERAND_INPUT;
-        } else if (state == CalculatorState.START) {
+        } else if (state == CalculatorState.EQUALS_PRESSED) {
             state = CalculatorState.FIRST_OPERAND_INPUT;
         }
     }

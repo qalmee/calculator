@@ -1,4 +1,4 @@
-package calculator.model.utils.DTO;
+package calculator.model.utils.dto;
 
 public interface ExpressionNode {
 

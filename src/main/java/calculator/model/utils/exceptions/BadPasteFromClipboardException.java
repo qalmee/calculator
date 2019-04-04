@@ -1,4 +1,4 @@
-package calculator.model.utils.Exceptions;
+package calculator.model.utils.exceptions;
 
 public class BadPasteFromClipboardException extends RuntimeException {
 

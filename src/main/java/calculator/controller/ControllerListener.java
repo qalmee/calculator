@@ -1,9 +1,9 @@
 package calculator.controller;
 
-import calculator.model.calculatorStats.CalculatorMode;
-import calculator.model.calculatorStats.CalculatorOperation;
 import calculator.model.memory.MemoryOperation;
 import calculator.model.observer.CalculatorObserver;
+import calculator.model.stats.CalculatorMode;
+import calculator.model.stats.CalculatorOperation;
 import calculator.view.localization.Language;
 
 public interface ControllerListener {
@@ -14,7 +14,7 @@ public interface ControllerListener {
 
     void updateDigitButtons(int base);
 
-    void checkPastedValue(String value);
+    void checkPastedValue(String value, CalculatorMode calculatorMode);
 
     void convertValue(String value, int currentBase, int newBase);
 

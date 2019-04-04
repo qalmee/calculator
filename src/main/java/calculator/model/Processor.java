@@ -1,10 +1,10 @@
 package calculator.model;
 
-import calculator.model.calculatorStats.CalculatorOperation;
 import calculator.model.numbers.Complex;
 import calculator.model.numbers.Number;
-import calculator.model.utils.Exceptions.DivisionByZeroException;
+import calculator.model.stats.CalculatorOperation;
 import calculator.model.utils.NumberConstant;
+import calculator.model.utils.exceptions.DivisionByZeroException;
 
 import java.math.BigDecimal;
 

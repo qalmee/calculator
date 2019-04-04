@@ -1,6 +1,6 @@
 package calculator.model.configuration;
 
-import calculator.model.calculatorStats.CalculatorMode;
+import calculator.model.stats.CalculatorMode;
 import calculator.view.localization.Language;
 
 import java.util.prefs.Preferences;

@@ -1,10 +1,10 @@
 package calculator.model.utils;
 
-import calculator.model.calculatorStats.CalculatorMode;
 import calculator.model.numbers.Complex;
 import calculator.model.numbers.Fraction;
 import calculator.model.numbers.Number;
 import calculator.model.numbers.Real;
+import calculator.model.stats.CalculatorMode;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -43,14 +43,17 @@ public class NumberConverter {
         if (value.startsWith("-")) {
             realIsNegative = true;
             value = value.replaceFirst("-", "");
+        } else if (value.startsWith("+")) {
+            value = value.replaceFirst("\\+", "");
         }
+
         if (value.contains("-")) {
             imIsNegative = true;
         }
         value = value.replaceFirst("[-+]", " ");
         String[] arr = value.split("\\s");
         if (arr.length > 2) {
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("Incorrect complex number");
         }
         BigDecimal real = BigDecimal.ZERO;
         BigDecimal im = BigDecimal.ZERO;
@@ -77,7 +80,7 @@ public class NumberConverter {
         value = value.replaceAll("\\s+", "");
         String[] values = value.split("/");
         if (values.length != 2) {
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("Incorrect fraction number");
         }
         BigInteger numerator = new BigInteger(values[0]);
         BigInteger denominator = new BigInteger(values[1]);

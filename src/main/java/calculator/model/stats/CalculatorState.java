@@ -1,12 +1,11 @@
-package calculator.model.calculatorStats;
+package calculator.model.stats;
 
 public enum CalculatorState {
     ERROR(0),
-    START(1),
-    FIRST_OPERAND_INPUT(2),
-    OPERATOR_SET(3),
-    SECOND_OPERAND_INPUT(4),
-    EQUALS_PRESSED(5);
+    FIRST_OPERAND_INPUT(1),
+    OPERATOR_SET(2),
+    SECOND_OPERAND_INPUT(3),
+    EQUALS_PRESSED(4);
 
     private int calculatorStateNumber;
 

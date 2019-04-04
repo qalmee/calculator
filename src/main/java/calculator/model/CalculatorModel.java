@@ -1,14 +1,14 @@
 package calculator.model;
 
-import calculator.model.calculatorStats.CalculatorMode;
-import calculator.model.calculatorStats.CalculatorOperation;
 import calculator.model.configuration.Config;
 import calculator.model.memory.MemoryOperation;
 import calculator.model.numbers.Number;
 import calculator.model.observer.CalculatorObserver;
+import calculator.model.stats.CalculatorMode;
+import calculator.model.stats.CalculatorOperation;
 import calculator.model.utils.ConverterPToP;
-import calculator.model.utils.Exceptions.DivisionByZeroException;
 import calculator.model.utils.NumberConverter;
+import calculator.model.utils.exceptions.DivisionByZeroException;
 import calculator.view.ErrorState;
 import calculator.view.localization.Language;
 
@@ -79,7 +79,6 @@ public class CalculatorModel {
         } catch (DivisionByZeroException e) {
             calculatorObserver.setErrorState(ErrorState.DIVISION_BY_ZERO);
             calculatorObserver.clearResultAfterEnteringDigit();
-            calculatorObserver.setResult(e.getMessage());
             setHistoryOnDisplay(calculatorMode);
             ControlUnit.INSTANCE.resetCalculator();
             return;
@@ -110,7 +109,6 @@ public class CalculatorModel {
         } catch (DivisionByZeroException e) {
             calculatorObserver.setErrorState(ErrorState.DIVISION_BY_ZERO);
             calculatorObserver.clearResultAfterEnteringDigit();
-            calculatorObserver.setResult(e.getMessage());
             setHistoryOnDisplay(calculatorMode);
             ControlUnit.INSTANCE.resetCalculator();
             return;
@@ -129,6 +127,7 @@ public class CalculatorModel {
         calculatorObserver.setBackSpaceEnabled(true);
     }
 
+    @SuppressWarnings("Duplicates")
     public void memoryOperationPressed(String valueOnDisplay, MemoryOperation operation, CalculatorMode calculatorMode) {
         valueOnDisplay = commasToDots(valueOnDisplay);
         if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
@@ -165,11 +164,10 @@ public class CalculatorModel {
 
     public void convertAll(String valueOnDisplay, int oldBase, int newBase) {
         valueOnDisplay = commasToDots(valueOnDisplay);
-        String result = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, oldBase); //todo: precision ?
+        String result = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, oldBase);
         result = ConverterPToP.convert10ToPAdaptive(result, newBase);
         calculatorObserver.setResult(dotsToCommas(result));
         calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(newBase)));
-        currentBase = newBase;
     }
 
     private String dotsToCommas(String s) {
@@ -186,5 +184,23 @@ public class CalculatorModel {
         } else {
             calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString()));
         }
+    }
+
+    public void parseClipboardString(String data, CalculatorMode calculatorMode) {
+        Number number;
+        try {
+            number = NumberConverter.stringToNumber(data, calculatorMode);
+        } catch (RuntimeException e) {
+            calculatorObserver.setErrorState(ErrorState.WRONG_DATA);
+            calculatorObserver.clearResultAfterEnteringDigit();
+            ControlUnit.INSTANCE.resetCalculator();
+            return;
+        }
+        digitButtonPressed();
+        calculatorObserver.setResult(number.toString());
+    }
+
+    public void setBase(int base) {
+        currentBase = base;
     }
 }
