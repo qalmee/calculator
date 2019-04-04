@@ -157,6 +157,14 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         setButtonsStateDueToAnError(true);
     }
 
+    @Override
+    public void disableMemoryButtons(boolean value) {
+        Button buttonMemoryClear = CalculatorButtons.BUTTON_MEMORY_CLEAR.getButton();
+        Button buttonMemoryRead = CalculatorButtons.BUTTON_MEMORY_READ.getButton();
+        buttonMemoryClear.setDisable(value);
+        buttonMemoryRead.setDisable(value);
+    }
+
     public void setControllerListener(ControllerListener controllerListener) {
         this.controllerListener = controllerListener;
     }
