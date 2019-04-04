@@ -60,7 +60,7 @@ public class CalculatorMenu extends MenuBar {
         Menu menuFile = new Menu(getProperty("calculator_scene.menu_file"));
         Menu menuLanguage = generateLanguageMenu();
         MenuItem separator = new SeparatorMenuItem();
-        MenuItem menuItemExit = new MenuItem(getProperty("calculator_scene.menu_exit"));
+        MenuItem menuItemExit = new MenuItem(getProperty("calculator_scene.menu_item_exit"));
         menuFile.getItems().add(menuLanguage);
         menuFile.getItems().add(separator);
         menuFile.getItems().addAll(menuItemExit);
