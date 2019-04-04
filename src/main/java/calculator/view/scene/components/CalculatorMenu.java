@@ -124,7 +124,9 @@ public class CalculatorMenu extends MenuBar {
     private void setupMenuHelp() {
         Menu menuHelp = new Menu(getProperty("calculator_scene.menu_help"));
         MenuItem menuItemHelp = new MenuItem(getProperty("calculator_scene.menu_item_help"));
-        menuHelp.getItems().addAll(menuItemHelp);
+        MenuItem menuItemAbout = new MenuItem(getProperty("calculator_scene.menu_item_about"));
+        MenuItem separator = new SeparatorMenuItem();
+        menuHelp.getItems().addAll(menuItemHelp, separator, menuItemAbout);
         this.getMenus().add(menuHelp);
     }
 
