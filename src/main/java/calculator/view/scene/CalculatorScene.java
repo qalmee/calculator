@@ -188,7 +188,6 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private void setupTextFieldStyle(TextField textField) {
         textField.setAlignment(Pos.TOP_RIGHT);
         textField.setBackground(Background.EMPTY);
-        textField.setStyle("-fx-display-caret: false");
         textField.setCursor(Cursor.DEFAULT);
         textField.setEditable(false);
         textField.setMouseTransparent(true);
