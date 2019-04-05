@@ -1,13 +1,14 @@
 package calculator.view.scene;
 
+import calculator.model.observer.FractionCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
-import calculator.view.scene.components.caretposition.FractionCaretPosition;
 import calculator.view.scene.components.CalculatorButtons;
+import calculator.view.scene.components.caretposition.FractionCaretPosition;
 import javafx.scene.control.Button;
 
 import static calculator.view.localization.LanguageProperties.getProperty;
 
-class FractionCalculatorScene extends CalculatorScene {
+class FractionCalculatorScene extends CalculatorScene implements FractionCalculatorObserver {
 
     private static final String DEFAULT_NUMERATOR;
     private static final String DEFAULT_DENOMINATOR;
@@ -25,10 +26,17 @@ class FractionCalculatorScene extends CalculatorScene {
     }
 
     @Override
+    public void setCaretToNumerator() {
+        Button delimiterButton = CalculatorButtons.BUTTON_DELIMITER.getButton();
+        delimiterButton.fire();
+    }
+
+    @Override
     public void initializeScene() {
         super.initializeScene();
         setupDelimiterButton();
         disableCommaButton(true);
+        controllerListener.setFractionCalculatorObserver(this);
         caretPosition = FractionCaretPosition.NUMERATOR;
     }
 

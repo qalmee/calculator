@@ -62,7 +62,7 @@ class PNumberCalculatorScene extends CalculatorScene {
         sliderBase.setDisable(false);
         controllerListener.updateDigitButtons((int) sliderBase.getValue());
     }
-    
+
     private void setupPNumberButtons() {
         List<CalculatorButtons> pNumberDigitButtons = CalculatorButtons.getPNumberDigitButtons();
         pNumberDigitButtons.forEach(button -> configureDigitButton(button.getButton()));

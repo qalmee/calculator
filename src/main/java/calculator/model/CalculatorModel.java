@@ -4,6 +4,7 @@ import calculator.model.configuration.Config;
 import calculator.model.memory.MemoryOperation;
 import calculator.model.numbers.Number;
 import calculator.model.observer.CalculatorObserver;
+import calculator.model.observer.FractionCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
 import calculator.model.utils.ConverterPToP;
@@ -21,9 +22,14 @@ public class CalculatorModel {
     private int currentBase = 10;
 
     private CalculatorObserver calculatorObserver;
+    private FractionCalculatorObserver fractionCalculatorObserver;
 
     public void setCalculatorObserver(CalculatorObserver calculatorObserver) {
         this.calculatorObserver = calculatorObserver;
+    }
+
+    public void setFractionCalculatorObserver(FractionCalculatorObserver fractionCalculatorObserver) {
+        this.fractionCalculatorObserver = fractionCalculatorObserver;
     }
 
     private void resetModel() {
