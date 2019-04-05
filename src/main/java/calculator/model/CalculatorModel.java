@@ -10,7 +10,7 @@ import calculator.model.stats.CalculatorOperation;
 import calculator.model.utils.ConverterPToP;
 import calculator.model.utils.NumberConverter;
 import calculator.model.utils.exceptions.DivisionByZeroException;
-import calculator.view.ErrorState;
+import calculator.model.stats.ErrorState;
 import calculator.view.localization.Language;
 
 import java.util.ArrayList;

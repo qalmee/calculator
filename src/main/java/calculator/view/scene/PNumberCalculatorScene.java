@@ -1,7 +1,7 @@
 package calculator.view.scene;
 
 import calculator.model.stats.CalculatorMode;
-import calculator.view.ErrorState;
+import calculator.model.stats.ErrorState;
 import calculator.view.scene.components.CalculatorButtons;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

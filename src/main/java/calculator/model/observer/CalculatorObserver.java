@@ -1,7 +1,7 @@
 package calculator.model.observer;
 
 import calculator.model.stats.CalculatorMode;
-import calculator.view.ErrorState;
+import calculator.model.stats.ErrorState;
 import calculator.view.localization.Language;
 
 import java.util.List;
