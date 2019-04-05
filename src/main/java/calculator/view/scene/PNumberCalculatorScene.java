@@ -1,6 +1,7 @@
 package calculator.view.scene;
 
 import calculator.model.stats.CalculatorMode;
+import calculator.view.ErrorState;
 import calculator.view.scene.components.CalculatorButtons;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -48,6 +49,20 @@ class PNumberCalculatorScene extends CalculatorScene {
         updateDigitButtonsOnStart();
     }
 
+    @Override
+    void setAtErrorState(ErrorState errorState) {
+        super.setAtErrorState(errorState);
+        sliderBase.setDisable(true);
+        controllerListener.updateDigitButtons((int) sliderBase.getValue());
+    }
+
+    @Override
+    void setToNormalState() {
+        super.setToNormalState();
+        sliderBase.setDisable(false);
+        controllerListener.updateDigitButtons((int) sliderBase.getValue());
+    }
+    
     private void setupPNumberButtons() {
         List<CalculatorButtons> pNumberDigitButtons = CalculatorButtons.getPNumberDigitButtons();
         pNumberDigitButtons.forEach(button -> configureDigitButton(button.getButton()));

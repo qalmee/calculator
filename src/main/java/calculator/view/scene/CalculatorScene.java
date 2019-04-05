@@ -165,9 +165,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     @Override
     public void setErrorState(ErrorState errorState) {
-        textFieldValue.setText(errorState.getErrorStateText());
-        isErrorState = true;
-        setButtonsStateDueToAnError(true);
+        setAtErrorState(errorState);
     }
 
     @Override
@@ -522,9 +520,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     private void clearTextFieldValueIfError() {
         if (isErrorState) {
-            isErrorState = false;
-            clearTextFields();
-            setButtonsStateDueToAnError(false);
+            setToNormalState();
         }
     }
 
@@ -612,6 +608,18 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     void addElementToMainPanel(Node element) {
         mainPanel.getChildren().add(element);
+    }
+
+    void setAtErrorState(ErrorState errorState) {
+        textFieldValue.setText(errorState.getErrorStateText());
+        isErrorState = true;
+        setButtonsStateDueToAnError(true);
+    }
+
+    void setToNormalState() {
+        isErrorState = false;
+        clearTextFields();
+        setButtonsStateDueToAnError(false);
     }
 
     String getValueFromTextFieldValue() {
