@@ -19,10 +19,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -56,6 +53,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private static final int SCROLL_BUTTONS_SCROLL_SIZE = 10;
 
     private static final String FONT_FAMILY = "System";
+    private static final String CSS_STYLE_FILE = "style/style.css";
 
     private static final Font TEXT_FIELD_VALUE_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 30);
     private static final Font TEXT_FIELD_PREVIOUS_OPERATION_FONT = Font.font("Consolas", FontWeight.BOLD, 14);
@@ -77,6 +75,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private GridPane buttonsGridPane;
     private TextField textFieldValue;
     private TextField textFieldPreviousOperation;
+    private Label memoryLabel;
     private Button buttonScrollLeft;
     private Button buttonScrollRight;
 
@@ -91,6 +90,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     }
 
     public void initializeScene() {
+        this.getStylesheets().add(CSS_STYLE_FILE);
         setupMainPanel();
         setupMenu();
         setupScrollButtons();
@@ -100,6 +100,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         setupButtons();
         setupHotKeys();
         setupClipboard();
+        setupMemoryLabel();
         setStartValue();
     }
 
@@ -175,6 +176,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         Button buttonMemoryRead = CalculatorButtons.BUTTON_MEMORY_READ.getButton();
         buttonMemoryClear.setDisable(value);
         buttonMemoryRead.setDisable(value);
+        memoryLabel.setText(value ? getProperty("calculator_scene.memory_saved") : " ");
     }
 
     public void setControllerListener(ControllerListener controllerListener) {
@@ -183,6 +185,12 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     private void setupMainPanel() {
         mainPanel = (VBox) this.getRoot();
+    }
+
+    private void setupMemoryLabel() {
+        memoryLabel = new Label();
+        buttonsGridPane.add(memoryLabel, 0, 0);
+        memoryLabel.getStyleClass().add("memory_label");
     }
 
     private void setupMenu() {

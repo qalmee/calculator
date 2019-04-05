@@ -1,0 +1,7 @@
+.memory_label {
+    -fx-background-color: lightgray;
+    -fx-border-color: gray;
+    -fx-font-family: consolas;
+    -fx-font-size: 22;
+    -fx-padding: 0 20 0 20;
+}
