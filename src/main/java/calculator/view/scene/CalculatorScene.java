@@ -515,14 +515,6 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         }
     }
 
-    private void setupAndSetNewScene(CalculatorScene calculatorScene) {
-        Window calculatorWindow = this.getWindow();
-        calculatorScene.setControllerListener(controllerListener);
-        calculatorScene.initializeScene();
-        ((Stage) calculatorWindow).setScene(calculatorScene);
-        controllerListener.setNewObserver(calculatorScene);
-    }
-
     private void setStartValue() {
         String startValue = calculatorMode.getStartValue();
         textFieldValue.setText(startValue);
@@ -571,6 +563,14 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private void setVisibleScrollButtons(boolean value) {
         buttonScrollLeft.setVisible(value);
         buttonScrollRight.setVisible(value);
+    }
+
+    void setupAndSetNewScene(CalculatorScene calculatorScene) {
+        Window calculatorWindow = this.getWindow();
+        calculatorScene.setControllerListener(controllerListener);
+        calculatorScene.initializeScene();
+        ((Stage) calculatorWindow).setScene(calculatorScene);
+        controllerListener.setNewObserver(calculatorScene);
     }
 
     void configureDigitButton(Button button) {

@@ -28,7 +28,7 @@ class FractionCalculatorScene extends CalculatorScene {
     public void initializeScene() {
         super.initializeScene();
         setupDelimiterButton();
-        disableCommaButton();
+        disableCommaButton(true);
         caretPosition = FractionCaretPosition.NUMERATOR;
     }
 
@@ -80,6 +80,12 @@ class FractionCalculatorScene extends CalculatorScene {
         textFieldValueSetText(currentNumerator + "/" + currentDenominator);
     }
 
+    @Override
+    void setupAndSetNewScene(CalculatorScene calculatorScene) {
+        super.setupAndSetNewScene(calculatorScene);
+        disableCommaButton(false);
+    }
+
     private void replaceZeroDenominator() {
         String currentNumerator = getValueFromTextFieldValue().split("/")[0];
         String currentDenominator = getValueFromTextFieldValue().split("/")[1];
@@ -104,8 +110,8 @@ class FractionCalculatorScene extends CalculatorScene {
         });
     }
 
-    private void disableCommaButton() {
+    private void disableCommaButton(boolean value) {
         Button commaButton = CalculatorButtons.BUTTON_COMMA.getButton();
-        commaButton.setDisable(true);
+        commaButton.setDisable(value);
     }
 }
