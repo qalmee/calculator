@@ -8,6 +8,7 @@ import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
 import calculator.model.utils.ConverterPToP;
 import calculator.model.utils.NumberConverter;
+import calculator.model.utils.exceptions.BadPasteFromClipboardException;
 import calculator.model.utils.exceptions.DivisionByZeroException;
 import calculator.view.ErrorState;
 import calculator.view.localization.Language;
@@ -144,10 +145,9 @@ public class CalculatorModel {
             ControlUnit.INSTANCE.enteringNewValue();
         }
         calculatorObserver.clearResultAfterEnteringDigit();
-
     }
 
-    public void digitButtonPressed() {
+    public void displayTextActionHappened() {
         ControlUnit.INSTANCE.enteringNewValue();
         calculatorObserver.setBackSpaceEnabled(true);
     }
@@ -187,20 +187,34 @@ public class CalculatorModel {
     }
 
     public void parseClipboardString(String data, CalculatorMode calculatorMode) {
-        Number number;
+        System.out.println(data);
+        if (data.isEmpty()) {
+            return;
+        }
+        data = data.toUpperCase();
         try {
-            number = NumberConverter.stringToNumber(data, calculatorMode);
+            if (calculatorMode.equals(CalculatorMode.P_NUMBER) && !checkStringBeforeParse(data)) {
+                throw new BadPasteFromClipboardException("String contains bad symbols");
+            }
         } catch (RuntimeException e) {
             calculatorObserver.setErrorState(ErrorState.WRONG_DATA);
             calculatorObserver.clearResultAfterEnteringDigit();
             ControlUnit.INSTANCE.resetCalculator();
             return;
         }
-        digitButtonPressed();
-        calculatorObserver.setResult(number.toString());
+        displayTextActionHappened();
+        calculatorObserver.setResult(data);
     }
 
     public void setBase(int base) {
         currentBase = base;
+    }
+
+    private boolean checkStringBeforeParse(String data) {
+        char digits = (char) ('0' + (currentBase > 10 ? 9 : currentBase - 1));
+        char letters = (char) ('A' + currentBase - 11);
+        return data.chars().allMatch(
+                ch -> (ch >= '0' && ch <= '9' && ch <= digits)
+                        || (ch >= 'A' && ch <= 'F' && ch <= letters));
     }
 }

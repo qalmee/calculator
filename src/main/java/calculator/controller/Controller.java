@@ -67,7 +67,7 @@ public class Controller implements ControllerListener {
 
     @Override
     public void buttonDigitClicked() {
-        calculatorModel.digitButtonPressed();
+        calculatorModel.displayTextActionHappened();
     }
 
     @Override

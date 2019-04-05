@@ -69,6 +69,9 @@ public class Processor<T extends Number<T>> {
                 leftResultOperand = leftResultOperand.negate();
                 break;
             case REVERSE:
+                if (leftResultOperand.equals(NumberConstant.ZERO)) {
+                    throw new DivisionByZeroException("Cannot divide by zero");
+                }
                 leftResultOperand = leftResultOperand.reverse();
                 break;
             case SQUARE:
