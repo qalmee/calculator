@@ -589,8 +589,13 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     void appendDigitToTextFieldValue(String digitText) {
         String text = textFieldValue.getText();
-        if (text.equals(calculatorMode.getStartValue()) && !digitText.contains(calculatorMode.getStartValue())) {
-            textFieldValue.setText(digitText);
+        if (text.equals(calculatorMode.getStartValue())) {
+            if (digitText.equals(text)) {
+                return;
+            }
+            if (!digitText.contains(calculatorMode.getStartValue())) {
+                textFieldValue.setText(digitText);
+            }
         } else {
             textFieldValue.setText(text + digitText);
         }
