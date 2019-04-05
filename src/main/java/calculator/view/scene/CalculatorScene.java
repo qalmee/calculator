@@ -158,6 +158,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     @Override
     public void pasteValueFromClipboard() {
+        clearTextFieldValueIfError();
         String value = clipboard.getString();
         textFieldValue.setText(value);
         controllerListener.checkPastedValue(value, calculatorMode);
