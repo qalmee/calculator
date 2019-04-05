@@ -27,4 +27,6 @@ public interface CalculatorObserver {
     void pasteValueFromClipboard();
 
     void setErrorState(ErrorState errorState);
+
+    void disableMemoryButtons(boolean value);
 }

@@ -59,8 +59,8 @@ public enum CalculatorButtons {
     BUTTON_REVERSE(CalculatorMode.BASIC, null,
             4, 1, new Button(getProperty("calculator_scene.button_reverse"))),
 
-    BUTTON_DOT(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.COMMA),
-            4, 4, new Button(getProperty("calculator_scene.button_dot"))),
+    BUTTON_COMMA(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.COMMA),
+            4, 4, new Button(getProperty("calculator_scene.button_comma"))),
     BUTTON_ENTER(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.ENTER),
             4, 5, new Button(getProperty("calculator_scene.button_enter"))),
     BUTTON_PLUS_MINUS(CalculatorMode.BASIC, null,
@@ -88,7 +88,7 @@ public enum CalculatorButtons {
     BUTTON_DIGIT_F(CalculatorMode.P_NUMBER, new KeyCodeCombination(KeyCode.F),
             5, 5, new Button(getProperty("p-number_calculator_scene.buttonF"))),
 
-    BUTTON_DELIMITER(CalculatorMode.FRACTION, null,
+    BUTTON_DELIMITER(CalculatorMode.FRACTION, new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.SHIFT_DOWN),
             2, 1, new Button(getProperty("fraction_calculator_scene.button_delimiter"))),
 
     BUTTON_MODULE(CalculatorMode.COMPLEX, null,

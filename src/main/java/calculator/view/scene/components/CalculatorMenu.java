@@ -60,7 +60,7 @@ public class CalculatorMenu extends MenuBar {
         Menu menuFile = new Menu(getProperty("calculator_scene.menu_file"));
         Menu menuLanguage = generateLanguageMenu();
         MenuItem separator = new SeparatorMenuItem();
-        MenuItem menuItemExit = new MenuItem(getProperty("calculator_scene.menu_exit"));
+        MenuItem menuItemExit = new MenuItem(getProperty("calculator_scene.menu_item_exit"));
         menuFile.getItems().add(menuLanguage);
         menuFile.getItems().add(separator);
         menuFile.getItems().addAll(menuItemExit);
@@ -124,16 +124,28 @@ public class CalculatorMenu extends MenuBar {
     private void setupMenuHelp() {
         Menu menuHelp = new Menu(getProperty("calculator_scene.menu_help"));
         MenuItem menuItemHelp = new MenuItem(getProperty("calculator_scene.menu_item_help"));
-        menuHelp.getItems().addAll(menuItemHelp);
+        MenuItem menuItemAbout = new MenuItem(getProperty("calculator_scene.menu_item_about"));
+        MenuItem separator = new SeparatorMenuItem();
+        menuHelp.getItems().addAll(menuItemHelp, separator, menuItemAbout);
         this.getMenus().add(menuHelp);
+
+        menuItemHelp.setOnAction(event -> createInformationAlert(getProperty("calculator_scene.help_alert_title"),
+                getProperty("calculator_scene.help_alert_message")));
+        menuItemAbout.setOnAction(event -> createInformationAlert(getProperty("calculator_scene.about_alert_title"),
+                getProperty("calculator_scene.about_alert_message")));
     }
 
     private void changeLanguage(Language language) {
         controllerListener.updateLanguage(language);
+        createInformationAlert(getProperty("calculator_scene.restart_alert_title"),
+                getProperty("calculator_scene.restart_alert_message"));
+    }
+
+    private void createInformationAlert(String title, String contentText) {
         Alert needRestartAlert = new Alert(Alert.AlertType.INFORMATION);
-        needRestartAlert.setTitle(getProperty("calculator_scene.restart_alert_title"));
+        needRestartAlert.setTitle(title);
         needRestartAlert.setHeaderText(null);
-        needRestartAlert.setContentText(getProperty("calculator_scene.restart_alert_message"));
+        needRestartAlert.setContentText(contentText);
         needRestartAlert.showAndWait();
     }
 }
