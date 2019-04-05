@@ -208,7 +208,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         textFieldValue.setFont(TEXT_FIELD_VALUE_FONT);
         textFieldValue.setPrefSize(TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
         textFieldValue.textProperty().addListener((observable, oldValue, newValue) ->
-                configureTextInTextFieldValue(oldValue, newValue));
+                configureTextInTextFieldValue(newValue));
         setupTextFieldStyle(textFieldValue);
         mainPanel.getChildren().add(textFieldValue);
     }
@@ -358,9 +358,8 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
         buttonBackSpace.setOnAction(event -> {
             clearTextFieldValueIfError();
-            String textInTextField = textFieldValue.getText();
             if (backSpaceEnabled) {
-                textFieldValue.setText(textInTextField.substring(0, textInTextField.length() - 1));
+                backspaceClickedAction();
             }
         });
     }
@@ -412,7 +411,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     }
 
     private void setupDotButton() {
-        Button dotButton = CalculatorButtons.BUTTON_DOT.getButton();
+        Button dotButton = CalculatorButtons.BUTTON_COMMA.getButton();
         String commaSymbol = dotButton.getText();
         dotButton.setOnAction(event -> {
             if (!textFieldValue.getText().contains(commaSymbol)) {
@@ -545,15 +544,12 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         setVisibleScrollButtons(text.length() >= maxLength);
     }
 
-    private void configureTextInTextFieldValue(String oldValue, String newValue) {
-        if (newValue.length() >= TEXT_FIELD_VALUE_MAX_TEXT_LENGTH) {
-            textFieldValue.setText(newValue.substring(0, newValue.length() - 1));
+    private void configureTextInTextFieldValue(String text) {
+        if (text.length() >= TEXT_FIELD_VALUE_MAX_TEXT_LENGTH) {
+            textFieldValue.setText(text.substring(0, text.length() - 1));
         }
-        if (newValue.isEmpty()) {
+        if (text.isEmpty()) {
             textFieldValue.setText(calculatorMode.getStartValue());
-        }
-        if (oldValue.equals(calculatorMode.getStartValue()) && newValue.contains(calculatorMode.getStartValue())) {
-            textFieldValue.setText(newValue.replaceAll(calculatorMode.getStartValue(), ""));
         }
         configureValueTextFieldFont();
     }
@@ -572,6 +568,11 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         textFieldValue.setFont(textFont);
     }
 
+    private void setVisibleScrollButtons(boolean value) {
+        buttonScrollLeft.setVisible(value);
+        buttonScrollRight.setVisible(value);
+    }
+
     void configureDigitButton(Button button) {
         button.setFont(BUTTONS_DIGIT_FONT);
         button.setOnAction(event -> {
@@ -581,14 +582,27 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
                 needClearResult = false;
                 textFieldValue.clear();
             }
-            textFieldValue.setText(textFieldValue.getText() + digitText);
+            appendDigitToTextFieldValue(digitText);
             controllerListener.buttonDigitClicked();
         });
     }
 
-    private void setVisibleScrollButtons(boolean value) {
-        buttonScrollLeft.setVisible(value);
-        buttonScrollRight.setVisible(value);
+    void appendDigitToTextFieldValue(String digitText) {
+        String text = textFieldValue.getText();
+        if (text.equals(calculatorMode.getStartValue()) && !digitText.contains(calculatorMode.getStartValue())) {
+            textFieldValue.setText(digitText);
+        } else {
+            textFieldValue.setText(text + digitText);
+        }
+    }
+
+    void backspaceClickedAction() {
+        String textInTextField = textFieldValue.getText();
+        textFieldValue.setText(textInTextField.substring(0, textInTextField.length() - 1));
+    }
+
+    void textFieldValueSetText(String text) {
+        textFieldValue.setText(text);
     }
 
     void addElementToMainPanel(Node element) {
