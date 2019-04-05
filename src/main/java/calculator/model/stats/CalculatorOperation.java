@@ -1,20 +1,22 @@
 package calculator.model.stats;
 
+import static calculator.view.localization.LanguageProperties.getProperty;
+
 public enum CalculatorOperation {
 
-    ADD("ADD", false, "+"),
-    SUBTRACT("SUBTRACT", false, "-"),
-    MULTIPLY("MULTIPLY", false, "*"),
-    DIVIDE("DIVIDE", false, "/"),
-    REVERSE("REVERSE", true, "1/"),
-    NEGATE("NEGATE", true, "negate"),
-    SQUARE("SQUARE", true, "sqr"),
+    ADD("ADD", false, getProperty("calculator_scene.operation_plus")),
+    SUBTRACT("SUBTRACT", false, getProperty("calculator_scene.operation_minus")),
+    MULTIPLY("MULTIPLY", false, getProperty("calculator_scene.operation_multiply")),
+    DIVIDE("DIVIDE", false, getProperty("calculator_scene.operation_divide")),
+    REVERSE("REVERSE", true, getProperty("calculator_scene.operation_reverse")),
+    NEGATE("NEGATE", true, getProperty("calculator_scene.operation_negate")),
+    SQUARE("SQUARE", true, getProperty("calculator_scene.operation_square")),
     BACKSPACE("BACKSPACE", true, "OMEGA_LUL"),
     //only for complex:
-    ABS("ABS", true, "abs"),
-    RAD("RAD", true, "rad"),
-    DEG("DEG", true, "deg"),
-    POW("POW", false, "^");
+    ABS("ABS", true, getProperty("complex_calculator_scene.operation_abs")),
+    RAD("RAD", true, getProperty("complex_calculator_scene.operation_rad")),
+    DEG("DEG", true, getProperty("complex_calculator_scene.operation_deg")),
+    POW("POW", false, getProperty("complex_calculator_scene.operation_pow"));
 
 
     private String name;
