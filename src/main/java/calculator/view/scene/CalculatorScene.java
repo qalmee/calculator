@@ -62,7 +62,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     private static final Duration BUTTON_CLICK_EFFECT_DURATION = Duration.seconds(0.1);
     ControllerListener controllerListener;
-    private CalculatorMode calculatorMode;
+    CalculatorMode calculatorMode;
 
     private boolean needClearResult;
     private boolean backSpaceEnabled;
@@ -251,7 +251,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         setupActionButtons();
         setupMemoryButtons();
         setupEnterButton();
-        setupDotButton();
+        setupCommaButton();
     }
 
     private void setupHotKeys() {
@@ -417,14 +417,9 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         });
     }
 
-    private void setupDotButton() {
-        Button dotButton = CalculatorButtons.BUTTON_COMMA.getButton();
-        String commaSymbol = dotButton.getText();
-        dotButton.setOnAction(event -> {
-            if (!textFieldValue.getText().contains(commaSymbol)) {
-                textFieldValue.appendText(dotButton.getText());
-            }
-        });
+    private void setupCommaButton() {
+        Button commaButton = CalculatorButtons.BUTTON_COMMA.getButton();
+        commaButton.setOnAction(event -> appendComaDigitToTextFieldValue());
     }
 
     private void setButtonsStateDueToAnError(boolean value) {
@@ -590,6 +585,14 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
             appendDigitToTextFieldValue(digitText);
             controllerListener.buttonDigitClicked();
         });
+    }
+
+    void appendComaDigitToTextFieldValue() {
+        Button commaButton = CalculatorButtons.BUTTON_COMMA.getButton();
+        String commaSymbol = commaButton.getText();
+        if (!textFieldValue.getText().contains(commaSymbol)) {
+            textFieldValue.appendText(commaSymbol);
+        }
     }
 
     void appendDigitToTextFieldValue(String digitText) {

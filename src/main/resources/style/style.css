@@ -5,3 +5,10 @@
     -fx-font-size: 22;
     -fx-padding: 0 20 0 20;
 }
+
+.i_button_active {
+    -fx-font-size: 15;
+    -fx-text-fill: blue;
+    -fx-font-weight: bold;
+    -fx-underline: true;
+}
