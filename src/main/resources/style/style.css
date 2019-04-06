@@ -6,6 +6,39 @@
     -fx-padding: 0 20 0 20;
 }
 
+.text_field_value {
+    -fx-pref-width: 415;
+    -fx-pref-height: 65;
+    -fx-alignment: top-right;
+    -fx-background-color: transparent;
+}
+
+.text_field_previous_operation {
+    -fx-font-size: 14;
+    -fx-font-family: consolas;
+    -fx-font-weight: bold;
+    -fx-pref-width: 360;
+    -fx-alignment: top-right;
+    -fx-background-color: transparent;
+}
+
+.grid_pane_buttons {
+    -fx-alignment: center;
+    -fx-grid-lines-visible: true;
+    -fx-padding: 0 0 10 0;
+}
+
+.grid_pane_button {
+    -fx-font-family: system;
+    -fx-font-size: 15;
+    -fx-pref-width: 60;
+    -fx-pref-height: 30;
+}
+
+.grid_pane_button_digit {
+    -fx-font-weight: bold;
+}
+
 .i_button_active {
     -fx-font-size: 15;
     -fx-text-fill: blue;
