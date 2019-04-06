@@ -1,5 +1,6 @@
 package calculator.view.scene;
 
+import calculator.model.observer.ComplexCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
 import calculator.view.scene.components.CalculatorButtons;
@@ -12,7 +13,7 @@ import java.util.regex.Pattern;
 
 import static calculator.view.localization.LanguageProperties.getProperty;
 
-class ComplexCalculatorScene extends CalculatorScene {
+class ComplexCalculatorScene extends CalculatorScene implements ComplexCalculatorObserver {
 
     private static final String DEFAULT_REAL_PART;
     private static final String DEFAULT_IMAGINARY_PART;
@@ -31,11 +32,18 @@ class ComplexCalculatorScene extends CalculatorScene {
     }
 
     @Override
+    public void setCaretToRealPart() {
+        Button iButton = CalculatorButtons.BUTTON_I.getButton();
+        iButton.fire();
+    }
+
+    @Override
     public void initializeScene() {
         super.initializeScene();
         setupIButton();
         setupComplexActionButtons();
         addTooltipsToComplexButtons();
+        controllerListener.setComplexCalculatorObserver(this);
         caretPosition = ComplexCaretPosition.REAL;
     }
 

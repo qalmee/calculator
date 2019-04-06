@@ -4,6 +4,7 @@ import calculator.model.configuration.Config;
 import calculator.model.memory.MemoryOperation;
 import calculator.model.numbers.Number;
 import calculator.model.observer.CalculatorObserver;
+import calculator.model.observer.ComplexCalculatorObserver;
 import calculator.model.observer.FractionCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
@@ -23,6 +24,7 @@ public class CalculatorModel {
 
     private CalculatorObserver calculatorObserver;
     private FractionCalculatorObserver fractionCalculatorObserver;
+    private ComplexCalculatorObserver complexCalculatorObserver;
 
     public void setCalculatorObserver(CalculatorObserver calculatorObserver) {
         this.calculatorObserver = calculatorObserver;
@@ -30,6 +32,10 @@ public class CalculatorModel {
 
     public void setFractionCalculatorObserver(FractionCalculatorObserver fractionCalculatorObserver) {
         this.fractionCalculatorObserver = fractionCalculatorObserver;
+    }
+
+    public void setComplexCalculatorObserver(ComplexCalculatorObserver complexCalculatorObserver) {
+        this.complexCalculatorObserver = complexCalculatorObserver;
     }
 
     private void resetModel() {
