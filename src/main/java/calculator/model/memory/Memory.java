@@ -23,7 +23,7 @@ public class Memory <T extends Number<T>> {
         if (memoryValue == null) {
             memoryValue = addend;
         } else {
-            memoryValue.add(addend);
+            memoryValue = memoryValue.add(addend);
         }
         return memoryValue;
     }

@@ -41,6 +41,9 @@ public class CalculatorModel {
 
     private void resetModel() {
         currentBase = 10;
+        calculatorObserver.disableMemoryButtons(true);
+        calculatorObserver.setBackSpaceEnabled(true);
+        ControlUnit.INSTANCE.resetCalculator();
     }
 
     public void updateDigitButtons(int base) {
@@ -56,11 +59,9 @@ public class CalculatorModel {
     }
 
     public void setCalculatorModeToConfig(CalculatorMode calculatorMode) {
-        ControlUnit.INSTANCE.resetCalculator();
         resetModel();
         Config.setCalculatorMode(calculatorMode);
         calculatorObserver.updateCalculatorMode(calculatorMode);
-        calculatorObserver.setBackSpaceEnabled(true);
     }
 
     public void readConfigInformation() {
@@ -112,7 +113,7 @@ public class CalculatorModel {
 
         ControlUnit.INSTANCE.memoryOperationPressed(number, operation);
 
-        if (operation.equals(MemoryOperation.MEMORY_READ)) {
+        if (operation.equals(MemoryOperation.MEMORY_READ) && ControlUnit.INSTANCE.getResultValue() != null) {
             setResult(calculatorMode);
         }
         calculatorObserver.clearResultAfterEnteringDigit();
@@ -124,7 +125,7 @@ public class CalculatorModel {
     }
 
     public void clear() {
-        ControlUnit.INSTANCE.resetCalculator();
+        resetModel();
         calculatorObserver.setBackSpaceEnabled(true);
     }
 
@@ -245,7 +246,7 @@ public class CalculatorModel {
         calculatorObserver.setErrorState(state);
         calculatorObserver.clearResultAfterEnteringDigit();
         setHistoryOnDisplay(calculatorMode);
-        ControlUnit.INSTANCE.resetCalculator();
+        resetModel();
     }
 
 }
