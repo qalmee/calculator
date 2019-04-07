@@ -31,7 +31,6 @@ public class CalculatorModel {
 
     public void setCalculatorObserver(CalculatorObserver calculatorObserver) {
         this.calculatorObserver = calculatorObserver;
-        calculatorObserver.disableMemoryButtons(true);
     }
 
     public void setFractionCalculatorObserver(FractionCalculatorObserver fractionCalculatorObserver) {
