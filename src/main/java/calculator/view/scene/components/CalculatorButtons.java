@@ -121,6 +121,7 @@ public enum CalculatorButtons {
         actionButtons.put(BUTTON_PLUS_MINUS.getButton(), CalculatorOperation.NEGATE);
 
         complexActionButtons = new HashMap<>();
+        complexActionButtons.put(BUTTON_PLUS_MINUS_I.getButton(), CalculatorOperation.IM_NEGATE);
         complexActionButtons.put(BUTTON_MODULE.getButton(), CalculatorOperation.ABS);
         complexActionButtons.put(BUTTON_ARGUMENT_RAD.getButton(), CalculatorOperation.RAD);
         complexActionButtons.put(BUTTON_ARGUMENT_DEG.getButton(), CalculatorOperation.DEG);
