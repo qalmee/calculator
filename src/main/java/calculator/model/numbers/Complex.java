@@ -127,7 +127,12 @@ public class Complex implements Number<Complex> {
 
     @Override
     public String toString() {
-        return real.toPlainString() + imaginary.toPlainString() + "i";
+
+        if (imaginary.signum() < 0) {
+            return real.toPlainString().substring(0, Math.min(real.toPlainString().length(), 10)) + imaginary.toPlainString().substring(0, Math.min(imaginary.toPlainString().length(), 10)) + "i";
+        } else {
+            return real.toPlainString().substring(0, Math.min(real.toPlainString().length(), 10)) + "+" + imaginary.toPlainString().substring(0, Math.min(imaginary.toPlainString().length(), 10)) + "i";
+        }
     }
 
     @Override
