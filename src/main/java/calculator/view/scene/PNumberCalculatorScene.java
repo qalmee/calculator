@@ -1,5 +1,6 @@
 package calculator.view.scene;
 
+import calculator.model.observer.PNumberCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.ErrorState;
 import calculator.view.scene.components.CalculatorButtons;
@@ -11,7 +12,7 @@ import java.util.List;
 
 import static calculator.view.localization.LanguageProperties.getProperty;
 
-class PNumberCalculatorScene extends CalculatorScene {
+class PNumberCalculatorScene extends CalculatorScene implements PNumberCalculatorObserver {
 
     private static final int SLIDER_MIN_VALUE = 2;
     private static final int SLIDER_MAX_VALUE = 16;
@@ -22,6 +23,11 @@ class PNumberCalculatorScene extends CalculatorScene {
 
     PNumberCalculatorScene() {
         super(CalculatorMode.P_NUMBER);
+    }
+
+    @Override
+    public void setBase(int base) {
+        sliderBase.setValue(base);
     }
 
     @Override

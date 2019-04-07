@@ -6,6 +6,7 @@ import calculator.model.numbers.Number;
 import calculator.model.observer.CalculatorObserver;
 import calculator.model.observer.ComplexCalculatorObserver;
 import calculator.model.observer.FractionCalculatorObserver;
+import calculator.model.observer.PNumberCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
 import calculator.model.stats.ErrorState;
@@ -26,6 +27,7 @@ public class CalculatorModel {
     private CalculatorObserver calculatorObserver;
     private FractionCalculatorObserver fractionCalculatorObserver;
     private ComplexCalculatorObserver complexCalculatorObserver;
+    private PNumberCalculatorObserver pNumberCalculatorObserver;
 
     public void setCalculatorObserver(CalculatorObserver calculatorObserver) {
         this.calculatorObserver = calculatorObserver;
@@ -37,6 +39,10 @@ public class CalculatorModel {
 
     public void setComplexCalculatorObserver(ComplexCalculatorObserver complexCalculatorObserver) {
         this.complexCalculatorObserver = complexCalculatorObserver;
+    }
+
+    public void setPNumberCalculatorObserver(PNumberCalculatorObserver pNumberCalculatorObserver) {
+        this.pNumberCalculatorObserver = pNumberCalculatorObserver;
     }
 
     private void resetModel() {

@@ -5,6 +5,7 @@ import calculator.model.memory.MemoryOperation;
 import calculator.model.observer.CalculatorObserver;
 import calculator.model.observer.ComplexCalculatorObserver;
 import calculator.model.observer.FractionCalculatorObserver;
+import calculator.model.observer.PNumberCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
 import calculator.view.localization.Language;
@@ -30,6 +31,11 @@ public class Controller implements ControllerListener {
     @Override
     public void setComplexCalculatorObserver(ComplexCalculatorObserver complexCalculatorObserver) {
         calculatorModel.setComplexCalculatorObserver(complexCalculatorObserver);
+    }
+
+    @Override
+    public void setPNumberCalculatorObserver(PNumberCalculatorObserver pNumberCalculatorObserver) {
+        calculatorModel.setPNumberCalculatorObserver(pNumberCalculatorObserver);
     }
 
     @Override
