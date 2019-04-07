@@ -4,7 +4,6 @@ import calculator.model.observer.ComplexCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
 import calculator.view.scene.components.CalculatorButtons;
-import calculator.view.scene.components.caretposition.ComplexCaretPosition;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 
@@ -15,13 +14,13 @@ import static calculator.view.localization.LanguageProperties.getProperty;
 
 class ComplexCalculatorScene extends CalculatorScene implements ComplexCalculatorObserver {
 
-    private static final String DEFAULT_REAL_PART;
-    private static final String DEFAULT_IMAGINARY_PART;
+    private static final String START_REAL_PART;
+    private static final String START_IMAGINARY_PART;
     private static final String I_SYMBOL;
 
     static {
-        DEFAULT_REAL_PART = CalculatorMode.COMPLEX.getStartValue().split(Pattern.quote("+"))[0];
-        DEFAULT_IMAGINARY_PART = CalculatorMode.COMPLEX.getStartValue().split(Pattern.quote("+"))[1];
+        START_REAL_PART = CalculatorMode.COMPLEX.getStartValue().split(Pattern.quote("+"))[0];
+        START_IMAGINARY_PART = CalculatorMode.COMPLEX.getStartValue().split(Pattern.quote("+"))[1];
         I_SYMBOL = CalculatorButtons.BUTTON_I.getButton().getText();
     }
 
@@ -72,13 +71,13 @@ class ComplexCalculatorScene extends CalculatorScene implements ComplexCalculato
         String currentImaginaryPart = getValueFromTextFieldValue().split(Pattern.quote("+"))[1];
 
         if (caretPosition == ComplexCaretPosition.REAL) {
-            if (currentRealPart.equals(DEFAULT_REAL_PART)) {
+            if (currentRealPart.equals(START_REAL_PART)) {
                 currentRealPart = digitText;
             } else {
                 currentRealPart = currentRealPart + digitText;
             }
         } else {
-            if (currentImaginaryPart.equals(DEFAULT_IMAGINARY_PART)) {
+            if (currentImaginaryPart.equals(START_IMAGINARY_PART)) {
                 currentImaginaryPart = digitText + I_SYMBOL;
             } else {
                 String imaginaryPartWithoutI = currentImaginaryPart.substring(0, currentImaginaryPart.length() - 1);
@@ -96,12 +95,12 @@ class ComplexCalculatorScene extends CalculatorScene implements ComplexCalculato
         if (caretPosition == ComplexCaretPosition.REAL) {
             currentRealPart = currentRealPart.substring(0, currentRealPart.length() - 1);
             if (currentRealPart.isEmpty()) {
-                currentRealPart = DEFAULT_REAL_PART;
+                currentRealPart = START_REAL_PART;
             }
         } else {
             currentImaginaryPart = currentImaginaryPart.substring(0, currentImaginaryPart.length() - 2) + I_SYMBOL;
             if (currentImaginaryPart.equals(I_SYMBOL)) {
-                currentImaginaryPart = DEFAULT_IMAGINARY_PART;
+                currentImaginaryPart = START_IMAGINARY_PART;
             }
         }
         textFieldValueSetText(currentRealPart + "+" + currentImaginaryPart);
@@ -146,4 +145,6 @@ class ComplexCalculatorScene extends CalculatorScene implements ComplexCalculato
         buttonPow.setTooltip(new Tooltip(getProperty("complex_calculator_scene.tooltip_button_pow")));
         buttonSqr.setTooltip(new Tooltip(getProperty("complex_calculator_scene.tooltip_button_sqr")));
     }
+
+    private enum ComplexCaretPosition {REAL, IMAGINARY}
 }

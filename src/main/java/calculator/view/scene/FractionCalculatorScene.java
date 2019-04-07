@@ -3,19 +3,18 @@ package calculator.view.scene;
 import calculator.model.observer.FractionCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.view.scene.components.CalculatorButtons;
-import calculator.view.scene.components.caretposition.FractionCaretPosition;
 import javafx.scene.control.Button;
 
 import static calculator.view.localization.LanguageProperties.getProperty;
 
 class FractionCalculatorScene extends CalculatorScene implements FractionCalculatorObserver {
 
-    private static final String DEFAULT_NUMERATOR;
-    private static final String DEFAULT_DENOMINATOR;
+    private static final String START_NUMERATOR;
+    private static final String START_DENOMINATOR;
 
     static {
-        DEFAULT_NUMERATOR = CalculatorMode.FRACTION.getStartValue().split("/")[0];
-        DEFAULT_DENOMINATOR = CalculatorMode.FRACTION.getStartValue().split("/")[1];
+        START_NUMERATOR = CalculatorMode.FRACTION.getStartValue().split("/")[0];
+        START_DENOMINATOR = CalculatorMode.FRACTION.getStartValue().split("/")[1];
     }
 
     private FractionCaretPosition caretPosition;
@@ -46,14 +45,14 @@ class FractionCalculatorScene extends CalculatorScene implements FractionCalcula
         String currentDenominator = getValueFromTextFieldValue().split("/")[1];
 
         if (caretPosition == FractionCaretPosition.NUMERATOR) {
-            if (currentNumerator.equals(DEFAULT_NUMERATOR)) {
+            if (currentNumerator.equals(START_NUMERATOR)) {
                 currentNumerator = digitText;
             } else {
                 currentNumerator = currentNumerator + digitText;
             }
         } else {
-            if (currentDenominator.equals(DEFAULT_DENOMINATOR)) {
-                if (digitText.equals(DEFAULT_DENOMINATOR) && !denominatorDefaultDigitClicked) {
+            if (currentDenominator.equals(START_DENOMINATOR)) {
+                if (digitText.equals(START_DENOMINATOR) && !denominatorDefaultDigitClicked) {
                     denominatorDefaultDigitClicked = true;
                 } else if (denominatorDefaultDigitClicked) {
                     denominatorDefaultDigitClicked = false;
@@ -77,12 +76,12 @@ class FractionCalculatorScene extends CalculatorScene implements FractionCalcula
         if (caretPosition == FractionCaretPosition.NUMERATOR) {
             currentNumerator = currentNumerator.substring(0, currentNumerator.length() - 1);
             if (currentNumerator.isEmpty()) {
-                currentNumerator = DEFAULT_NUMERATOR;
+                currentNumerator = START_NUMERATOR;
             }
         } else {
             currentDenominator = currentDenominator.substring(0, currentDenominator.length() - 1);
             if (currentDenominator.isEmpty()) {
-                currentDenominator = DEFAULT_DENOMINATOR;
+                currentDenominator = START_DENOMINATOR;
             }
         }
         textFieldValueSetText(currentNumerator + "/" + currentDenominator);
@@ -99,7 +98,7 @@ class FractionCalculatorScene extends CalculatorScene implements FractionCalcula
         String currentDenominator = getValueFromTextFieldValue().split("/")[1];
 
         if (currentDenominator.equals("0")) {
-            currentDenominator = DEFAULT_DENOMINATOR;
+            currentDenominator = START_DENOMINATOR;
         }
         textFieldValueSetText(currentNumerator + "/" + currentDenominator);
     }
@@ -122,4 +121,6 @@ class FractionCalculatorScene extends CalculatorScene implements FractionCalcula
         Button commaButton = CalculatorButtons.BUTTON_COMMA.getButton();
         commaButton.setDisable(value);
     }
+
+    private enum FractionCaretPosition {NUMERATOR, DENOMINATOR}
 }
