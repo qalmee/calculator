@@ -91,6 +91,8 @@ public enum CalculatorButtons {
     BUTTON_DELIMITER(CalculatorMode.FRACTION, new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.SHIFT_DOWN),
             2, 1, new Button(getProperty("fraction_calculator_scene.button_delimiter"))),
 
+    BUTTON_PLUS_MINUS_I(CalculatorMode.COMPLEX, null,
+            2, 1, new Button(getProperty("complex_calculator_scene.button_im_negate"))),
     BUTTON_MODULE(CalculatorMode.COMPLEX, null,
             5, 0, new Button(getProperty("complex_calculator_scene.button_module"))),
     BUTTON_ARGUMENT_RAD(CalculatorMode.COMPLEX, null,
@@ -124,7 +126,7 @@ public enum CalculatorButtons {
         complexActionButtons.put(BUTTON_ARGUMENT_DEG.getButton(), CalculatorOperation.DEG);
         complexActionButtons.put(BUTTON_POW.getButton(), CalculatorOperation.POW);
         complexActionButtons.put(BUTTON_SQR.getButton(), CalculatorOperation.SQRT);
-        
+
         memoryButtons = new HashMap<>();
         memoryButtons.put(BUTTON_MEMORY_ADD.getButton(), MemoryOperation.MEMORY_ADD);
         memoryButtons.put(BUTTON_MEMORY_SAVE.getButton(), MemoryOperation.MEMORY_SAVE);

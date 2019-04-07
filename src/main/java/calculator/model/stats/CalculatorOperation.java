@@ -13,6 +13,7 @@ public enum CalculatorOperation {
     SQUARE("SQUARE", true, getProperty("calculator_scene.operation_square")),
     BACKSPACE("BACKSPACE", true, "OMEGA_LUL"),
     //only for complex:
+    IM_NEGATE("IM_NEGATE", true, getProperty("complex_calculator_scene.operation_im_negate")),
     ABS("ABS", true, getProperty("complex_calculator_scene.operation_abs")),
     RAD("RAD", true, getProperty("complex_calculator_scene.operation_rad")),
     DEG("DEG", true, getProperty("complex_calculator_scene.operation_deg")),
