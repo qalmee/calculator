@@ -9,16 +9,18 @@ import calculator.model.stats.ErrorState;
 import calculator.view.localization.Language;
 import calculator.view.localization.LanguageProperties;
 import calculator.view.scene.components.CalculatorButtons;
+import calculator.view.scene.components.CalculatorButtonsGridPane;
 import calculator.view.scene.components.CalculatorMenu;
 import javafx.animation.PauseTransition;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.geometry.HPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -28,15 +30,13 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static calculator.view.localization.LanguageProperties.getProperty;
 
 public class CalculatorScene extends Scene implements CalculatorObserver {
 
-    private static final int ROW_CONSTRAINS_HEIGHT = 40;
-    private static final int COLUMN_CONSTRAINS_WIDTH = 65;
+
     private static final int TEXT_FIELD_PREVIOUS_OPERATION_MAX_TEXT_LENGTH = 44;
     private static final int TEXT_FIELD_VALUE_MAX_TEXT_WIDTH_PIXELS = 380;
     private static final int TEXT_FIELD_VALUE_MAX_TEXT_LENGTH = 40;
@@ -206,10 +206,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     }
 
     private void setupButtonsGridPane() {
-        buttonsGridPane = new GridPane();
-        buttonsGridPane.getStyleClass().add("grid_pane_buttons");
-        addRowAndColumnConstraintsToButtonsGridPane(
-                calculatorMode.getCountButtonsGridPaneRows(), calculatorMode.getCountButtonsGridPaneColumns());
+        buttonsGridPane = new CalculatorButtonsGridPane(calculatorMode);
         mainPanel.getChildren().add(buttonsGridPane);
     }
 
@@ -218,7 +215,6 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         Arrays.stream(buttons).forEach(button -> configureButton(button.getButton()));
         List<CalculatorButtons> digitButtons = CalculatorButtons.getDigitButtons();
         digitButtons.forEach(button -> configureDigitButton(button.getButton()));
-        addButtonsToGridPane();
 
         setupClearButtons();
         setupActionButtons();
@@ -418,48 +414,6 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         needClearResult = false;
         textFieldValue.clear();
         textFieldPreviousOperation.clear();
-    }
-
-    private void addButtonsToGridPane() {
-        int countRows = calculatorMode.getCountButtonsGridPaneColumns();
-        int countColumns = calculatorMode.getCountButtonsGridPaneColumns();
-        Node[][] elementsInGridPane = new Node[countRows][countColumns];
-
-        CalculatorButtons[] buttons = CalculatorButtons.values();
-        Arrays.stream(buttons)
-                .filter(button -> button.getCalculatorMode() == CalculatorMode.BASIC ||
-                        button.getCalculatorMode() == calculatorMode)
-                .forEach(button -> {
-                    int row = button.getRowInGridPane();
-                    int column = button.getColumnInGridPane();
-                    elementsInGridPane[row][column] = button.getButton();
-                });
-        addEmptyPaneToBullGridPaneElements(elementsInGridPane);
-
-        for (int i = 0; i < elementsInGridPane.length; ++i) {
-            buttonsGridPane.addRow(i, elementsInGridPane[i]);
-        }
-    }
-
-    private void addRowAndColumnConstraintsToButtonsGridPane(int countRows, int countColumns) {
-        RowConstraints rowConstraints = new RowConstraints();
-        rowConstraints.setPrefHeight(ROW_CONSTRAINS_HEIGHT);
-        ColumnConstraints columnConstraints = new ColumnConstraints();
-        columnConstraints.setPrefWidth(COLUMN_CONSTRAINS_WIDTH);
-        columnConstraints.setHalignment(HPos.CENTER);
-
-        buttonsGridPane.getRowConstraints().addAll(Collections.nCopies(countRows, rowConstraints));
-        buttonsGridPane.getColumnConstraints().addAll(Collections.nCopies(countColumns, columnConstraints));
-    }
-
-    private void addEmptyPaneToBullGridPaneElements(Node[][] elementsInGridPane) {
-        for (int i = 0; i < elementsInGridPane.length; ++i) {
-            for (int j = 0; j < elementsInGridPane[i].length; ++j) {
-                if (elementsInGridPane[i][j] == null) {
-                    elementsInGridPane[i][j] = new Pane();
-                }
-            }
-        }
     }
 
     private void configureButton(Button button) {
