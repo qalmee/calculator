@@ -43,7 +43,7 @@ public class Processor<T extends Number<T>> {
             throw new IllegalStateException("Left operand or operation is not set");
         }
         if (rightOperand == null && (
-                        operation == CalculatorOperation.ADD ||
+                operation == CalculatorOperation.ADD ||
                         operation == CalculatorOperation.SUBTRACT ||
                         operation == CalculatorOperation.MULTIPLY ||
                         operation == CalculatorOperation.DIVIDE ||
@@ -79,20 +79,19 @@ public class Processor<T extends Number<T>> {
                 leftResultOperand = leftResultOperand.square();
                 break;
             case ABS:
-                leftResultOperand = new Complex(((Complex)(leftResultOperand)).module(), BigDecimal.ZERO);
+                leftResultOperand = new Complex(((Complex) leftResultOperand).module(), BigDecimal.ZERO);
                 break;
             case DEG:
-                //wtf????
-                leftResultOperand = new Complex(MathUtils.radToDegrees(((Complex) (leftResultOperand)).complexArgument()), BigDecimal.ZERO);
+                leftResultOperand = new Complex(MathUtils.radToDegrees(((Complex) leftResultOperand).complexArgument()), BigDecimal.ZERO);
                 break;
             case POW:
-                leftResultOperand =(((Complex)(leftResultOperand)).pow(rightOperand.toBigDecimal().intValue()));
+                leftResultOperand = (((Complex) leftResultOperand).pow(rightOperand.toBigDecimal().intValue()));
                 break;
             case RAD:
-                leftResultOperand = new Complex(((Complex)(leftResultOperand)).complexArgument(), BigDecimal.ZERO);
+                leftResultOperand = new Complex(((Complex) leftResultOperand).complexArgument(), BigDecimal.ZERO);
                 break;
             case SQRT:
-                //leftResultOperand.
+                leftResultOperand = ((Complex) leftResultOperand).sqrt();
             default:
                 //throw
         }

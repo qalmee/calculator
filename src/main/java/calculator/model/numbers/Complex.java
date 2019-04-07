@@ -68,7 +68,7 @@ public class Complex implements Number<Complex> {
     //this method counts 1/x value
     @Override
     public Complex reverse() {
-        BigDecimal square = this.module();
+        BigDecimal square = this.squareScalar();
         return new Complex(this.conjugate().real.divide(square, MAX_PRECISION, ROUND_FLOOR),
                 this.conjugate().imaginary.divide(square, MAX_PRECISION, ROUND_FLOOR));
     }
@@ -78,12 +78,23 @@ public class Complex implements Number<Complex> {
         return new Complex(this.real.negate(), this.imaginary.negate());
     }
 
+
     public Complex conjugate() {
         return new Complex(this.real, this.imaginary.negate());
     }
 
     public BigDecimal module() {
+        return MathUtils.sqrt(this.real.multiply(this.real).add(this.imaginary.multiply(this.imaginary)));
+    }
+
+    public BigDecimal squareScalar() {
         return this.real.multiply(this.real).add(this.imaginary.multiply(this.imaginary));
+    }
+
+    public Complex sqrt() {
+        BigDecimal module = MathUtils.sqrt(this.module());
+        BigDecimal fi = this.complexArgument().multiply(BigDecimal.valueOf(0.5));
+        return new Complex(MathUtils.taylorCos(fi).multiply(module), MathUtils.taylorSin(fi).multiply(module));
     }
 
     public BigDecimal complexArgument() {
