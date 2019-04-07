@@ -19,13 +19,11 @@ public class Main extends Application {
         Controller controller = new Controller(calculatorModel);
 
         CalculatorScene calculatorScene = new CalculatorScene();
+        calculatorModel.readLanguageFromConfig();
         calculatorScene.initializeScene();
 
         calculatorScene.setControllerListener(controller);
-
         calculatorModel.setCalculatorObserver(calculatorScene);
-        calculatorModel.readLanguageFromConfig();
-
 
         Stage calculatorWindow = new CalculatorWindow();
         calculatorWindow.setScene(calculatorScene);
