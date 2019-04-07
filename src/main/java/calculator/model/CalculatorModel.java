@@ -8,7 +8,6 @@ import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
 import calculator.model.utils.ConverterPToP;
 import calculator.model.utils.NumberConverter;
-import calculator.model.utils.exceptions.BadPasteFromClipboardException;
 import calculator.model.utils.exceptions.DivisionByZeroException;
 import calculator.view.ErrorState;
 import calculator.view.localization.Language;
@@ -19,6 +18,7 @@ import java.util.List;
 public class CalculatorModel {
 
     private static final int MAX_BASE = 16;
+    private static final int MAX_SCIENTIFIC_DIGITS = 30;
     private int currentBase = 10;
 
     private CalculatorObserver calculatorObserver;
@@ -67,82 +67,41 @@ public class CalculatorModel {
         calculatorObserver.pasteValueFromClipboard();
     }
 
-    @SuppressWarnings("Duplicates")
     public void operationPressed(String valueOnDisplay, CalculatorOperation operation, CalculatorMode calculatorMode) {
-        valueOnDisplay = commasToDots(valueOnDisplay);
-        if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
-            valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, currentBase);
-        }
-        Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
+        Number number = prepareStringBeforeCalc(valueOnDisplay, calculatorMode);
 
-        try {
-            ControlUnit.INSTANCE.operatorPressed(number, operation);
-        } catch (DivisionByZeroException e) {
-            calculatorObserver.setErrorState(ErrorState.DIVISION_BY_ZERO);
-            calculatorObserver.clearResultAfterEnteringDigit();
-            setHistoryOnDisplay(calculatorMode);
-            ControlUnit.INSTANCE.resetCalculator();
+        if (!performOperator(number, calculatorMode, operation)) {
             return;
         }
 
-        calculatorObserver.clearResultAfterEnteringDigit();
         if (ControlUnit.INSTANCE.needToSetResult()) {
-            String result = ControlUnit.INSTANCE.getResultValue().toString();
-            if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
-                result = ConverterPToP.convert10ToPAdaptive(result, currentBase);
-            }
-            calculatorObserver.setResult(dotsToCommas(result));
-            ControlUnit.INSTANCE.resultIsSet();
+            setResult(calculatorMode);
         }
-        setHistoryOnDisplay(calculatorMode);
         calculatorObserver.setBackSpaceEnabled(false);
+        calculatorObserver.clearResultAfterEnteringDigit();
+        setHistoryOnDisplay(calculatorMode);
     }
 
-    @SuppressWarnings("Duplicates")
     public void equalsPressed(String valueOnDisplay, CalculatorMode calculatorMode) {
-        valueOnDisplay = commasToDots(valueOnDisplay);
-        if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
-            valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, currentBase);
-        }
-        Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
-        try {
-            ControlUnit.INSTANCE.equalsPressed(number);
-        } catch (DivisionByZeroException e) {
-            calculatorObserver.setErrorState(ErrorState.DIVISION_BY_ZERO);
-            calculatorObserver.clearResultAfterEnteringDigit();
-            setHistoryOnDisplay(calculatorMode);
-            ControlUnit.INSTANCE.resetCalculator();
+        Number number = prepareStringBeforeCalc(valueOnDisplay, calculatorMode);
+
+        if (!performEquals(number, calculatorMode)) {
             return;
         }
-
-        calculatorObserver.clearResultAfterEnteringDigit();
         if (ControlUnit.INSTANCE.needToSetResult()) {
-            String result = ControlUnit.INSTANCE.getResultValue().toString();
-            if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
-                result = ConverterPToP.convert10ToPAdaptive(result, currentBase);
-            }
-            calculatorObserver.setResult(dotsToCommas(result));
-            ControlUnit.INSTANCE.resultIsSet();
+            setResult(calculatorMode);
         }
+        calculatorObserver.clearResultAfterEnteringDigit();
         calculatorObserver.setPreviousOperationText("");
-        calculatorObserver.setBackSpaceEnabled(true);
     }
 
-    @SuppressWarnings("Duplicates")
     public void memoryOperationPressed(String valueOnDisplay, MemoryOperation operation, CalculatorMode calculatorMode) {
-        valueOnDisplay = commasToDots(valueOnDisplay);
-        if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
-            valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, currentBase);
-        }
-        Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
+        Number number = prepareStringBeforeCalc(valueOnDisplay, calculatorMode);
+
         ControlUnit.INSTANCE.memoryOperationPressed(number, operation);
+
         if (operation.equals(MemoryOperation.MEMORY_READ)) {
-            String result = ControlUnit.INSTANCE.getResultValue().toString();
-            if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
-                result = ConverterPToP.convert10ToPAdaptive(result, currentBase);
-            }
-            calculatorObserver.setResult(dotsToCommas(result));
-            ControlUnit.INSTANCE.enteringNewValue();
+            setResult(calculatorMode);
         }
         calculatorObserver.clearResultAfterEnteringDigit();
     }
@@ -163,10 +122,10 @@ public class CalculatorModel {
     }
 
     public void convertAll(String valueOnDisplay, int oldBase, int newBase) {
-        valueOnDisplay = commasToDots(valueOnDisplay);
-        String result = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, oldBase);
-        result = ConverterPToP.convert10ToPAdaptive(result, newBase);
-        calculatorObserver.setResult(dotsToCommas(result));
+        valueOnDisplay = NumberConverter.fromScientific(commasToDots(valueOnDisplay));
+        valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, oldBase);
+        valueOnDisplay = ConverterPToP.convert10ToPAdaptive(valueOnDisplay, newBase);
+        calculatorObserver.setResult(dotsToCommas(NumberConverter.toScientific(valueOnDisplay, MAX_SCIENTIFIC_DIGITS)));
         calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(newBase)));
     }
 
@@ -187,20 +146,27 @@ public class CalculatorModel {
     }
 
     public void parseClipboardString(String data, CalculatorMode calculatorMode) {
-        System.out.println(data);
         if (data.isEmpty()) {
             return;
         }
         data = data.toUpperCase();
-        try {
-            if (calculatorMode.equals(CalculatorMode.P_NUMBER) && !checkStringBeforeParse(data)) {
-                throw new BadPasteFromClipboardException("String contains bad symbols");
+        if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
+            if (!checkStringBeforeParse(data)) {
+                setErrorState(ErrorState.WRONG_DATA, calculatorMode);
+                return;
             }
-        } catch (RuntimeException e) {
-            calculatorObserver.setErrorState(ErrorState.WRONG_DATA);
-            calculatorObserver.clearResultAfterEnteringDigit();
-            ControlUnit.INSTANCE.resetCalculator();
-            return;
+        } else {
+            Number number;
+            try {
+                number = NumberConverter.stringToNumber(data, calculatorMode);
+            } catch (RuntimeException e) {
+                setErrorState(ErrorState.WRONG_DATA, calculatorMode);
+                return;
+            }
+            data = number.toString();
+        }
+        if (data.length() > MAX_SCIENTIFIC_DIGITS) {
+            data = NumberConverter.toScientific(data, MAX_SCIENTIFIC_DIGITS);
         }
         displayTextActionHappened();
         calculatorObserver.setResult(data);
@@ -217,4 +183,55 @@ public class CalculatorModel {
                 ch -> (ch >= '0' && ch <= '9' && ch <= digits)
                         || (ch >= 'A' && ch <= 'F' && ch <= letters));
     }
+
+    private void setResult(CalculatorMode calculatorMode) {
+        String result = ControlUnit.INSTANCE.getResultValue().toString();
+        if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
+            result = ConverterPToP.convert10ToPAdaptive(result, currentBase);
+        }
+        if (result.length() > MAX_SCIENTIFIC_DIGITS) {
+            result = NumberConverter.toScientific(result, MAX_SCIENTIFIC_DIGITS);
+        }
+
+        calculatorObserver.setResult(dotsToCommas(result));
+        ControlUnit.INSTANCE.resultIsSet();
+
+        calculatorObserver.setBackSpaceEnabled(false);
+    }
+
+    private boolean performEquals(Number number, CalculatorMode calculatorMode) {
+        try {
+            ControlUnit.INSTANCE.equalsPressed(number);
+        } catch (DivisionByZeroException e) {
+            setErrorState(ErrorState.DIVISION_BY_ZERO, calculatorMode);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean performOperator(Number number, CalculatorMode calculatorMode, CalculatorOperation calculatorOperation) {
+        try {
+            ControlUnit.INSTANCE.operatorPressed(number, calculatorOperation);
+        } catch (DivisionByZeroException e) {
+            setErrorState(ErrorState.DIVISION_BY_ZERO, calculatorMode);
+            return false;
+        }
+        return true;
+    }
+
+    private Number prepareStringBeforeCalc(String valueOnDisplay, CalculatorMode calculatorMode) {
+        valueOnDisplay = NumberConverter.fromScientific(commasToDots(valueOnDisplay));
+        if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
+            valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, currentBase);
+        }
+        return NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
+    }
+
+    private void setErrorState(ErrorState state, CalculatorMode calculatorMode) {
+        calculatorObserver.setErrorState(state);
+        calculatorObserver.clearResultAfterEnteringDigit();
+        setHistoryOnDisplay(calculatorMode);
+        ControlUnit.INSTANCE.resetCalculator();
+    }
+
 }

@@ -68,8 +68,8 @@ public final class MathUtils {
         if (a.abs().subtract(BigDecimal.ONE).compareTo(EPS) <= 0) {
             return BigDecimal.valueOf(Math.PI / 4.0).multiply(BigDecimal.valueOf(a.compareTo(BigDecimal.ZERO)));
         } else if (a.abs().compareTo(BigDecimal.ONE) > 0) {
-            BigDecimal abs_a = a.abs();
-            BigDecimal result = BigDecimal.valueOf(Math.PI / 2.0).subtract(aTan(BigDecimal.ONE.divide(abs_a, MAX_PRECISION, ROUND_FLOOR)));
+            BigDecimal absOfA = a.abs();
+            BigDecimal result = BigDecimal.valueOf(Math.PI / 2.0).subtract(aTan(BigDecimal.ONE.divide(absOfA, MAX_PRECISION, ROUND_FLOOR)));
             if (a.compareTo(BigDecimal.ZERO) < 0) {
                 result = result.negate();
             }

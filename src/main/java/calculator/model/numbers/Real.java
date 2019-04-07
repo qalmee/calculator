@@ -78,4 +78,9 @@ public class Real implements Number<Real> {
     public BigDecimal toBigDecimal() {
         return null;
     }
+
+    String getExp() {
+        return value.toEngineeringString();
+    }
+
 }

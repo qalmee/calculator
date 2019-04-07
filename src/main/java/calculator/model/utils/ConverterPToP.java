@@ -7,18 +7,20 @@ public class ConverterPToP {
 
     private static final int MAX_BASE = 16;
     private static final int MIN_BASE = 2;
-    private static final int MAX_PRECISION = 20;
+    private static final int MAX_PRECISION = 100;
 
     private ConverterPToP() {
 
     }
 
     public static String convert10ToPAdaptive(String valueString, int base) {
+        if (base == 10) return valueString;
         String result = convert10ToP(valueString, base, MAX_PRECISION);
         return cutTrailingZeros(result);
     }
 
     public static String convertPTo10Adaptive(String valueString, int base) {
+        if (base == 10) return valueString;
         String result = convertPTo10(valueString, base, MAX_PRECISION);
         return cutTrailingZeros(result);
     }
