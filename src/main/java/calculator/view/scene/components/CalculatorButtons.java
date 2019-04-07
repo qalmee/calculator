@@ -123,9 +123,8 @@ public enum CalculatorButtons {
         complexActionButtons.put(BUTTON_ARGUMENT_RAD.getButton(), CalculatorOperation.RAD);
         complexActionButtons.put(BUTTON_ARGUMENT_DEG.getButton(), CalculatorOperation.DEG);
         complexActionButtons.put(BUTTON_POW.getButton(), CalculatorOperation.POW);
-        complexActionButtons.put(BUTTON_SQR.getButton(), null);
-
-
+        complexActionButtons.put(BUTTON_SQR.getButton(), CalculatorOperation.SQRT);
+        
         memoryButtons = new HashMap<>();
         memoryButtons.put(BUTTON_MEMORY_ADD.getButton(), MemoryOperation.MEMORY_ADD);
         memoryButtons.put(BUTTON_MEMORY_SAVE.getButton(), MemoryOperation.MEMORY_SAVE);
