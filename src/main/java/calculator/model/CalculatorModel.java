@@ -1,6 +1,5 @@
 package calculator.model;
 
-import calculator.controller.ControllerListener;
 import calculator.model.configuration.Config;
 import calculator.model.memory.MemoryOperation;
 import calculator.model.numbers.Number;
@@ -9,16 +8,16 @@ import calculator.model.observer.ComplexCalculatorObserver;
 import calculator.model.observer.FractionCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
+import calculator.model.stats.ErrorState;
 import calculator.model.utils.ConverterPToP;
 import calculator.model.utils.NumberConverter;
 import calculator.model.utils.exceptions.DivisionByZeroException;
-import calculator.model.stats.ErrorState;
 import calculator.view.localization.Language;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CalculatorModel implements ControllerListener {
+public class CalculatorModel {
 
     private static final int MAX_BASE = 16;
     private int currentBase = 10;
@@ -26,6 +25,42 @@ public class CalculatorModel implements ControllerListener {
     private CalculatorObserver calculatorObserver;
     private FractionCalculatorObserver fractionCalculatorObserver;
     private ComplexCalculatorObserver complexCalculatorObserver;
+
+    public void setCalculatorObserver(CalculatorObserver calculatorObserver) {
+        this.calculatorObserver = calculatorObserver;
+    }
+
+    public void setFractionCalculatorObserver(FractionCalculatorObserver fractionCalculatorObserver) {
+        this.fractionCalculatorObserver = fractionCalculatorObserver;
+    }
+
+    public void setComplexCalculatorObserver(ComplexCalculatorObserver complexCalculatorObserver) {
+        this.complexCalculatorObserver = complexCalculatorObserver;
+    }
+
+    private void resetModel() {
+        currentBase = 10;
+    }
+
+    public void updateDigitButtons(int base) {
+        List<String> buttonsToUpdate = new ArrayList<>(MAX_BASE - base);
+        for (int i = base; i < MAX_BASE; ++i) {
+            buttonsToUpdate.add(Integer.toString(i, 16).toUpperCase());
+        }
+        calculatorObserver.updateDigitButtons(buttonsToUpdate);
+    }
+
+    public void setLanguageToConfig(Language language) {
+        Config.setLanguage(language);
+    }
+
+    public void setCalculatorModeToConfig(CalculatorMode calculatorMode) {
+        ControlUnit.INSTANCE.resetCalculator();
+        resetModel();
+        Config.setCalculatorMode(calculatorMode);
+        calculatorObserver.updateCalculatorMode(calculatorMode);
+        calculatorObserver.setBackSpaceEnabled(true);
+    }
 
     public void readConfigInformation() {
         calculatorObserver.updateCalculatorMode(Config.getCalculatorMode());
@@ -35,87 +70,28 @@ public class CalculatorModel implements ControllerListener {
         calculatorObserver.updateLanguage(Config.getLanguage());
     }
 
-    @Override
-    public void setNewObserver(CalculatorObserver calculatorObserver) {
-        this.calculatorObserver = calculatorObserver;
+    public void copyValueToClipboard() {
+        calculatorObserver.copyValueToClipboard();
     }
 
-    @Override
-    public void setFractionCalculatorObserver(FractionCalculatorObserver fractionCalculatorObserver) {
-        this.fractionCalculatorObserver = fractionCalculatorObserver;
+    public void pasteValueFromClipboard() {
+        calculatorObserver.pasteValueFromClipboard();
     }
 
-    @Override
-    public void setComplexCalculatorObserver(ComplexCalculatorObserver complexCalculatorObserver) {
-        this.complexCalculatorObserver = complexCalculatorObserver;
-    }
-
-    @Override
-    public void setNewBase(int newBase) {
-        currentBase = newBase;
-    }
-
-    @Override
-    public void updateDigitButtons(int base) {
-        List<String> buttonsToUpdate = new ArrayList<>(MAX_BASE - base);
-        for (int i = base; i < MAX_BASE; ++i) {
-            buttonsToUpdate.add(Integer.toString(i, 16).toUpperCase());
+    @SuppressWarnings("Duplicates")
+    public void operationPressed(String valueOnDisplay, CalculatorOperation operation, CalculatorMode calculatorMode) {
+        valueOnDisplay = commasToDots(valueOnDisplay);
+        if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
+            valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, currentBase);
         }
-        calculatorObserver.updateDigitButtons(buttonsToUpdate);
-    }
-
-    @Override
-    public void checkPastedValue(String value, CalculatorMode calculatorMode) {
-        Number number;
-        try {
-            number = NumberConverter.stringToNumber(value, calculatorMode);
-        } catch (RuntimeException e) {
-            calculatorObserver.setErrorState(ErrorState.WRONG_DATA);
-            calculatorObserver.clearResultAfterEnteringDigit();
-            ControlUnit.INSTANCE.resetCalculator();
-            return;
-        }
-        buttonDigitClicked();
-        calculatorObserver.setResult(number.toString());
-    }
-
-    @Override
-    public void convertValue(String value, int currentBase, int newBase) {
-        value = commasToDots(value);
-        String result = ConverterPToP.convertPTo10Adaptive(value, currentBase);
-        result = ConverterPToP.convert10ToPAdaptive(result, newBase);
-        calculatorObserver.setResult(dotsToCommas(result));
-        calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(newBase)));
-    }
-
-    @Override
-    public void updateLanguage(Language language) {
-        Config.setLanguage(language);
-    }
-
-    @Override
-    public void updateCalculatorMode(CalculatorMode calculatorMode) {
-        ControlUnit.INSTANCE.resetCalculator();
-        resetModel();
-        Config.setCalculatorMode(calculatorMode);
-        calculatorObserver.updateCalculatorMode(calculatorMode);
-        calculatorObserver.setBackSpaceEnabled(true);
-    }
-
-    @Override
-    public void actionButtonClicked(String value, CalculatorOperation operation, CalculatorMode mode) {
-        value = commasToDots(value);
-        if (mode.equals(CalculatorMode.P_NUMBER)) {
-            value = ConverterPToP.convertPTo10Adaptive(value, currentBase);
-        }
-        Number number = NumberConverter.stringToNumber(value, mode);
+        Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
 
         try {
             ControlUnit.INSTANCE.operatorPressed(number, operation);
         } catch (DivisionByZeroException e) {
             calculatorObserver.setErrorState(ErrorState.DIVISION_BY_ZERO);
             calculatorObserver.clearResultAfterEnteringDigit();
-            setHistoryOnDisplay(mode);
+            setHistoryOnDisplay(calculatorMode);
             ControlUnit.INSTANCE.resetCalculator();
             return;
         }
@@ -123,48 +99,29 @@ public class CalculatorModel implements ControllerListener {
         calculatorObserver.clearResultAfterEnteringDigit();
         if (ControlUnit.INSTANCE.needToSetResult()) {
             String result = ControlUnit.INSTANCE.getResultValue().toString();
-            if (mode.equals(CalculatorMode.P_NUMBER)) {
+            if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
                 result = ConverterPToP.convert10ToPAdaptive(result, currentBase);
             }
             calculatorObserver.setResult(dotsToCommas(result));
             ControlUnit.INSTANCE.resultIsSet();
         }
-        setHistoryOnDisplay(mode);
+        setHistoryOnDisplay(calculatorMode);
         calculatorObserver.setBackSpaceEnabled(false);
     }
 
-    @Override
-    public void memoryButtonClicked(String value, MemoryOperation memoryOperation, CalculatorMode mode) {
-        value = commasToDots(value);
-        if (mode.equals(CalculatorMode.P_NUMBER)) {
-            value = ConverterPToP.convertPTo10Adaptive(value, currentBase);
+    @SuppressWarnings("Duplicates")
+    public void equalsPressed(String valueOnDisplay, CalculatorMode calculatorMode) {
+        valueOnDisplay = commasToDots(valueOnDisplay);
+        if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
+            valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, currentBase);
         }
-        Number number = NumberConverter.stringToNumber(value, mode);
-        ControlUnit.INSTANCE.memoryOperationPressed(number, memoryOperation);
-        if (memoryOperation.equals(MemoryOperation.MEMORY_READ)) {
-            String result = ControlUnit.INSTANCE.getResultValue().toString();
-            if (mode.equals(CalculatorMode.P_NUMBER)) {
-                result = ConverterPToP.convert10ToPAdaptive(result, currentBase);
-            }
-            calculatorObserver.setResult(dotsToCommas(result));
-            ControlUnit.INSTANCE.enteringNewValue();
-        }
-        calculatorObserver.clearResultAfterEnteringDigit();
-    }
-
-    @Override
-    public void buttonEnterClicked(String value, CalculatorMode mode) {
-        value = commasToDots(value);
-        if (mode.equals(CalculatorMode.P_NUMBER)) {
-            value = ConverterPToP.convertPTo10Adaptive(value, currentBase);
-        }
-        Number number = NumberConverter.stringToNumber(value, mode);
+        Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
         try {
             ControlUnit.INSTANCE.equalsPressed(number);
         } catch (DivisionByZeroException e) {
             calculatorObserver.setErrorState(ErrorState.DIVISION_BY_ZERO);
             calculatorObserver.clearResultAfterEnteringDigit();
-            setHistoryOnDisplay(mode);
+            setHistoryOnDisplay(calculatorMode);
             ControlUnit.INSTANCE.resetCalculator();
             return;
         }
@@ -172,7 +129,7 @@ public class CalculatorModel implements ControllerListener {
         calculatorObserver.clearResultAfterEnteringDigit();
         if (ControlUnit.INSTANCE.needToSetResult()) {
             String result = ControlUnit.INSTANCE.getResultValue().toString();
-            if (mode.equals(CalculatorMode.P_NUMBER)) {
+            if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
                 result = ConverterPToP.convert10ToPAdaptive(result, currentBase);
             }
             calculatorObserver.setResult(dotsToCommas(result));
@@ -182,32 +139,47 @@ public class CalculatorModel implements ControllerListener {
         calculatorObserver.setBackSpaceEnabled(true);
     }
 
-    @Override
-    public void buttonDigitClicked() {
+    @SuppressWarnings("Duplicates")
+    public void memoryOperationPressed(String valueOnDisplay, MemoryOperation operation, CalculatorMode calculatorMode) {
+        valueOnDisplay = commasToDots(valueOnDisplay);
+        if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
+            valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, currentBase);
+        }
+        Number number = NumberConverter.stringToNumber(valueOnDisplay, calculatorMode);
+        ControlUnit.INSTANCE.memoryOperationPressed(number, operation);
+        if (operation.equals(MemoryOperation.MEMORY_READ)) {
+            String result = ControlUnit.INSTANCE.getResultValue().toString();
+            if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
+                result = ConverterPToP.convert10ToPAdaptive(result, currentBase);
+            }
+            calculatorObserver.setResult(dotsToCommas(result));
+            ControlUnit.INSTANCE.enteringNewValue();
+        }
+        calculatorObserver.clearResultAfterEnteringDigit();
+
+    }
+
+    public void digitButtonPressed() {
         ControlUnit.INSTANCE.enteringNewValue();
         calculatorObserver.setBackSpaceEnabled(true);
     }
 
-    @Override
-    public void buttonClearEntryClicked() {
-        ControlUnit.INSTANCE.enteringNewValue();
-        calculatorObserver.setBackSpaceEnabled(true);
-    }
-
-    @Override
-    public void buttonGlobalClearClicked() {
+    public void clear() {
         ControlUnit.INSTANCE.resetCalculator();
         calculatorObserver.setBackSpaceEnabled(true);
     }
 
-    @Override
-    public void buttonCopyClicked() {
-        calculatorObserver.copyValueToClipboard();
+    public void clearEntry() {
+        ControlUnit.INSTANCE.enteringNewValue();
+        calculatorObserver.setBackSpaceEnabled(true);
     }
 
-    @Override
-    public void buttonPasteClicked() {
-        calculatorObserver.pasteValueFromClipboard();
+    public void convertAll(String valueOnDisplay, int oldBase, int newBase) {
+        valueOnDisplay = commasToDots(valueOnDisplay);
+        String result = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, oldBase);
+        result = ConverterPToP.convert10ToPAdaptive(result, newBase);
+        calculatorObserver.setResult(dotsToCommas(result));
+        calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(newBase)));
     }
 
     private String dotsToCommas(String s) {
@@ -226,7 +198,21 @@ public class CalculatorModel implements ControllerListener {
         }
     }
 
-    private void resetModel() {
-        currentBase = 10;
+    public void parseClipboardString(String data, CalculatorMode calculatorMode) {
+        Number number;
+        try {
+            number = NumberConverter.stringToNumber(data, calculatorMode);
+        } catch (RuntimeException e) {
+            calculatorObserver.setErrorState(ErrorState.WRONG_DATA);
+            calculatorObserver.clearResultAfterEnteringDigit();
+            ControlUnit.INSTANCE.resetCalculator();
+            return;
+        }
+        digitButtonPressed();
+        calculatorObserver.setResult(number.toString());
+    }
+
+    public void setBase(int base) {
+        currentBase = base;
     }
 }

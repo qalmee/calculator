@@ -28,11 +28,11 @@ public interface ControllerListener {
 
     void updateCalculatorMode(CalculatorMode calculatorMode);
 
-    void actionButtonClicked(String value, CalculatorOperation operation, CalculatorMode mode);
+    void actionButtonClicked(String number, CalculatorOperation operation, CalculatorMode mode);
 
-    void memoryButtonClicked(String value, MemoryOperation memoryOperation, CalculatorMode mode);
+    void memoryButtonClicked(String number, MemoryOperation memoryOperation, CalculatorMode mode);
 
-    void buttonEnterClicked(String value, CalculatorMode mode);
+    void buttonEnterClicked(String number, CalculatorMode mode);
 
     void buttonDigitClicked();
 
