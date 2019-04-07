@@ -1,0 +1,69 @@
+.label_memory {
+    -fx-pref-width: 60;
+    -fx-alignment: center;
+    -fx-background-color: lightgray;
+    -fx-border-color: gray;
+    -fx-font-family: consolas;
+    -fx-font-size: 22;
+    -fx-padding: 1,1,1,1;
+}
+
+.text_field_value {
+    -fx-pref-width: 415;
+    -fx-pref-height: 65;
+    -fx-alignment: top-right;
+    -fx-background-color: transparent;
+}
+
+.text_field_previous_operation {
+    -fx-font-size: 14;
+    -fx-font-family: consolas;
+    -fx-font-weight: bold;
+    -fx-pref-width: 360;
+    -fx-alignment: top-right;
+    -fx-background-color: transparent;
+}
+
+.grid_pane_buttons {
+    -fx-alignment: center;
+    -fx-grid-lines-visible: true;
+    -fx-padding: 0 0 10 0;
+}
+
+.grid_pane_button {
+    -fx-font-family: system;
+    -fx-font-size: 15;
+    -fx-pref-width: 60;
+    -fx-pref-height: 30;
+}
+
+.grid_pane_button_digit {
+    -fx-font-weight: bold;
+}
+
+.slider_base {
+    -fx-show-tick-labels: true;
+    -fx-show-tick-marks: true;
+    -fx-major-tick-unit: 1;
+    -fx-minor-tick-count: 0;
+    -fx-snap-to-ticks: true;
+    -fx-padding: 20 0 0 0;
+    -fx-pref-width: 270;
+}
+
+.label_base {
+    -fx-font-family: system;
+    -fx-font-size: 20;
+    -fx-padding: 10 0 0 0;
+}
+
+.h_box_bottom_pane {
+    -fx-alignment: center;
+}
+
+.i_button_active {
+    -fx-font-size: 15;
+    -fx-text-fill: blue;
+    -fx-font-weight: bold;
+    -fx-underline: true;
+}

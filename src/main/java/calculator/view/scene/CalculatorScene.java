@@ -5,26 +5,22 @@ import calculator.model.memory.MemoryOperation;
 import calculator.model.observer.CalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
-import calculator.view.ErrorState;
+import calculator.model.stats.ErrorState;
 import calculator.view.localization.Language;
 import calculator.view.localization.LanguageProperties;
 import calculator.view.scene.components.CalculatorButtons;
+import calculator.view.scene.components.CalculatorButtonsGridPane;
 import calculator.view.scene.components.CalculatorMenu;
 import javafx.animation.PauseTransition;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.input.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -34,37 +30,24 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static calculator.view.localization.LanguageProperties.getProperty;
 
 public class CalculatorScene extends Scene implements CalculatorObserver {
 
-    private static final int MAIN_PANEL_PADDING_SIZE = 5;
 
-    private static final int BUTTON_WIDTH = 60;
-    private static final int BUTTON_HEIGHT = 30;
-    private static final int ROW_CONSTRAINS_HEIGHT = 40;
-    private static final int COLUMN_CONSTRAINS_WIDTH = 65;
-    private static final int TEXT_FIELD_WIDTH = 415;
-    private static final int TEXT_FIELD_HEIGHT = 65;
-    private static final int TEXT_FIELD_PREVIOUS_OPERATION_MAX_TEXT_WIDTH_PIXELS = 360;
-    private static final int TEXT_FIELD_PREVIOUS_OPERATION_MAX_TEXT_LENGTH = 40;
+    private static final int TEXT_FIELD_PREVIOUS_OPERATION_MAX_TEXT_LENGTH = 44;
     private static final int TEXT_FIELD_VALUE_MAX_TEXT_WIDTH_PIXELS = 380;
     private static final int TEXT_FIELD_VALUE_MAX_TEXT_LENGTH = 40;
     private static final int SCROLL_BUTTONS_SCROLL_SIZE = 10;
 
-    private static final String FONT_FAMILY = "System";
-
-    private static final Font TEXT_FIELD_VALUE_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 30);
-    private static final Font TEXT_FIELD_PREVIOUS_OPERATION_FONT = Font.font("Consolas", FontWeight.BOLD, 14);
-    private static final Font BUTTONS_FONT = Font.font(FONT_FAMILY, 15);
-    private static final Font BUTTONS_DIGIT_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 15);
-
+    private static final String CSS_STYLE_FILE = "style/style.css";
+    private static final Font TEXT_FIELD_VALUE_FONT = Font.font("System", FontWeight.BOLD, 30);
     private static final Duration BUTTON_CLICK_EFFECT_DURATION = Duration.seconds(0.1);
+
     ControllerListener controllerListener;
-    private CalculatorMode calculatorMode;
+    CalculatorMode calculatorMode;
 
     private boolean needClearResult;
     private boolean backSpaceEnabled;
@@ -77,6 +60,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private GridPane buttonsGridPane;
     private TextField textFieldValue;
     private TextField textFieldPreviousOperation;
+    private Label memoryLabel;
     private Button buttonScrollLeft;
     private Button buttonScrollRight;
 
@@ -91,6 +75,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     }
 
     public void initializeScene() {
+        this.getStylesheets().add(CSS_STYLE_FILE);
         setupMainPanel();
         setupMenu();
         setupScrollButtons();
@@ -100,6 +85,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         setupButtons();
         setupHotKeys();
         setupClipboard();
+        setupMemoryLabel();
         setStartValue();
     }
 
@@ -158,6 +144,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     @Override
     public void pasteValueFromClipboard() {
+        clearTextFieldValueIfError();
         String value = clipboard.getString();
         textFieldValue.setText(value);
         controllerListener.checkPastedValue(value, calculatorMode);
@@ -165,9 +152,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     @Override
     public void setErrorState(ErrorState errorState) {
-        textFieldValue.setText(errorState.getErrorStateText());
-        isErrorState = true;
-        setButtonsStateDueToAnError(true);
+        setAtErrorState(errorState);
     }
 
     @Override
@@ -176,6 +161,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         Button buttonMemoryRead = CalculatorButtons.BUTTON_MEMORY_READ.getButton();
         buttonMemoryClear.setDisable(value);
         buttonMemoryRead.setDisable(value);
+        memoryLabel.setText(value ? getProperty("calculator_scene.memory_saved") : "");
     }
 
     public void setControllerListener(ControllerListener controllerListener) {
@@ -186,6 +172,12 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         mainPanel = (VBox) this.getRoot();
     }
 
+    private void setupMemoryLabel() {
+        memoryLabel = new Label();
+        buttonsGridPane.add(memoryLabel, 0, 0);
+        memoryLabel.getStyleClass().add("label_memory");
+    }
+
     private void setupMenu() {
         MenuBar calculatorMenu = new CalculatorMenu(controllerListener, calculatorMode);
         mainPanel.getChildren().add(calculatorMenu);
@@ -193,11 +185,11 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     private void setupTextFieldPreviousOperation() {
         textFieldPreviousOperation = new TextField();
-        textFieldPreviousOperation.setFont(TEXT_FIELD_PREVIOUS_OPERATION_FONT);
-        textFieldPreviousOperation.setPrefWidth(TEXT_FIELD_PREVIOUS_OPERATION_MAX_TEXT_WIDTH_PIXELS);
+        textFieldPreviousOperation.getStyleClass().add("text_field_previous_operation");
+        textFieldPreviousOperation.setMouseTransparent(true);
+        textFieldPreviousOperation.setFocusTraversable(false);
         textFieldPreviousOperation.textProperty().addListener((observable, oldValue, newValue) ->
                 configureTextIntTextFieldPreviousOperation(newValue));
-        setupTextFieldStyle(textFieldPreviousOperation);
 
         HBox hBox = new HBox(buttonScrollLeft, textFieldPreviousOperation, buttonScrollRight);
         mainPanel.getChildren().add(hBox);
@@ -205,31 +197,16 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     private void setupTextFieldValue() {
         textFieldValue = new TextField();
-        textFieldValue.setFont(TEXT_FIELD_VALUE_FONT);
-        textFieldValue.setPrefSize(TEXT_FIELD_WIDTH, TEXT_FIELD_HEIGHT);
+        textFieldValue.getStyleClass().add("text_field_value");
+        textFieldValue.setMouseTransparent(true);
+        textFieldValue.setFocusTraversable(false);
         textFieldValue.textProperty().addListener((observable, oldValue, newValue) ->
                 configureTextInTextFieldValue(newValue));
-        setupTextFieldStyle(textFieldValue);
         mainPanel.getChildren().add(textFieldValue);
     }
 
-    private void setupTextFieldStyle(TextField textField) {
-        textField.setAlignment(Pos.TOP_RIGHT);
-        textField.setBackground(Background.EMPTY);
-        textField.setCursor(Cursor.DEFAULT);
-        textField.setEditable(false);
-        textField.setMouseTransparent(true);
-        textField.setFocusTraversable(false);
-    }
-
     private void setupButtonsGridPane() {
-        buttonsGridPane = new GridPane();
-        addRowAndColumnConstraintsToButtonsGridPane(
-                calculatorMode.getCountButtonsGridPaneRows(), calculatorMode.getCountButtonsGridPaneColumns());
-        buttonsGridPane.setAlignment(Pos.CENTER);
-        buttonsGridPane.setGridLinesVisible(true);
-        buttonsGridPane.setPadding(new Insets(0,
-                MAIN_PANEL_PADDING_SIZE, MAIN_PANEL_PADDING_SIZE, MAIN_PANEL_PADDING_SIZE));
+        buttonsGridPane = new CalculatorButtonsGridPane(calculatorMode);
         mainPanel.getChildren().add(buttonsGridPane);
     }
 
@@ -238,13 +215,12 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         Arrays.stream(buttons).forEach(button -> configureButton(button.getButton()));
         List<CalculatorButtons> digitButtons = CalculatorButtons.getDigitButtons();
         digitButtons.forEach(button -> configureDigitButton(button.getButton()));
-        addButtonsToGridPane();
 
         setupClearButtons();
         setupActionButtons();
         setupMemoryButtons();
         setupEnterButton();
-        setupDotButton();
+        setupCommaButton();
     }
 
     private void setupHotKeys() {
@@ -410,14 +386,9 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         });
     }
 
-    private void setupDotButton() {
-        Button dotButton = CalculatorButtons.BUTTON_COMMA.getButton();
-        String commaSymbol = dotButton.getText();
-        dotButton.setOnAction(event -> {
-            if (!textFieldValue.getText().contains(commaSymbol)) {
-                textFieldValue.appendText(dotButton.getText());
-            }
-        });
+    private void setupCommaButton() {
+        Button commaButton = CalculatorButtons.BUTTON_COMMA.getButton();
+        commaButton.setOnAction(event -> appendComaDigitToTextFieldValue());
     }
 
     private void setButtonsStateDueToAnError(boolean value) {
@@ -445,52 +416,8 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         textFieldPreviousOperation.clear();
     }
 
-    private void addButtonsToGridPane() {
-        int countRows = calculatorMode.getCountButtonsGridPaneColumns();
-        int countColumns = calculatorMode.getCountButtonsGridPaneColumns();
-        Node[][] elementsInGridPane = new Node[countRows][countColumns];
-
-        CalculatorButtons[] buttons = CalculatorButtons.values();
-        Arrays.stream(buttons)
-                .filter(button -> button.getCalculatorMode() == CalculatorMode.BASIC ||
-                        button.getCalculatorMode() == calculatorMode)
-                .forEach(button -> {
-                    int row = button.getRowInGridPane();
-                    int column = button.getColumnInGridPane();
-                    elementsInGridPane[row][column] = button.getButton();
-                });
-        addEmptyPaneToBullGridPaneElements(elementsInGridPane);
-
-        for (int i = 0; i < elementsInGridPane.length; ++i) {
-            buttonsGridPane.addRow(i, elementsInGridPane[i]);
-        }
-    }
-
-    private void addRowAndColumnConstraintsToButtonsGridPane(int countRows, int countColumns) {
-        RowConstraints rowConstraints = new RowConstraints();
-        rowConstraints.setPrefHeight(ROW_CONSTRAINS_HEIGHT);
-        ColumnConstraints columnConstraints = new ColumnConstraints();
-        columnConstraints.setPrefWidth(COLUMN_CONSTRAINS_WIDTH);
-        columnConstraints.setHalignment(HPos.CENTER);
-
-        buttonsGridPane.getRowConstraints().addAll(Collections.nCopies(countRows, rowConstraints));
-        buttonsGridPane.getColumnConstraints().addAll(Collections.nCopies(countColumns, columnConstraints));
-    }
-
-    private void addEmptyPaneToBullGridPaneElements(Node[][] elementsInGridPane) {
-        for (int i = 0; i < elementsInGridPane.length; ++i) {
-            for (int j = 0; j < elementsInGridPane[i].length; ++j) {
-                if (elementsInGridPane[i][j] == null) {
-                    elementsInGridPane[i][j] = new Pane();
-                }
-            }
-        }
-    }
-
     private void configureButton(Button button) {
-        button.setPrefWidth(BUTTON_WIDTH);
-        button.setPrefHeight(BUTTON_HEIGHT);
-        button.setFont(BUTTONS_FONT);
+        button.getStyleClass().add("grid_pane_button");
         button.setFocusTraversable(false);
     }
 
@@ -515,14 +442,6 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         }
     }
 
-    private void setupAndSetNewScene(CalculatorScene calculatorScene) {
-        Window calculatorWindow = this.getWindow();
-        calculatorScene.setControllerListener(controllerListener);
-        calculatorScene.initializeScene();
-        ((Stage) calculatorWindow).setScene(calculatorScene);
-        controllerListener.setNewObserver(calculatorScene);
-    }
-
     private void setStartValue() {
         String startValue = calculatorMode.getStartValue();
         textFieldValue.setText(startValue);
@@ -530,9 +449,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     private void clearTextFieldValueIfError() {
         if (isErrorState) {
-            isErrorState = false;
-            clearTextFields();
-            setButtonsStateDueToAnError(false);
+            setToNormalState();
         }
     }
 
@@ -573,8 +490,16 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         buttonScrollRight.setVisible(value);
     }
 
+    void setupAndSetNewScene(CalculatorScene calculatorScene) {
+        Window calculatorWindow = this.getWindow();
+        calculatorScene.setControllerListener(controllerListener);
+        calculatorScene.initializeScene();
+        ((Stage) calculatorWindow).setScene(calculatorScene);
+        controllerListener.setNewObserver(calculatorScene);
+    }
+
     void configureDigitButton(Button button) {
-        button.setFont(BUTTONS_DIGIT_FONT);
+        button.getStyleClass().add("grid_pane_button_digit");
         button.setOnAction(event -> {
             clearTextFieldValueIfError();
             String digitText = button.getText();
@@ -587,10 +512,23 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         });
     }
 
+    void appendComaDigitToTextFieldValue() {
+        Button commaButton = CalculatorButtons.BUTTON_COMMA.getButton();
+        String commaSymbol = commaButton.getText();
+        if (!textFieldValue.getText().contains(commaSymbol)) {
+            textFieldValue.appendText(commaSymbol);
+        }
+    }
+
     void appendDigitToTextFieldValue(String digitText) {
         String text = textFieldValue.getText();
-        if (text.equals(calculatorMode.getStartValue()) && !digitText.contains(calculatorMode.getStartValue())) {
-            textFieldValue.setText(digitText);
+        if (text.equals(calculatorMode.getStartValue())) {
+            if (digitText.equals(text)) {
+                return;
+            }
+            if (!digitText.contains(calculatorMode.getStartValue())) {
+                textFieldValue.setText(digitText);
+            }
         } else {
             textFieldValue.setText(text + digitText);
         }
@@ -607,6 +545,18 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     void addElementToMainPanel(Node element) {
         mainPanel.getChildren().add(element);
+    }
+
+    void setAtErrorState(ErrorState errorState) {
+        textFieldValue.setText(errorState.getErrorStateText());
+        isErrorState = true;
+        setButtonsStateDueToAnError(true);
+    }
+
+    void setToNormalState() {
+        isErrorState = false;
+        clearTextFields();
+        setButtonsStateDueToAnError(false);
     }
 
     String getValueFromTextFieldValue() {

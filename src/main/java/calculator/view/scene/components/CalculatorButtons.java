@@ -105,6 +105,7 @@ public enum CalculatorButtons {
             5, 5, new Button(getProperty("complex_calculator_scene.buttonI")));
 
     private static Map<Button, CalculatorOperation> actionButtons;
+    private static Map<Button, CalculatorOperation> complexActionButtons;
     private static Map<Button, MemoryOperation> memoryButtons;
 
     static {
@@ -116,6 +117,14 @@ public enum CalculatorButtons {
         actionButtons.put(BUTTON_REVERSE.getButton(), CalculatorOperation.REVERSE);
         actionButtons.put(BUTTON_SQUARE.getButton(), CalculatorOperation.SQUARE);
         actionButtons.put(BUTTON_PLUS_MINUS.getButton(), CalculatorOperation.NEGATE);
+
+        complexActionButtons = new HashMap<>();
+        complexActionButtons.put(BUTTON_MODULE.getButton(), CalculatorOperation.ABS);
+        complexActionButtons.put(BUTTON_ARGUMENT_RAD.getButton(), CalculatorOperation.RAD);
+        complexActionButtons.put(BUTTON_ARGUMENT_DEG.getButton(), CalculatorOperation.DEG);
+        complexActionButtons.put(BUTTON_POW.getButton(), CalculatorOperation.POW);
+        complexActionButtons.put(BUTTON_SQR.getButton(), null);
+
 
         memoryButtons = new HashMap<>();
         memoryButtons.put(BUTTON_MEMORY_ADD.getButton(), MemoryOperation.MEMORY_ADD);
@@ -155,6 +164,10 @@ public enum CalculatorButtons {
                 BUTTON_DIVIDE, BUTTON_PLUS_MINUS, BUTTON_REVERSE, BUTTON_SQUARE);
     }
 
+    public static List<CalculatorButtons> getComplexActionButtons() {
+        return Arrays.asList(BUTTON_MODULE, BUTTON_ARGUMENT_RAD, BUTTON_ARGUMENT_DEG, BUTTON_POW, BUTTON_SQR);
+    }
+
     public static List<CalculatorButtons> getMemoryButtons() {
         return Arrays.asList(BUTTON_MEMORY_ADD, BUTTON_MEMORY_CLEAR, BUTTON_MEMORY_READ, BUTTON_MEMORY_SAVE);
     }
@@ -165,6 +178,10 @@ public enum CalculatorButtons {
 
     public static CalculatorOperation getCalculatorOperationFromButton(Button button) {
         return actionButtons.get(button);
+    }
+
+    public static CalculatorOperation getCalculatorOperationFromComplexButton(Button button) {
+        return complexActionButtons.get(button);
     }
 
     public static MemoryOperation getMemoryOperationFromButton(Button button) {

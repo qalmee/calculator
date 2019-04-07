@@ -3,6 +3,8 @@ package calculator.controller;
 import calculator.model.CalculatorModel;
 import calculator.model.memory.MemoryOperation;
 import calculator.model.observer.CalculatorObserver;
+import calculator.model.observer.ComplexCalculatorObserver;
+import calculator.model.observer.FractionCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
 import calculator.view.localization.Language;
@@ -18,6 +20,16 @@ public class Controller implements ControllerListener {
     @Override
     public void setNewObserver(CalculatorObserver calculatorObserver) {
         calculatorModel.setCalculatorObserver(calculatorObserver);
+    }
+
+    @Override
+    public void setFractionCalculatorObserver(FractionCalculatorObserver fractionCalculatorObserver) {
+        calculatorModel.setFractionCalculatorObserver(fractionCalculatorObserver);
+    }
+
+    @Override
+    public void setComplexCalculatorObserver(ComplexCalculatorObserver complexCalculatorObserver) {
+        calculatorModel.setComplexCalculatorObserver(complexCalculatorObserver);
     }
 
     @Override

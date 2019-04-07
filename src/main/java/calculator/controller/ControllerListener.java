@@ -2,6 +2,8 @@ package calculator.controller;
 
 import calculator.model.memory.MemoryOperation;
 import calculator.model.observer.CalculatorObserver;
+import calculator.model.observer.ComplexCalculatorObserver;
+import calculator.model.observer.FractionCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
 import calculator.view.localization.Language;
@@ -9,6 +11,10 @@ import calculator.view.localization.Language;
 public interface ControllerListener {
 
     void setNewObserver(CalculatorObserver calculatorObserver);
+
+    void setFractionCalculatorObserver(FractionCalculatorObserver fractionCalculatorObserver);
+
+    void setComplexCalculatorObserver(ComplexCalculatorObserver complexCalculatorObserver);
 
     void setNewBase(int newBase);
 
