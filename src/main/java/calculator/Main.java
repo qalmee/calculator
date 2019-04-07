@@ -1,6 +1,5 @@
 package calculator;
 
-import calculator.controller.Controller;
 import calculator.model.CalculatorModel;
 import calculator.view.scene.CalculatorScene;
 import calculator.view.window.CalculatorWindow;
@@ -16,12 +15,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         CalculatorModel calculatorModel = new CalculatorModel();
-        Controller controller = new Controller(calculatorModel);
 
         CalculatorScene calculatorScene = new CalculatorScene();
-        calculatorScene.setControllerListener(controller);
+        calculatorScene.setControllerListener(calculatorModel);
 
-        calculatorModel.setCalculatorObserver(calculatorScene);
+        calculatorModel.setNewObserver(calculatorScene);
         calculatorModel.readLanguageFromConfig();
 
         calculatorScene.initializeScene();
