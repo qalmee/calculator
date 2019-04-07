@@ -55,7 +55,18 @@ public class NumberConverter {
         return new String(new char[length]).replace('\0', '0');
     }
 
-    public static String toScientific(String value, int fractionLength) {
+    public static String toScientific(String value, int fractionLength, CalculatorMode calculatorMode) {
+        switch (calculatorMode) {
+            case BASIC:
+                return realToScientific(value, fractionLength);
+            case P_NUMBER:
+                return realToScientific(value, fractionLength);
+            default:
+                return value;
+        }
+    }
+
+    private static String realToScientific(String value, int fractionLength) {
         if (value.length() - (value.startsWith("-") ? 1 : 0) <= fractionLength) {
             return value;
         }

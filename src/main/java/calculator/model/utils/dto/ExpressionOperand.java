@@ -1,6 +1,7 @@
 package calculator.model.utils.dto;
 
 import calculator.model.numbers.Number;
+import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
 import calculator.model.utils.ConverterPToP;
 import calculator.model.utils.NumberConverter;
@@ -48,7 +49,7 @@ public class ExpressionOperand implements ExpressionNode {
             sb.append(operation.getOperation().getMathSign());
             sb.append("(");
         }
-        sb.append(NumberConverter.toScientific(ConverterPToP.convert10ToPAdaptive(number.toString(), base), MAX_DIGITS_IN_HISTORY));
+        sb.append(NumberConverter.toScientific(ConverterPToP.convert10ToPAdaptive(number.toString(), base), MAX_DIGITS_IN_HISTORY, CalculatorMode.P_NUMBER));
         for (int i = 0; i < unaryOperations.size(); i++) {
             sb.append(")");
         }

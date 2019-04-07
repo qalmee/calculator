@@ -35,6 +35,12 @@ public class LocalHistory {
         }
     }
 
+    public void popOperand() {
+        if (!historyList.isEmpty() && historyList.getLast() instanceof ExpressionOperand) {
+            historyList.removeLast();
+        }
+    }
+
     public void addBinaryOperation(CalculatorOperation operation) {
         if (operation.isUnary()) {
             throw new IllegalArgumentException("Operation must be binary");

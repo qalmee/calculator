@@ -3,6 +3,7 @@ package calculator.model;
 import calculator.model.numbers.Complex;
 import calculator.model.numbers.Number;
 import calculator.model.stats.CalculatorOperation;
+import calculator.model.utils.MathUtils;
 import calculator.model.utils.NumberConstant;
 import calculator.model.utils.exceptions.DivisionByZeroException;
 
@@ -82,7 +83,7 @@ public class Processor<T extends Number<T>> {
                 break;
             case DEG:
                 //wtf????
-                leftResultOperand = new Complex(((Complex)(leftResultOperand)).complexArgument(), BigDecimal.ZERO);
+                leftResultOperand = new Complex(MathUtils.radToDegrees(((Complex) (leftResultOperand)).complexArgument()), BigDecimal.ZERO);
                 break;
             case POW:
                 leftResultOperand =(((Complex)(leftResultOperand)).pow(rightOperand.toBigDecimal().intValue()));
@@ -90,6 +91,8 @@ public class Processor<T extends Number<T>> {
             case RAD:
                 leftResultOperand = new Complex(((Complex)(leftResultOperand)).complexArgument(), BigDecimal.ZERO);
                 break;
+            case SQRT:
+                //leftResultOperand.
             default:
                 //throw
         }

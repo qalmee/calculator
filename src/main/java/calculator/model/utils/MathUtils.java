@@ -2,6 +2,7 @@ package calculator.model.utils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 
 import static java.math.BigDecimal.ROUND_FLOOR;
 
@@ -81,5 +82,33 @@ public final class MathUtils {
 
     public static BigDecimal radToDegrees(BigDecimal fi) {
         return fi.multiply(BigDecimal.valueOf(180).divide(BigDecimal.valueOf(Math.PI), MAX_PRECISION, ROUND_FLOOR));
+    }
+
+    private static final BigDecimal SQRT_DIG = BigDecimal.valueOf(120);
+    private static final BigDecimal SQRT_PRE = BigDecimal.valueOf(10).pow(SQRT_DIG.intValue());
+
+    public static BigDecimal sqrt(BigDecimal value) {
+        BigDecimal x = BigDecimal.valueOf(Math.sqrt(value.doubleValue()));
+        return x.add(BigDecimal.valueOf(value.subtract(x.multiply(x)).doubleValue() / (x.doubleValue() * 2.0)));
+    }
+
+    private static BigDecimal sqrtNewtonRaphson(BigDecimal c, BigDecimal xn, BigDecimal precision) {
+        BigDecimal fx, fpx, xn1, currentSquare, currentPrecision;
+        do {
+            fx = xn.pow(2).add(c.negate());
+            fpx = xn.multiply(new BigDecimal(2));
+            xn1 = fx.divide(fpx, 2 * SQRT_DIG.intValue(), RoundingMode.FLOOR);
+            xn1 = xn.add(xn1.negate());
+            currentSquare = xn1.pow(2);
+            currentPrecision = currentSquare.subtract(c).abs();
+
+            xn = xn1;
+        }
+        while (currentPrecision.compareTo(precision) > -1);
+        return xn1;
+    }
+
+    public static BigDecimal bigSqrt(BigDecimal c) {
+        return sqrtNewtonRaphson(c, BigDecimal.valueOf(1), BigDecimal.valueOf(1).divide(SQRT_PRE, 2 * SQRT_DIG.intValue(), ROUND_FLOOR));
     }
 }

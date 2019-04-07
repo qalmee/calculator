@@ -16,7 +16,8 @@ public enum CalculatorOperation {
     ABS("ABS", true, getProperty("complex_calculator_scene.operation_abs")),
     RAD("RAD", true, getProperty("complex_calculator_scene.operation_rad")),
     DEG("DEG", true, getProperty("complex_calculator_scene.operation_deg")),
-    POW("POW", false, getProperty("complex_calculator_scene.operation_pow"));
+    POW("POW", false, getProperty("complex_calculator_scene.operation_pow")),
+    SQRT("SQRT", true, getProperty("complex_calculator_scene.operation_sqrt"));
 
 
     private String name;

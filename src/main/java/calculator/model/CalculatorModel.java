@@ -131,13 +131,15 @@ public class CalculatorModel {
     public void clearEntry() {
         ControlUnit.INSTANCE.enteringNewValue();
         calculatorObserver.setBackSpaceEnabled(true);
+        LocalHistory.INSTANCE.popOperand();
+        calculatorObserver.setPreviousOperationText(LocalHistory.INSTANCE.toString(currentBase));
     }
 
     public void convertAll(String valueOnDisplay, int oldBase, int newBase) {
         valueOnDisplay = NumberConverter.fromScientific(commasToDots(valueOnDisplay));
         valueOnDisplay = ConverterPToP.convertPTo10Adaptive(valueOnDisplay, oldBase);
         valueOnDisplay = ConverterPToP.convert10ToPAdaptive(valueOnDisplay, newBase);
-        calculatorObserver.setResult(dotsToCommas(NumberConverter.toScientific(valueOnDisplay, MAX_SCIENTIFIC_DIGITS)));
+        calculatorObserver.setResult(dotsToCommas(NumberConverter.toScientific(valueOnDisplay, MAX_SCIENTIFIC_DIGITS, CalculatorMode.P_NUMBER)));
         calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(newBase)));
     }
 
@@ -178,7 +180,7 @@ public class CalculatorModel {
             data = number.toString();
         }
         if (data.length() > MAX_SCIENTIFIC_DIGITS) {
-            data = NumberConverter.toScientific(data, MAX_SCIENTIFIC_DIGITS);
+            data = NumberConverter.toScientific(data, MAX_SCIENTIFIC_DIGITS, calculatorMode);
         }
         displayTextActionHappened();
         calculatorObserver.setResult(data);
@@ -202,7 +204,7 @@ public class CalculatorModel {
             result = ConverterPToP.convert10ToPAdaptive(result, currentBase);
         }
         if (result.length() > MAX_SCIENTIFIC_DIGITS) {
-            result = NumberConverter.toScientific(result, MAX_SCIENTIFIC_DIGITS);
+            result = NumberConverter.toScientific(result, MAX_SCIENTIFIC_DIGITS, calculatorMode);
         }
 
         calculatorObserver.setResult(dotsToCommas(result));
