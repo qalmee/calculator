@@ -82,10 +82,10 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         setupTextFieldPreviousOperation();
         setupTextFieldValue();
         setupButtonsGridPane();
+        setupMemoryLabel();
         setupButtons();
         setupHotKeys();
         setupClipboard();
-        setupMemoryLabel();
         setStartValue();
     }
 
@@ -161,7 +161,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         Button buttonMemoryRead = CalculatorButtons.BUTTON_MEMORY_READ.getButton();
         buttonMemoryClear.setDisable(value);
         buttonMemoryRead.setDisable(value);
-        memoryLabel.setText(value ? getProperty("calculator_scene.memory_saved") : "");
+        memoryLabel.setText(value ? "" : getProperty("calculator_scene.memory_saved"));
     }
 
     public void setControllerListener(ControllerListener controllerListener) {
@@ -363,6 +363,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
             });
         });
         addTooltipsToMemoryButtons();
+        disableMemoryButtons(true);
     }
 
     private void addTooltipsToMemoryButtons() {
