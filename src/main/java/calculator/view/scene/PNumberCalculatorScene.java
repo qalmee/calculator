@@ -38,6 +38,7 @@ class PNumberCalculatorScene extends CalculatorScene implements PNumberCalculato
         setupLabelBase();
         setupSliderBase();
         updateDigitButtonsOnStart();
+        controllerListener.setPNumberCalculatorObserver(this);
     }
 
     @Override

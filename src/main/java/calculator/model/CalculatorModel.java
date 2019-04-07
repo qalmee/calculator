@@ -31,6 +31,7 @@ public class CalculatorModel {
 
     public void setCalculatorObserver(CalculatorObserver calculatorObserver) {
         this.calculatorObserver = calculatorObserver;
+        calculatorObserver.disableMemoryButtons(true);
     }
 
     public void setFractionCalculatorObserver(FractionCalculatorObserver fractionCalculatorObserver) {
@@ -47,6 +48,7 @@ public class CalculatorModel {
 
     private void resetModel() {
         currentBase = 10;
+        pNumberCalculatorObserver.setBase(10);
         calculatorObserver.disableMemoryButtons(true);
         calculatorObserver.setBackSpaceEnabled(true);
         ControlUnit.INSTANCE.resetCalculator();
@@ -114,12 +116,12 @@ public class CalculatorModel {
         calculatorObserver.setPreviousOperationText("");
     }
 
-    public void memoryOperationPressed(String valueOnDisplay, MemoryOperation operation, CalculatorMode calculatorMode) {
+    public void memoryOperationPressed(String valueOnDisplay, MemoryOperation memoryOperation, CalculatorMode calculatorMode) {
         Number number = prepareStringBeforeCalc(valueOnDisplay, calculatorMode);
 
-        ControlUnit.INSTANCE.memoryOperationPressed(number, operation);
-
-        if (operation.equals(MemoryOperation.MEMORY_READ) && ControlUnit.INSTANCE.getResultValue() != null) {
+        ControlUnit.INSTANCE.memoryOperationPressed(number, memoryOperation);
+        toggleMemoryButtons(memoryOperation);
+        if (memoryOperation.equals(MemoryOperation.MEMORY_READ) && ControlUnit.INSTANCE.getResultValue() != null) {
             setResult(calculatorMode);
         }
         calculatorObserver.clearResultAfterEnteringDigit();
@@ -253,6 +255,20 @@ public class CalculatorModel {
         calculatorObserver.clearResultAfterEnteringDigit();
         setHistoryOnDisplay(calculatorMode);
         resetModel();
+    }
+
+    private void toggleMemoryButtons(MemoryOperation memoryOperation) {
+        switch (memoryOperation) {
+            case MEMORY_ADD:
+                calculatorObserver.disableMemoryButtons(false);
+                break;
+            case MEMORY_SAVE:
+                calculatorObserver.disableMemoryButtons(false);
+                break;
+            case MEMORY_CLEAR:
+                calculatorObserver.disableMemoryButtons(true);
+                break;
+        }
     }
 
 }
