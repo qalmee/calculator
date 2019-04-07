@@ -42,12 +42,10 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private static final int TEXT_FIELD_VALUE_MAX_TEXT_LENGTH = 40;
     private static final int SCROLL_BUTTONS_SCROLL_SIZE = 10;
 
-    private static final String FONT_FAMILY = "System";
     private static final String CSS_STYLE_FILE = "style/style.css";
-
-    private static final Font TEXT_FIELD_VALUE_FONT = Font.font(FONT_FAMILY, FontWeight.BOLD, 30);
-
+    private static final Font TEXT_FIELD_VALUE_FONT = Font.font("System", FontWeight.BOLD, 30);
     private static final Duration BUTTON_CLICK_EFFECT_DURATION = Duration.seconds(0.1);
+
     ControllerListener controllerListener;
     CalculatorMode calculatorMode;
 
@@ -163,7 +161,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         Button buttonMemoryRead = CalculatorButtons.BUTTON_MEMORY_READ.getButton();
         buttonMemoryClear.setDisable(value);
         buttonMemoryRead.setDisable(value);
-        memoryLabel.setText(value ? getProperty("calculator_scene.memory_saved") : " ");
+        memoryLabel.setText(value ? getProperty("calculator_scene.memory_saved") : "");
     }
 
     public void setControllerListener(ControllerListener controllerListener) {
@@ -177,7 +175,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private void setupMemoryLabel() {
         memoryLabel = new Label();
         buttonsGridPane.add(memoryLabel, 0, 0);
-        memoryLabel.getStyleClass().add("memory_label");
+        memoryLabel.getStyleClass().add("label_memory");
     }
 
     private void setupMenu() {
