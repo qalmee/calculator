@@ -5,6 +5,7 @@ import static calculator.view.localization.LanguageProperties.getProperty;
 public enum ErrorState {
 
     DIVISION_BY_ZERO(getProperty("calculator_scene.error_division_by_zero")),
+    OVERFLOW(getProperty("calculator_scene.error_overflow")),
     WRONG_DATA(getProperty("calculator_scene.error_wrong_data"));
 
     String errorStateText;

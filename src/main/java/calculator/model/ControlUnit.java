@@ -25,6 +25,10 @@ public class ControlUnit {
         newValue = true;
     }
 
+    public void clearEntry() {
+        newValue = true;
+    }
+
     private void debug() {
         System.out.println(Processor.INSTANCE.getLeftResultOperand());
         System.out.println(Processor.INSTANCE.getOperation());
@@ -206,6 +210,7 @@ public class ControlUnit {
         } else if (state == CalculatorState.EQUALS_PRESSED) {
             state = CalculatorState.FIRST_OPERAND_INPUT;
         }
+        newValue = true;
     }
 
     private void addUnaryOperation(CalculatorOperation operation) {

@@ -16,6 +16,11 @@ public class Complex implements Number<Complex> {
     private BigDecimal real;
     private BigDecimal imaginary;
 
+    private static final int MAX_PRECISION = 100;
+    private static final int MAX_COMPARE_PRECISION = 90;
+    private static final BigDecimal EPS = BigDecimal.ONE
+            .divide(BigDecimal.TEN.pow(MAX_COMPARE_PRECISION), MAX_COMPARE_PRECISION, BigDecimal.ROUND_FLOOR);
+
 
     public Complex(BigDecimal real, BigDecimal imaginary) {
         if (real == null || imaginary == null) {

@@ -5,6 +5,7 @@ import calculator.model.numbers.Fraction;
 import calculator.model.numbers.Number;
 import calculator.model.numbers.Real;
 import calculator.model.stats.CalculatorMode;
+import calculator.model.utils.exceptions.OverflowException;
 import javafx.util.Pair;
 
 import java.math.BigDecimal;
@@ -265,6 +266,9 @@ public class NumberConverter {
     }
 
     public static String toScientificIfNeeded(String data, CalculatorMode calculatorMode, int maxLen, int maxLenFract) {
+        if (data.length() > OVERFLOW_LENGTH) {
+            throw new OverflowException("Overflow");
+        }
         if (data.length() > maxLen) {
             if (calculatorMode.equals(CalculatorMode.BASIC) || calculatorMode.equals(CalculatorMode.P_NUMBER)) {
                 return NumberConverter.toScientific(data, maxLen, calculatorMode);

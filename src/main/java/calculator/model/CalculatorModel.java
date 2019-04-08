@@ -14,6 +14,7 @@ import calculator.model.stats.ErrorState;
 import calculator.model.utils.ConverterPToP;
 import calculator.model.utils.NumberConverter;
 import calculator.model.utils.exceptions.DivisionByZeroException;
+import calculator.model.utils.exceptions.OverflowException;
 import calculator.view.localization.Language;
 
 import java.util.ArrayList;
@@ -106,7 +107,12 @@ public class CalculatorModel {
         }
 
         if (ControlUnit.INSTANCE.needToSetResult()) {
-            setResult(calculatorMode);
+            try {
+                setResult(calculatorMode);
+            } catch (OverflowException e) {
+                setErrorState(ErrorState.OVERFLOW, calculatorMode);
+                return;
+            }
         }
         calculatorObserver.setBackSpaceEnabled(false);
         calculatorObserver.clearResultAfterEnteringDigit();
@@ -120,7 +126,12 @@ public class CalculatorModel {
             return;
         }
         if (ControlUnit.INSTANCE.needToSetResult()) {
-            setResult(calculatorMode);
+            try {
+                setResult(calculatorMode);
+            } catch (OverflowException e) {
+                setErrorState(ErrorState.OVERFLOW, calculatorMode);
+                return;
+            }
         }
         calculatorObserver.clearResultAfterEnteringDigit();
         setHistoryOnDisplay(calculatorMode);
@@ -132,7 +143,12 @@ public class CalculatorModel {
         ControlUnit.INSTANCE.memoryOperationPressed(number, memoryOperation);
         toggleMemoryButtons(memoryOperation);
         if (memoryOperation.equals(MemoryOperation.MEMORY_READ) && ControlUnit.INSTANCE.getResultValue() != null) {
-            setResult(calculatorMode);
+            try {
+                setResult(calculatorMode);
+            } catch (OverflowException e) {
+                setErrorState(ErrorState.OVERFLOW, calculatorMode);
+                return;
+            }
         }
         calculatorObserver.clearResultAfterEnteringDigit();
     }
@@ -158,8 +174,18 @@ public class CalculatorModel {
         currentBase = oldBase;
         valueOnDisplay = parseStringToNumber(valueOnDisplay, CalculatorMode.P_NUMBER).toString();
         valueOnDisplay = ConverterPToP.convert10ToPAdaptive(valueOnDisplay, newBase);
-        valueOnDisplay = NumberConverter.toScientificIfNeeded(valueOnDisplay, CalculatorMode.P_NUMBER, MAX_SCIENTIFIC_DIGITS_REAL, MAX_SCIENTIFIC_DIGITS_FRACTION);
-        calculatorObserver.setResult(dotsToCommas(valueOnDisplay));
+        try {
+            valueOnDisplay = NumberConverter.toScientificIfNeeded(valueOnDisplay, CalculatorMode.P_NUMBER, MAX_SCIENTIFIC_DIGITS_REAL, MAX_SCIENTIFIC_DIGITS_FRACTION);
+        } catch (OverflowException e) {
+            setErrorState(ErrorState.OVERFLOW, CalculatorMode.P_NUMBER);
+            return;
+        }
+        try {
+            calculatorObserver.setResult(dotsToCommas(valueOnDisplay));
+        } catch (OverflowException e) {
+            setErrorState(ErrorState.OVERFLOW, CalculatorMode.P_NUMBER);
+            return;
+        }
         currentBase = newBase;
         setHistoryOnDisplay(CalculatorMode.P_NUMBER);
     }
@@ -175,6 +201,9 @@ public class CalculatorModel {
     public void pasteFromClipboard(String data, CalculatorMode calculatorMode) {
         try {
             data = parseClipboardString(data, calculatorMode);
+        } catch (OverflowException e) {
+            setErrorState(ErrorState.OVERFLOW, calculatorMode);
+            return;
         } catch (RuntimeException e) {
             setErrorState(ErrorState.WRONG_DATA, calculatorMode);
             return;
@@ -248,6 +277,11 @@ public class CalculatorModel {
         calculatorObserver.setErrorState(state);
         calculatorObserver.clearResultAfterEnteringDigit();
         setHistoryOnDisplay(calculatorMode);
+
+        currentBase = 10;
+        if (pNumberCalculatorObserver != null) {
+            pNumberCalculatorObserver.setBase(10);
+        }
     }
 
     private void toggleMemoryButtons(MemoryOperation memoryOperation) {

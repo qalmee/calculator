@@ -39,7 +39,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     private static final int TEXT_FIELD_PREVIOUS_OPERATION_MAX_TEXT_LENGTH = 44;
     private static final int TEXT_FIELD_VALUE_MAX_TEXT_WIDTH_PIXELS = 380;
-    private static final int TEXT_FIELD_VALUE_MAX_TEXT_LENGTH = 25;
+    private static final int TEXT_FIELD_VALUE_MAX_TEXT_LENGTH = 40;
     private static final int SCROLL_BUTTONS_SCROLL_SIZE = 10;
 
     private static final String CSS_STYLE_FILE = "style/style.css";
