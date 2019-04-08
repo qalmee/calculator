@@ -5,6 +5,7 @@ import calculator.model.numbers.Fraction;
 import calculator.model.numbers.Number;
 import calculator.model.numbers.Real;
 import calculator.model.stats.CalculatorMode;
+import javafx.util.Pair;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -15,7 +16,24 @@ public class NumberConverter {
 
     }
 
-    public static String fromScientific(String value) {
+    private static final int OVERFLOW_LENGTH = 1000;
+
+    public static String fromScientific(String value, CalculatorMode calculatorMode) {
+        switch (calculatorMode) {
+            case BASIC:
+            case P_NUMBER:
+                return realFromScientific(value);
+            case FRACTION:
+                Pair<String, String> fraction = stringToNumeratorAndDenominator(value);
+                String numerator = realFromScientific(fraction.getKey());
+                String denominator = realFromScientific(fraction.getValue());
+                return numerator + "/" + denominator;
+            default:
+                return value;
+        }
+    }
+
+    private static String realFromScientific(String value) {
         String[] arr = value.split("exp");
         if (arr.length > 2) {
             throw new IllegalArgumentException("Value has more than one Exp");
@@ -29,10 +47,17 @@ public class NumberConverter {
             arr[0] = arr[0].substring(1);
         }
         int power = Integer.parseInt(arr[1]);
-        if (arr[0].charAt(1) != '.') {
+        if (arr[0].length() > 1 && arr[0].charAt(1) != '.' && arr[0].contains(".")) {
             throw new IllegalArgumentException("Value must be in 0.00exp00 format");
         }
-        arr[0] = arr[0].replace(".", "");
+        if (arr[0].length() == 1 && arr[0].charAt(0) == '.') {
+            throw new IllegalArgumentException("Value must be in 0.00exp00 format");
+        }
+        if (!arr[0].contains(".")) {
+            power += arr[0].length() - 1;
+        } else {
+            arr[0] = arr[0].replace(".", "");
+        }
         if (power >= 0) {
             return isNegative + moreThanOneFractionFromScintific(arr[0], power);
         }
@@ -55,12 +80,18 @@ public class NumberConverter {
         return new String(new char[length]).replace('\0', '0');
     }
 
-    public static String toScientific(String value, int fractionLength, CalculatorMode calculatorMode) {
+    private static String toScientific(String value, int fractionLength, CalculatorMode calculatorMode) {
         switch (calculatorMode) {
             case BASIC:
                 return realToScientific(value, fractionLength);
             case P_NUMBER:
                 return realToScientific(value, fractionLength);
+            case FRACTION:
+                Fraction fraction = (Fraction) stringToFraction(value);
+                value = realToScientific(fraction.numeratorToString(), fractionLength)
+                        + "/"
+                        + realToScientific(fraction.denominatorToString(), fractionLength);
+                return value;
             default:
                 return value;
         }
@@ -119,20 +150,22 @@ public class NumberConverter {
         return value.substring(0, dotPos) + "." + value.substring(dotPos) + "exp" + (intSize - 1);
     }
 
-    public static Number stringToNumber(String value, CalculatorMode mode) {
+    public static Number stringToNumber(String value, CalculatorMode mode, int base) {
+        value = commasToDots(value);
+        value = fromScientific(value, mode);
         switch (mode) {
+            case BASIC:
             case P_NUMBER:
+                value = value.toUpperCase();
+                value = ConverterPToP.convertPTo10Adaptive(value, base);
                 return stringToReal(value);
             case COMPLEX:
                 return stringToComplex(value);
             case FRACTION:
                 return stringToFraction(value);
-            case BASIC:
-                return stringToReal(value);
             default:
                 return stringToReal("0");
         }
-
     }
 
     private static Number stringToReal(String value) {
@@ -181,13 +214,65 @@ public class NumberConverter {
 
     //format : a/b
     private static Number stringToFraction(String value) {
+        Pair<String, String> fraction = stringToNumeratorAndDenominator(value);
+        BigInteger numerator = new BigInteger(fraction.getKey());
+        BigInteger denominator = new BigInteger(fraction.getValue());
+        return new Fraction(numerator, denominator);
+    }
+
+    private static Pair<String, String> stringToNumeratorAndDenominator(String value) {
         value = value.replaceAll("\\s+", "");
         String[] values = value.split("/");
         if (values.length != 2) {
             throw new IllegalArgumentException("Incorrect fraction number");
         }
-        BigInteger numerator = new BigInteger(values[0]);
-        BigInteger denominator = new BigInteger(values[1]);
-        return new Fraction(numerator, denominator);
+        return new Pair<>(values[0], values[1]);
     }
+
+    public static String cutTrailingZeros(String value) {
+        if (!value.contains(".")) {
+            return value;
+        }
+        StringBuilder sb = new StringBuilder(value);
+        while (sb.length() > 0 && sb.charAt(sb.length() - 1) == '0') {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        if (sb.charAt(sb.length() - 1) == '.') {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return sb.toString();
+    }
+
+    public static CalculatorMode fromNumberToCalculatorMode(Number number) {
+        if (number instanceof Real) {
+            return CalculatorMode.P_NUMBER;
+        }
+        if (number instanceof Complex) {
+            return CalculatorMode.COMPLEX;
+        }
+        if (number instanceof Fraction) {
+            return CalculatorMode.FRACTION;
+        }
+        return null;
+    }
+
+    public static String dotsToCommas(String s) {
+        return s.replaceAll("\\.", ",");
+    }
+
+    public static String commasToDots(String s) {
+        return s.replaceAll(",", ".");
+    }
+
+    public static String toScientificIfNeeded(String data, CalculatorMode calculatorMode, int maxLen, int maxLenFract) {
+        if (data.length() > maxLen) {
+            if (calculatorMode.equals(CalculatorMode.BASIC) || calculatorMode.equals(CalculatorMode.P_NUMBER)) {
+                return NumberConverter.toScientific(data, maxLen, calculatorMode);
+            } else if (calculatorMode.equals(CalculatorMode.FRACTION)) {
+                return NumberConverter.toScientific(data, maxLenFract, calculatorMode);
+            }
+        }
+        return data;
+    }
+
 }

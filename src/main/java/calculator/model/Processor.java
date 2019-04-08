@@ -61,7 +61,7 @@ public class Processor<T extends Number<T>> {
                 leftResultOperand = leftResultOperand.multiply(rightOperand);
                 break;
             case DIVIDE:
-                if (rightOperand.equals(NumberConstant.ZERO)) {
+                if (rightOperand.compareToConst(NumberConstant.ZERO)) {
                     throw new DivisionByZeroException("Cannot divide by zero");
                 }
                 leftResultOperand = leftResultOperand.divide(rightOperand);
@@ -70,7 +70,7 @@ public class Processor<T extends Number<T>> {
                 leftResultOperand = leftResultOperand.negate();
                 break;
             case REVERSE:
-                if (leftResultOperand.equals(NumberConstant.ZERO)) {
+                if (leftResultOperand.compareToConst(NumberConstant.ZERO)) {
                     throw new DivisionByZeroException("Cannot divide by zero");
                 }
                 leftResultOperand = leftResultOperand.reverse();
