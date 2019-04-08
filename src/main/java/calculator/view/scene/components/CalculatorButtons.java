@@ -167,7 +167,8 @@ public enum CalculatorButtons {
     }
 
     public static List<CalculatorButtons> getComplexActionButtons() {
-        return Arrays.asList(BUTTON_MODULE, BUTTON_ARGUMENT_RAD, BUTTON_ARGUMENT_DEG, BUTTON_POW, BUTTON_SQR);
+        return Arrays.asList(BUTTON_MODULE, BUTTON_ARGUMENT_RAD, BUTTON_ARGUMENT_DEG,
+                BUTTON_POW, BUTTON_SQR, BUTTON_PLUS_MINUS_I);
     }
 
     public static List<CalculatorButtons> getMemoryButtons() {
