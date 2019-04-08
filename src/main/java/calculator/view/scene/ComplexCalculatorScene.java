@@ -15,6 +15,8 @@ import static calculator.view.localization.LanguageProperties.getProperty;
 class ComplexCalculatorScene extends CalculatorScene implements ComplexCalculatorObserver {
 
     private static final int TEXT_FIELD_VALUE_MAX_INPUT_TEXT_LENGTH = 25;
+    private static final String I_BUTTON_ACTIVE_STYLE = "i_button_active";
+
     private static final String START_REAL_PART;
     private static final String START_IMAGINARY_PART;
     private static final String I_SYMBOL;
@@ -33,8 +35,9 @@ class ComplexCalculatorScene extends CalculatorScene implements ComplexCalculato
 
     @Override
     public void setCaretToRealPart() {
+        caretPosition = ComplexCaretPosition.REAL;
         Button iButton = CalculatorButtons.BUTTON_I.getButton();
-        iButton.fire();
+        iButton.getStyleClass().remove(I_BUTTON_ACTIVE_STYLE);
     }
 
     @Override
@@ -117,10 +120,10 @@ class ComplexCalculatorScene extends CalculatorScene implements ComplexCalculato
         iButton.setOnAction(event -> {
             if (caretPosition == ComplexCaretPosition.REAL) {
                 caretPosition = ComplexCaretPosition.IMAGINARY;
-                iButton.getStyleClass().add("i_button_active");
+                iButton.getStyleClass().add(I_BUTTON_ACTIVE_STYLE);
             } else {
                 caretPosition = ComplexCaretPosition.REAL;
-                iButton.getStyleClass().remove("i_button_active");
+                iButton.getStyleClass().remove(I_BUTTON_ACTIVE_STYLE);
             }
         });
     }
