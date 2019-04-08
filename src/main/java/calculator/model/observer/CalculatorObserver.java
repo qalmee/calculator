@@ -18,7 +18,7 @@ public interface CalculatorObserver {
 
     void setResult(String result);
 
-    void setPreviousOperationText(String text);
+    void setHistoryText(String text);
 
     void clearResultAfterEnteringDigit();
 
