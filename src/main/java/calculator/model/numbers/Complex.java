@@ -5,6 +5,8 @@ import calculator.model.utils.NumberConstant;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 import static java.math.BigDecimal.ROUND_FLOOR;
@@ -19,6 +21,8 @@ public class Complex implements Number<Complex> {
         if (real == null || imaginary == null) {
             throw new IllegalArgumentException("Arguments can not be null");
         }
+        real = real.round(new MathContext(100, RoundingMode.FLOOR));
+        imaginary = imaginary.round(new MathContext(100, RoundingMode.FLOOR));
         this.real = real;
         this.imaginary = imaginary;
     }
@@ -78,6 +82,9 @@ public class Complex implements Number<Complex> {
         return new Complex(this.real.negate(), this.imaginary.negate());
     }
 
+    public Complex negateIm() {
+        return new Complex(this.real, this.imaginary.negate());
+    }
 
     public Complex conjugate() {
         return new Complex(this.real, this.imaginary.negate());
@@ -128,14 +135,6 @@ public class Complex implements Number<Complex> {
         return result;
     }
 
-    public BigDecimal getReal() {
-        return real;
-    }
-
-    public BigDecimal getImaginary() {
-        return imaginary;
-    }
-
     @Override
     public String toString() {
 
@@ -144,6 +143,14 @@ public class Complex implements Number<Complex> {
         } else {
             return real.toPlainString().substring(0, Math.min(real.toPlainString().length(), 10)) + "+" + imaginary.toPlainString().substring(0, Math.min(imaginary.toPlainString().length(), 10)) + "i";
         }
+    }
+
+    public String realToString() {
+        return real.toPlainString();
+    }
+
+    public String imaginaryToString() {
+        return imaginary.toPlainString() + "i";
     }
 
     @Override
@@ -157,7 +164,7 @@ public class Complex implements Number<Complex> {
     }
 
     @Override
-    public boolean equals(NumberConstant constant) {
+    public boolean compareToConst(NumberConstant constant) {
         return this.equals(constant.getComplex());
     }
 

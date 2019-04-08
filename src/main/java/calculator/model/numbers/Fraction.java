@@ -1,6 +1,7 @@
 package calculator.model.numbers;
 
 import calculator.model.utils.NumberConstant;
+import calculator.model.utils.exceptions.DivisionByZeroException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -17,7 +18,7 @@ public class Fraction implements Number<Fraction> {
         this.numerator = numerator;
         this.denominator = denominator;
         if (denominator.equals(BigInteger.ZERO)) {
-            throw new IllegalArgumentException("Denominator can not be zero");
+            throw new DivisionByZeroException("Denominator can not be zero");
         }
         if (this.denominator.compareTo(BigInteger.ZERO) < 0) {
             this.numerator = this.numerator.negate();
@@ -87,6 +88,14 @@ public class Fraction implements Number<Fraction> {
         return numerator.toString() + "/" + denominator.toString();
     }
 
+    public String numeratorToString() {
+        return numerator.toString();
+    }
+
+    public String denominatorToString() {
+        return denominator.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -97,7 +106,7 @@ public class Fraction implements Number<Fraction> {
     }
 
     @Override
-    public boolean equals(NumberConstant constant) {
+    public boolean compareToConst(NumberConstant constant) {
         return this.equals(constant.getFraction());
     }
 

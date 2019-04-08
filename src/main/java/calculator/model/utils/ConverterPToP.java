@@ -3,6 +3,8 @@ package calculator.model.utils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import static calculator.model.utils.NumberConverter.cutTrailingZeros;
+
 public class ConverterPToP {
 
     private static final int MAX_BASE = 16;
@@ -14,13 +16,13 @@ public class ConverterPToP {
     }
 
     public static String convert10ToPAdaptive(String valueString, int base) {
-        if (base == 10) return valueString;
+        if (base == 10) return cutTrailingZeros(valueString);
         String result = convert10ToP(valueString, base, MAX_PRECISION);
         return cutTrailingZeros(result);
     }
 
     public static String convertPTo10Adaptive(String valueString, int base) {
-        if (base == 10) return valueString;
+        if (base == 10) return cutTrailingZeros(valueString);
         String result = convertPTo10(valueString, base, MAX_PRECISION);
         return cutTrailingZeros(result);
     }
@@ -144,20 +146,6 @@ public class ConverterPToP {
             multiplier = multiplier.multiply(BigDecimal.valueOf(1.0 / base));
         }
         return result;
-    }
-
-    private static String cutTrailingZeros(String value) {
-        if (!value.contains(".")) {
-            return value;
-        }
-        StringBuilder sb = new StringBuilder(value);
-        while (sb.length() > 0 && sb.charAt(sb.length() - 1) == '0') {
-            sb.deleteCharAt(sb.length() - 1);
-        }
-        if (sb.charAt(sb.length() - 1) == '.') {
-            sb.deleteCharAt(sb.length() - 1);
-        }
-        return sb.toString();
     }
 
     private static void checkArguments(String valueString, int base, int precision) {

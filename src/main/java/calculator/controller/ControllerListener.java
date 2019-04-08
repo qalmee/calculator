@@ -39,7 +39,7 @@ public interface ControllerListener {
 
     void buttonDigitClicked();
 
-    void buttonClearEntryClicked();
+    void buttonClearEntryClicked(CalculatorMode calculatorMode);
 
     void buttonGlobalClearClicked();
 

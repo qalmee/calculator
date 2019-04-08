@@ -12,7 +12,7 @@ import java.util.List;
 public class ExpressionOperand implements ExpressionNode {
     private Number number;
     private LinkedList<ExpressionOperation> unaryOperations;
-    private static final int MAX_DIGITS_IN_HISTORY = 30;
+    private static final int MAX_DIGITS_IN_HISTORY = 6;
 
     public ExpressionOperand(Number n) {
         number = n;
@@ -49,7 +49,10 @@ public class ExpressionOperand implements ExpressionNode {
             sb.append(operation.getOperation().getMathSign());
             sb.append("(");
         }
-        sb.append(NumberConverter.toScientific(ConverterPToP.convert10ToPAdaptive(number.toString(), base), MAX_DIGITS_IN_HISTORY, CalculatorMode.P_NUMBER));
+        String operand = ConverterPToP.convert10ToPAdaptive(number.toString(), base);
+        CalculatorMode calculatorMode = NumberConverter.fromNumberToCalculatorMode(this.getNumber());
+        operand = NumberConverter.toScientificIfNeeded(operand, calculatorMode, MAX_DIGITS_IN_HISTORY, MAX_DIGITS_IN_HISTORY);
+        sb.append(operand);
         for (int i = 0; i < unaryOperations.size(); i++) {
             sb.append(")");
         }

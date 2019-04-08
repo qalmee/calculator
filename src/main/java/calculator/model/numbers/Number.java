@@ -25,7 +25,7 @@ public interface Number<T extends Number<T>> {
 
     T square();
 
-    boolean equals(NumberConstant constant);
+    boolean compareToConst(NumberConstant constant);
 
     BigDecimal toBigDecimal();
 }

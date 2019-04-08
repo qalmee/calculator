@@ -3,17 +3,20 @@ package calculator.model.numbers;
 import calculator.model.utils.NumberConstant;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 public class Real implements Number<Real> {
 
     private BigDecimal value;
 
-    public Real(BigDecimal value) {
-        if (value == null) {
+    public Real(BigDecimal number) {
+        if (number == null) {
             throw new IllegalArgumentException("Arguments can not be null");
         }
-        this.value = value;
+        number = number.round(new MathContext(100, RoundingMode.FLOOR));
+        value = number;
     }
 
     @Override
@@ -65,7 +68,7 @@ public class Real implements Number<Real> {
     }
 
     @Override
-    public boolean equals(NumberConstant constant) {
+    public boolean compareToConst(NumberConstant constant) {
         return this.equals(constant.getReal());
     }
 

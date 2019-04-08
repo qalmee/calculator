@@ -50,7 +50,7 @@ public class Controller implements ControllerListener {
 
     @Override
     public void checkPastedValue(String value, CalculatorMode calculatorMode) {
-        calculatorModel.parseClipboardString(value, calculatorMode);
+        calculatorModel.pasteFromClipboard(value, calculatorMode);
     }
 
     @Override
@@ -89,8 +89,8 @@ public class Controller implements ControllerListener {
     }
 
     @Override
-    public void buttonClearEntryClicked() {
-        calculatorModel.clearEntry();
+    public void buttonClearEntryClicked(CalculatorMode calculatorMode) {
+        calculatorModel.clearEntry(calculatorMode);
     }
 
     @Override

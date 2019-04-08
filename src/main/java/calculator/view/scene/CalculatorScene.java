@@ -329,7 +329,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         buttonClearEntry.setOnAction(event -> {
             clearTextFieldValueIfError();
             clearTextFields();
-            controllerListener.buttonClearEntryClicked();
+            controllerListener.buttonClearEntryClicked(calculatorMode);
         });
 
         buttonBackSpace.setOnAction(event -> {
