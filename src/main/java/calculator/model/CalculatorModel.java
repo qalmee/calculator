@@ -166,9 +166,9 @@ public class CalculatorModel {
 
     private void setHistoryOnDisplay(CalculatorMode calculatorMode) {
         if (calculatorMode.equals(CalculatorMode.P_NUMBER)) {
-            calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString(currentBase)));
+            calculatorObserver.setHistoryText(dotsToCommas(LocalHistory.INSTANCE.toString(currentBase)));
         } else {
-            calculatorObserver.setPreviousOperationText(dotsToCommas(LocalHistory.INSTANCE.toString()));
+            calculatorObserver.setHistoryText(dotsToCommas(LocalHistory.INSTANCE.toString()));
         }
     }
 
