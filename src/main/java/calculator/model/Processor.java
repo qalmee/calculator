@@ -85,7 +85,7 @@ public class Processor<T extends Number<T>> {
                 leftResultOperand = new Complex(MathUtils.radToDegrees(((Complex) leftResultOperand).complexArgument()), BigDecimal.ZERO);
                 break;
             case POW:
-                leftResultOperand = (((Complex) leftResultOperand).pow(rightOperand.toBigDecimal().intValue()));
+                leftResultOperand = (((Complex) leftResultOperand).pow(((Complex) rightOperand).getReal().intValue()));
                 break;
             case RAD:
                 leftResultOperand = new Complex(((Complex) leftResultOperand).complexArgument(), BigDecimal.ZERO);

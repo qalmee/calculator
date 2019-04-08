@@ -15,7 +15,7 @@ public class Real implements Number<Real> {
         if (number == null) {
             throw new IllegalArgumentException("Arguments can not be null");
         }
-        number = number.round(new MathContext(100, RoundingMode.FLOOR));
+        number = number.round(new MathContext(100, RoundingMode.HALF_UP));
         value = number;
     }
 
@@ -36,12 +36,12 @@ public class Real implements Number<Real> {
 
     @Override
     public Real divide(Real b) {
-        return new Real(this.value.divide(b.value, MAX_PRECISION, BigDecimal.ROUND_FLOOR));
+        return new Real(this.value.divide(b.value, MAX_PRECISION, BigDecimal.ROUND_HALF_UP));
     }
 
     @Override
     public Real reverse() {
-        return new Real(BigDecimal.ONE.divide(this.value, MAX_PRECISION, BigDecimal.ROUND_FLOOR));
+        return new Real(BigDecimal.ONE.divide(this.value, MAX_PRECISION, BigDecimal.ROUND_HALF_UP));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class Real implements Number<Real> {
 
     @Override
     public String toString() {
-        return value.toPlainString();
+        return value.stripTrailingZeros().toPlainString();
     }
 
     @Override

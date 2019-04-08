@@ -2,6 +2,7 @@ package calculator.model.utils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 
 import static calculator.model.utils.NumberConverter.cutTrailingZeros;
 
@@ -81,7 +82,7 @@ public class ConverterPToP {
 
     private static StringBuilder convertFraction10ToP(BigDecimal value, int base, int precision) {
         BigDecimal multiplier = (BigDecimal.ONE.divide(BigDecimal.valueOf(base),
-                (precision + 1) * 2, BigDecimal.ROUND_FLOOR));
+                (precision + 1) * 2, RoundingMode.HALF_UP));
         value = value.abs();
         StringBuilder result = new StringBuilder();
         for (int i = 0; i <= precision; i++) {
@@ -90,7 +91,7 @@ public class ConverterPToP {
                 value = value.subtract(multiplier.multiply(BigDecimal.valueOf(digit)));
             }
             result.append(Digits.getDigitFromInt(digit));
-            multiplier = multiplier.divide(BigDecimal.valueOf(base), (precision + 1) * 2, BigDecimal.ROUND_FLOOR);
+            multiplier = multiplier.divide(BigDecimal.valueOf(base), (precision + 1) * 2, RoundingMode.HALF_UP);
         }
         return result;
     }
@@ -139,7 +140,7 @@ public class ConverterPToP {
 
     private static BigDecimal convertFractionPTo10(String value, int base, int precision) {
         BigDecimal multiplier = (BigDecimal.ONE.divide(BigDecimal.valueOf(base),
-                (precision + 1) * 2, BigDecimal.ROUND_FLOOR));
+                (precision + 1) * 2, RoundingMode.HALF_UP));
         BigDecimal result = new BigDecimal(0);
         for (char digit : value.toCharArray()) {
             result = result.add(multiplier.multiply(BigDecimal.valueOf(Digits.getDigitFromChar(digit))));

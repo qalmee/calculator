@@ -4,30 +4,28 @@ import calculator.model.utils.MathUtils;
 import calculator.model.utils.NumberConstant;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.Objects;
 
-import static java.math.BigDecimal.ROUND_FLOOR;
+import static java.math.RoundingMode.HALF_UP;
 
 public class Complex implements Number<Complex> {
 
     private BigDecimal real;
     private BigDecimal imaginary;
 
-    private static final int MAX_PRECISION = 100;
-    private static final int MAX_COMPARE_PRECISION = 90;
+    private static final int MAX_PRECISION = 7;
+    private static final int MAX_COMPARE_PRECISION = 5;
     private static final BigDecimal EPS = BigDecimal.ONE
-            .divide(BigDecimal.TEN.pow(MAX_COMPARE_PRECISION), MAX_COMPARE_PRECISION, BigDecimal.ROUND_FLOOR);
+            .divide(BigDecimal.TEN.pow(MAX_COMPARE_PRECISION), MAX_COMPARE_PRECISION, BigDecimal.ROUND_HALF_UP);
 
 
     public Complex(BigDecimal real, BigDecimal imaginary) {
         if (real == null || imaginary == null) {
             throw new IllegalArgumentException("Arguments can not be null");
         }
-        real = real.round(new MathContext(100, RoundingMode.FLOOR));
-        imaginary = imaginary.round(new MathContext(100, RoundingMode.FLOOR));
+        real = real.round(new MathContext(MAX_PRECISION, HALF_UP));
+        imaginary = imaginary.round(new MathContext(MAX_PRECISION, HALF_UP));
         this.real = real;
         this.imaginary = imaginary;
     }
@@ -68,8 +66,8 @@ public class Complex implements Number<Complex> {
     @Override
     public Complex divide(Complex b) {
         BigDecimal scale = b.real.multiply(b.real).add(b.imaginary.multiply(b.imaginary));
-        Complex c = new Complex(b.real.divide(scale, MAX_PRECISION, ROUND_FLOOR),
-                b.imaginary.negate().divide(scale, MAX_PRECISION, ROUND_FLOOR));
+        Complex c = new Complex(b.real.divide(scale, MAX_PRECISION, HALF_UP),
+                b.imaginary.negate().divide(scale, MAX_PRECISION, HALF_UP));
         Complex a = this;
         return a.multiply(c);
     }
@@ -78,8 +76,8 @@ public class Complex implements Number<Complex> {
     @Override
     public Complex reverse() {
         BigDecimal square = this.squareScalar();
-        return new Complex(this.conjugate().real.divide(square, MAX_PRECISION, ROUND_FLOOR),
-                this.conjugate().imaginary.divide(square, MAX_PRECISION, ROUND_FLOOR));
+        return new Complex(this.conjugate().real.divide(square, MAX_PRECISION, HALF_UP),
+                this.conjugate().imaginary.divide(square, MAX_PRECISION, HALF_UP));
     }
 
     @Override
@@ -112,14 +110,14 @@ public class Complex implements Number<Complex> {
     public BigDecimal complexArgument() {
         if (real.abs().compareTo(EPS) <= 0) {
             return BigDecimal.valueOf(Math.PI)
-                    .divide(BigDecimal.valueOf(2), MAX_PRECISION, ROUND_FLOOR)
+                    .divide(BigDecimal.valueOf(2), MAX_PRECISION, HALF_UP)
                     .multiply(BigDecimal.valueOf(imaginary.compareTo(BigDecimal.ZERO)));
         } else if (real.compareTo(BigDecimal.ZERO) < 0) {
-            return MathUtils.taylorATan(this.imaginary.divide(this.real, MAX_PRECISION, ROUND_FLOOR))
+            return MathUtils.taylorATan(this.imaginary.divide(this.real, MAX_PRECISION, HALF_UP))
                     .add(BigDecimal.valueOf(Math.PI));
 
         } else {
-            return MathUtils.taylorATan(this.imaginary.divide(this.real, MAX_PRECISION, ROUND_FLOOR));
+            return MathUtils.taylorATan(this.imaginary.divide(this.real, MAX_PRECISION, HALF_UP));
         }
     }
 
@@ -127,35 +125,20 @@ public class Complex implements Number<Complex> {
         if (exponent < 0 || exponent > 9999) {
             throw new IllegalArgumentException("Negative Exponent");
         }
-        BigDecimal module = this.module().pow(exponent);
+        BigDecimal module = this.module().pow(exponent, new MathContext(MAX_PRECISION, HALF_UP));
         BigDecimal fi = this.complexArgument().multiply(BigDecimal.valueOf(exponent));
         return new Complex(MathUtils.taylorCos(fi).multiply(module), MathUtils.taylorSin(fi).multiply(module));
     }
 
-    private BigInteger bigFact(int n) {
-        BigInteger result = BigInteger.ONE;
-        for (int i = 2; i <= n; i++) {
-            result = result.multiply(BigInteger.valueOf(i));
-        }
-        return result;
-    }
-
     @Override
     public String toString() {
-
+        real = real.stripTrailingZeros();
+        imaginary = imaginary.stripTrailingZeros();
         if (imaginary.signum() < 0) {
             return real.toPlainString().substring(0, Math.min(real.toPlainString().length(), 10)) + imaginary.toPlainString().substring(0, Math.min(imaginary.toPlainString().length(), 10)) + "i";
         } else {
             return real.toPlainString().substring(0, Math.min(real.toPlainString().length(), 10)) + "+" + imaginary.toPlainString().substring(0, Math.min(imaginary.toPlainString().length(), 10)) + "i";
         }
-    }
-
-    public String realToString() {
-        return real.toPlainString();
-    }
-
-    public String imaginaryToString() {
-        return imaginary.toPlainString() + "i";
     }
 
     @Override
@@ -181,5 +164,9 @@ public class Complex implements Number<Complex> {
     @Override
     public BigDecimal toBigDecimal() {
         return null;
+    }
+
+    public BigDecimal getReal() {
+        return real;
     }
 }
