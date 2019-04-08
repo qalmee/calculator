@@ -10,10 +10,16 @@ import static calculator.view.localization.LanguageProperties.getProperty;
 class FractionCalculatorScene extends CalculatorScene implements FractionCalculatorObserver {
 
     private static final int TEXT_FIELD_VALUE_MAX_INPUT_TEXT_LENGTH = 25;
+
+    private static final String BUTTON_DELIMITER_NUMERATOR_TEXT;
+    private static final String BUTTON_DELIMITER_DENOMINATOR_TEXT;
     private static final String START_NUMERATOR;
     private static final String START_DENOMINATOR;
 
     static {
+        BUTTON_DELIMITER_NUMERATOR_TEXT = getProperty("fraction_calculator_scene.button_delimiter_numerator");
+        BUTTON_DELIMITER_DENOMINATOR_TEXT = getProperty("fraction_calculator_scene.button_delimiter_denominator");
+
         START_NUMERATOR = CalculatorMode.FRACTION.getStartValue().split("/")[0];
         START_DENOMINATOR = CalculatorMode.FRACTION.getStartValue().split("/")[1];
     }
@@ -27,8 +33,9 @@ class FractionCalculatorScene extends CalculatorScene implements FractionCalcula
 
     @Override
     public void setCaretToNumerator() {
+        caretPosition = FractionCaretPosition.NUMERATOR;
         Button delimiterButton = CalculatorButtons.BUTTON_DELIMITER.getButton();
-        delimiterButton.fire();
+        delimiterButton.setText(BUTTON_DELIMITER_NUMERATOR_TEXT);
     }
 
     @Override
@@ -111,14 +118,14 @@ class FractionCalculatorScene extends CalculatorScene implements FractionCalcula
 
     private void setupDelimiterButton() {
         Button delimiterButton = CalculatorButtons.BUTTON_DELIMITER.getButton();
-        delimiterButton.setText(getProperty("fraction_calculator_scene.button_delimiter_numerator"));
+        delimiterButton.setText(BUTTON_DELIMITER_NUMERATOR_TEXT);
         delimiterButton.setOnAction(event -> {
             if (caretPosition == FractionCaretPosition.NUMERATOR) {
                 caretPosition = FractionCaretPosition.DENOMINATOR;
-                delimiterButton.setText(getProperty("fraction_calculator_scene.button_delimiter_denominator"));
+                delimiterButton.setText(BUTTON_DELIMITER_DENOMINATOR_TEXT);
             } else {
                 caretPosition = FractionCaretPosition.NUMERATOR;
-                delimiterButton.setText(getProperty("fraction_calculator_scene.button_delimiter_numerator"));
+                delimiterButton.setText(BUTTON_DELIMITER_NUMERATOR_TEXT);
             }
         });
     }
