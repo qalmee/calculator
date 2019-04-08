@@ -20,7 +20,6 @@ import calculator.view.localization.Language;
 import java.util.ArrayList;
 import java.util.List;
 
-import static calculator.model.utils.NumberConverter.commasToDots;
 import static calculator.model.utils.NumberConverter.dotsToCommas;
 
 public class CalculatorModel {
@@ -58,6 +57,7 @@ public class CalculatorModel {
     private void resetModel() {
         calculatorObserver.setBackSpaceEnabled(true);
         ControlUnit.INSTANCE.resetCalculator();
+        toggleCarretIfComplexOrFraction();
     }
 
     public void updateDigitButtons(int base) {
@@ -117,6 +117,7 @@ public class CalculatorModel {
         calculatorObserver.setBackSpaceEnabled(false);
         calculatorObserver.clearResultAfterEnteringDigit();
         setHistoryOnDisplay(calculatorMode);
+        toggleCarretIfComplexOrFraction();
     }
 
     public void equalsPressed(String valueOnDisplay, CalculatorMode calculatorMode) {
@@ -135,6 +136,7 @@ public class CalculatorModel {
         }
         calculatorObserver.clearResultAfterEnteringDigit();
         setHistoryOnDisplay(calculatorMode);
+        toggleCarretIfComplexOrFraction();
     }
 
     public void memoryOperationPressed(String valueOnDisplay, MemoryOperation memoryOperation, CalculatorMode calculatorMode) {
@@ -151,6 +153,7 @@ public class CalculatorModel {
             }
         }
         calculatorObserver.clearResultAfterEnteringDigit();
+        toggleCarretIfComplexOrFraction();
     }
 
     public void displayTextActionHappened() {
@@ -168,16 +171,20 @@ public class CalculatorModel {
         calculatorObserver.setBackSpaceEnabled(true);
         LocalHistory.INSTANCE.popOperand();
         setHistoryOnDisplay(calculatorMode);
+        toggleCarretIfComplexOrFraction();
     }
 
     public void convertAll(String valueOnDisplay, int oldBase, int newBase) {
         currentBase = oldBase;
-        valueOnDisplay = parseStringToNumber(valueOnDisplay, CalculatorMode.P_NUMBER).toString();
-        valueOnDisplay = ConverterPToP.convert10ToPAdaptive(valueOnDisplay, newBase);
         try {
+            valueOnDisplay = parseStringToNumber(valueOnDisplay, CalculatorMode.P_NUMBER, oldBase).toString();
+            valueOnDisplay = ConverterPToP.convert10ToPAdaptive(valueOnDisplay, newBase);
             valueOnDisplay = NumberConverter.toScientificIfNeeded(valueOnDisplay, CalculatorMode.P_NUMBER, MAX_SCIENTIFIC_DIGITS_REAL, MAX_SCIENTIFIC_DIGITS_FRACTION);
         } catch (OverflowException e) {
             setErrorState(ErrorState.OVERFLOW, CalculatorMode.P_NUMBER);
+            return;
+        } catch (RuntimeException e) {
+            setErrorState(ErrorState.WRONG_DATA, CalculatorMode.P_NUMBER);
             return;
         }
         try {
@@ -213,31 +220,45 @@ public class CalculatorModel {
     }
 
     private String parseClipboardString(String data, CalculatorMode calculatorMode) {
-        data = parseStringToNumber(data, calculatorMode).toString();
+        data = parseStringToNumber(data, calculatorMode, 10).toString();
 
         data = NumberConverter.toScientificIfNeeded(data, calculatorMode, MAX_SCIENTIFIC_DIGITS_REAL, MAX_SCIENTIFIC_DIGITS_FRACTION);
         return dotsToCommas(data);
     }
 
-    private Number parseStringToNumber(String data, CalculatorMode calculatorMode) {
+    private Number parseStringToNumber(String data, CalculatorMode calculatorMode, int baseOfData) {
         if (data.isEmpty()) {
             throw new IllegalArgumentException("data is empty");
         }
-        data = commasToDots(data);
-        return NumberConverter.stringToNumber(data, calculatorMode, currentBase);
+        if (!checkStringBeforeParse(data, calculatorMode)) {
+            throw new IllegalArgumentException("data is wrong");
+        }
+        return NumberConverter.stringToNumber(data, calculatorMode, baseOfData);
     }
 
     public void setBase(int base) {
         currentBase = base;
     }
 
-    private boolean checkStringBeforeParse(String data) {
-        char digits = (char) ('0' + (currentBase > 10 ? 9 : currentBase - 1));
-        char letters = (char) ('A' + currentBase - 11);
-        return data.chars().allMatch(
-                ch -> (ch >= '0' && ch <= '9' && ch <= digits)
-                        || (ch >= 'A' && ch <= 'F' && ch <= letters)
-                        || ch == '.');
+    private boolean checkStringBeforeParse(String data, CalculatorMode calculatorMode) {
+        switch (calculatorMode) {
+            case P_NUMBER:
+                char digits = (char) ('0' + (currentBase > 10 ? 9 : currentBase - 1));
+                char letters = (char) ('A' + currentBase - 11);
+                if (data.replaceFirst("exp", "").contains("exp")) {
+                    return false;
+                }
+                return data.replaceFirst("exp", "").chars().allMatch(
+                        ch -> (ch >= '0' && ch <= '9' && ch <= digits)
+                                || (ch >= 'A' && ch <= 'F' && ch <= letters)
+                                || ch == '.'
+                                || ch == '-');
+            case FRACTION:
+                return data.chars().filter(ch -> ch == '/').count() == 1;
+            case COMPLEX:
+                return true;
+        }
+        return true;
     }
 
     private void setResult(CalculatorMode calculatorMode) {
@@ -276,6 +297,7 @@ public class CalculatorModel {
         resetModel();
         calculatorObserver.setErrorState(state);
         calculatorObserver.clearResultAfterEnteringDigit();
+        toggleCarretIfComplexOrFraction();
         setHistoryOnDisplay(calculatorMode);
 
         currentBase = 10;
@@ -296,15 +318,18 @@ public class CalculatorModel {
         }
     }
 
-    private void toggleCarretIfComplex(CalculatorMode calculatorMode) {
-        if (calculatorMode.equals(CalculatorMode.COMPLEX)) {
+    private void toggleCarretIfComplexOrFraction() {
+        if (complexCalculatorObserver != null) {
             complexCalculatorObserver.setCaretToRealPart();
+        }
+        if (fractionCalculatorObserver != null) {
+            fractionCalculatorObserver.setCaretToNumerator();
         }
     }
 
     private void changeImSignOperation(Number number) {
         Complex complex = (Complex) number;
         complex = complex.negateIm();
-        calculatorObserver.setResult(complex.toString());
+        calculatorObserver.setResult(dotsToCommas(complex.toString()));
     }
 }
