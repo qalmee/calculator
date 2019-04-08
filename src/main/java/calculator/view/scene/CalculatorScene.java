@@ -52,14 +52,14 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private boolean needClearResult;
     private boolean backSpaceEnabled;
     private boolean isErrorState;
-    private String textFieldPreviousOperationText;
-    private int textFieldPreviousOperationPosition;
+    private String historyText;
+    private int historyCaretPosition;
 
     private Clipboard clipboard;
     private VBox mainPanel;
     private GridPane buttonsGridPane;
     private TextField textFieldValue;
-    private TextField textFieldPreviousOperation;
+    private TextField textFieldHistory;
     private Label memoryLabel;
     private Button buttonScrollLeft;
     private Button buttonScrollRight;
@@ -79,7 +79,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         setupMainPanel();
         setupMenu();
         setupScrollButtons();
-        setupTextFieldPreviousOperation();
+        setupTextFieldHistory();
         setupTextFieldValue();
         setupButtonsGridPane();
         setupMemoryLabel();
@@ -122,10 +122,10 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     }
 
     @Override
-    public void setPreviousOperationText(String text) {
-        textFieldPreviousOperationText = text;
-        textFieldPreviousOperationPosition = text.length();
-        textFieldPreviousOperation.setText(text);
+    public void setHistoryText(String text) {
+        historyText = text;
+        historyCaretPosition = text.length();
+        textFieldHistory.setText(text);
         buttonScrollLeft.setDisable(false);
         buttonScrollRight.setDisable(true);
     }
@@ -183,15 +183,15 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         mainPanel.getChildren().add(calculatorMenu);
     }
 
-    private void setupTextFieldPreviousOperation() {
-        textFieldPreviousOperation = new TextField();
-        textFieldPreviousOperation.getStyleClass().add("text_field_previous_operation");
-        textFieldPreviousOperation.setMouseTransparent(true);
-        textFieldPreviousOperation.setFocusTraversable(false);
-        textFieldPreviousOperation.textProperty().addListener((observable, oldValue, newValue) ->
-                configureTextIntTextFieldPreviousOperation(newValue));
+    private void setupTextFieldHistory() {
+        textFieldHistory = new TextField();
+        textFieldHistory.getStyleClass().add("text_field_history");
+        textFieldHistory.setMouseTransparent(true);
+        textFieldHistory.setFocusTraversable(false);
+        textFieldHistory.textProperty().addListener((observable, oldValue, newValue) ->
+                setupTextFieldHistoryUpdateListener(newValue));
 
-        HBox hBox = new HBox(buttonScrollLeft, textFieldPreviousOperation, buttonScrollRight);
+        HBox hBox = new HBox(buttonScrollLeft, textFieldHistory, buttonScrollRight);
         mainPanel.getChildren().add(hBox);
     }
 
@@ -236,10 +236,10 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
                     if (button.equals(CalculatorButtons.BUTTON_MULTIPLY)) {
                         accelerators.put(new KeyCodeCombination(KeyCode.DIGIT8, KeyCombination.SHIFT_DOWN), runnable);
                     }
-                    if (button.equals(CalculatorButtons.BUTTON_PLUS)) {
+                    if (button.equals(CalculatorButtons.BUTTON_ADD)) {
                         accelerators.put(new KeyCodeCombination(KeyCode.EQUALS, KeyCombination.SHIFT_DOWN), runnable);
                     }
-                    if (button.equals(CalculatorButtons.BUTTON_MINUS)) {
+                    if (button.equals(CalculatorButtons.BUTTON_SUBTRACT)) {
                         accelerators.put(new KeyCodeCombination(KeyCode.MINUS), runnable);
                     }
                     if (button.equals(CalculatorButtons.BUTTON_DIVIDE)) {
@@ -286,29 +286,29 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         final int scrollSize = SCROLL_BUTTONS_SCROLL_SIZE;
 
         buttonScrollLeft.setOnAction(event -> {
-            int startPos = textFieldPreviousOperationPosition - maxLength - scrollSize;
+            int startPos = historyCaretPosition - maxLength - scrollSize;
             int endPos = startPos + maxLength;
             if (startPos > 0) {
-                textFieldPreviousOperation.setText(textFieldPreviousOperationText.substring(startPos, endPos));
-                textFieldPreviousOperationPosition -= scrollSize;
+                textFieldHistory.setText(historyText.substring(startPos, endPos));
+                historyCaretPosition -= scrollSize;
             } else {
-                textFieldPreviousOperation.setText(textFieldPreviousOperationText.substring(0, maxLength));
-                textFieldPreviousOperationPosition = maxLength;
+                textFieldHistory.setText(historyText.substring(0, maxLength));
+                historyCaretPosition = maxLength;
                 buttonScrollLeft.setDisable(true);
             }
             buttonScrollRight.setDisable(false);
         });
 
         buttonScrollRight.setOnAction(event -> {
-            int startPos = textFieldPreviousOperationPosition - maxLength + scrollSize;
+            int startPos = historyCaretPosition - maxLength + scrollSize;
             int endPos = startPos + maxLength;
-            int textLength = textFieldPreviousOperationText.length();
-            if (endPos < textFieldPreviousOperationText.length()) {
-                textFieldPreviousOperation.setText(textFieldPreviousOperationText.substring(startPos, endPos));
-                textFieldPreviousOperationPosition += scrollSize;
+            int textLength = historyText.length();
+            if (endPos < historyText.length()) {
+                textFieldHistory.setText(historyText.substring(startPos, endPos));
+                historyCaretPosition += scrollSize;
             } else {
-                textFieldPreviousOperation.setText(textFieldPreviousOperationText.substring(textLength - maxLength));
-                textFieldPreviousOperationPosition = textLength;
+                textFieldHistory.setText(historyText.substring(textLength - maxLength));
+                historyCaretPosition = textLength;
                 buttonScrollRight.setDisable(true);
             }
             buttonScrollLeft.setDisable(false);
@@ -329,7 +329,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         buttonClearEntry.setOnAction(event -> {
             clearTextFieldValueIfError();
             clearTextFields();
-            controllerListener.buttonClearEntryClicked();
+            controllerListener.buttonClearEntryClicked(calculatorMode);
         });
 
         buttonBackSpace.setOnAction(event -> {
@@ -392,7 +392,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         commaButton.setOnAction(event -> appendComaDigitToTextFieldValue());
     }
 
-    private void setButtonsStateDueToAnError(boolean value) {
+    private void setErrorStateToButtons(boolean value) {
         List<CalculatorButtons> notDisabledButtons = new ArrayList<>();
         notDisabledButtons.addAll(CalculatorButtons.getDigitButtons());
         notDisabledButtons.addAll(CalculatorButtons.getAllClearButtons());
@@ -414,7 +414,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private void clearTextFields() {
         needClearResult = false;
         textFieldValue.clear();
-        textFieldPreviousOperation.clear();
+        textFieldHistory.clear();
     }
 
     private void configureButton(Button button) {
@@ -454,10 +454,10 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         }
     }
 
-    private void configureTextIntTextFieldPreviousOperation(String text) {
+    private void setupTextFieldHistoryUpdateListener(String text) {
         int maxLength = TEXT_FIELD_PREVIOUS_OPERATION_MAX_TEXT_LENGTH;
         if (text.length() - maxLength > 0) {
-            textFieldPreviousOperation.setText(text.substring(text.length() - maxLength));
+            textFieldHistory.setText(text.substring(text.length() - maxLength));
         }
         setVisibleScrollButtons(text.length() >= maxLength);
     }
@@ -551,13 +551,13 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     void setAtErrorState(ErrorState errorState) {
         textFieldValue.setText(errorState.getErrorStateText());
         isErrorState = true;
-        setButtonsStateDueToAnError(true);
+        setErrorStateToButtons(true);
     }
 
     void setToNormalState() {
         isErrorState = false;
         clearTextFields();
-        setButtonsStateDueToAnError(false);
+        setErrorStateToButtons(false);
     }
 
     String getValueFromTextFieldValue() {

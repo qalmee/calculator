@@ -49,10 +49,10 @@ public enum CalculatorButtons {
             0, 5, new Button(getProperty("calculator_scene.button_divide"))),
     BUTTON_MULTIPLY(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.MULTIPLY),
             1, 5, new Button(getProperty("calculator_scene.button_multiply"))),
-    BUTTON_MINUS(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.SUBTRACT),
-            2, 5, new Button(getProperty("calculator_scene.button_minus"))),
-    BUTTON_PLUS(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.ADD),
-            3, 5, new Button(getProperty("calculator_scene.button_plus"))),
+    BUTTON_SUBTRACT(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.SUBTRACT),
+            2, 5, new Button(getProperty("calculator_scene.button_subtract"))),
+    BUTTON_ADD(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.ADD),
+            3, 5, new Button(getProperty("calculator_scene.button_add"))),
 
     BUTTON_SQUARE(CalculatorMode.BASIC, null,
             3, 1, new Button(getProperty("calculator_scene.button_square"))),
@@ -63,8 +63,8 @@ public enum CalculatorButtons {
             4, 4, new Button(getProperty("calculator_scene.button_comma"))),
     BUTTON_ENTER(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.ENTER),
             4, 5, new Button(getProperty("calculator_scene.button_enter"))),
-    BUTTON_PLUS_MINUS(CalculatorMode.BASIC, null,
-            4, 2, new Button(getProperty("calculator_scene.button_plus_minus"))),
+    BUTTON_NEGATE(CalculatorMode.BASIC, null,
+            4, 2, new Button(getProperty("calculator_scene.button_negate"))),
 
     BUTTON_MEMORY_CLEAR(CalculatorMode.BASIC, new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN),
             1, 0, new Button(getProperty("calculator_scene.button_memory_clear"))),
@@ -91,7 +91,7 @@ public enum CalculatorButtons {
     BUTTON_DELIMITER(CalculatorMode.FRACTION, new KeyCodeCombination(KeyCode.BACK_SLASH, KeyCombination.SHIFT_DOWN),
             2, 1, new Button(getProperty("fraction_calculator_scene.button_delimiter"))),
 
-    BUTTON_PLUS_MINUS_I(CalculatorMode.COMPLEX, null,
+    BUTTON_IM_NEGATE(CalculatorMode.COMPLEX, null,
             2, 1, new Button(getProperty("complex_calculator_scene.button_im_negate"))),
     BUTTON_MODULE(CalculatorMode.COMPLEX, null,
             5, 0, new Button(getProperty("complex_calculator_scene.button_module"))),
@@ -112,16 +112,16 @@ public enum CalculatorButtons {
 
     static {
         actionButtons = new HashMap<>();
-        actionButtons.put(BUTTON_PLUS.getButton(), CalculatorOperation.ADD);
-        actionButtons.put(BUTTON_MINUS.getButton(), CalculatorOperation.SUBTRACT);
+        actionButtons.put(BUTTON_ADD.getButton(), CalculatorOperation.ADD);
+        actionButtons.put(BUTTON_SUBTRACT.getButton(), CalculatorOperation.SUBTRACT);
         actionButtons.put(BUTTON_MULTIPLY.getButton(), CalculatorOperation.MULTIPLY);
         actionButtons.put(BUTTON_DIVIDE.getButton(), CalculatorOperation.DIVIDE);
         actionButtons.put(BUTTON_REVERSE.getButton(), CalculatorOperation.REVERSE);
         actionButtons.put(BUTTON_SQUARE.getButton(), CalculatorOperation.SQUARE);
-        actionButtons.put(BUTTON_PLUS_MINUS.getButton(), CalculatorOperation.NEGATE);
+        actionButtons.put(BUTTON_NEGATE.getButton(), CalculatorOperation.NEGATE);
 
         complexActionButtons = new HashMap<>();
-        complexActionButtons.put(BUTTON_PLUS_MINUS_I.getButton(), CalculatorOperation.IM_NEGATE);
+        complexActionButtons.put(BUTTON_IM_NEGATE.getButton(), CalculatorOperation.IM_NEGATE);
         complexActionButtons.put(BUTTON_MODULE.getButton(), CalculatorOperation.ABS);
         complexActionButtons.put(BUTTON_ARGUMENT_RAD.getButton(), CalculatorOperation.RAD);
         complexActionButtons.put(BUTTON_ARGUMENT_DEG.getButton(), CalculatorOperation.DEG);
@@ -162,13 +162,13 @@ public enum CalculatorButtons {
     }
 
     public static List<CalculatorButtons> getActionButtons() {
-        return Arrays.asList(BUTTON_PLUS, BUTTON_MINUS, BUTTON_MULTIPLY,
-                BUTTON_DIVIDE, BUTTON_PLUS_MINUS, BUTTON_REVERSE, BUTTON_SQUARE);
+        return Arrays.asList(BUTTON_ADD, BUTTON_SUBTRACT, BUTTON_MULTIPLY,
+                BUTTON_DIVIDE, BUTTON_NEGATE, BUTTON_REVERSE, BUTTON_SQUARE);
     }
 
     public static List<CalculatorButtons> getComplexActionButtons() {
         return Arrays.asList(BUTTON_MODULE, BUTTON_ARGUMENT_RAD, BUTTON_ARGUMENT_DEG,
-                BUTTON_POW, BUTTON_SQR, BUTTON_PLUS_MINUS_I);
+                BUTTON_POW, BUTTON_SQR, BUTTON_IM_NEGATE);
     }
 
     public static List<CalculatorButtons> getMemoryButtons() {

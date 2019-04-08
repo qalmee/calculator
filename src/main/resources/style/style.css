@@ -15,7 +15,7 @@
     -fx-background-color: transparent;
 }
 
-.text_field_previous_operation {
+.text_field_history {
     -fx-font-size: 14;
     -fx-font-family: consolas;
     -fx-font-weight: bold;
