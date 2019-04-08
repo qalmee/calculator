@@ -1,5 +1,7 @@
 package calculator.model.utils;
 
+import calculator.model.stats.CalculatorPrecision;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -8,8 +10,8 @@ import static java.math.RoundingMode.HALF_UP;
 public final class MathUtils {
 
     private static final int TAYLOR_SERIES_LENGTH = 30;
-    private static final int MAX_PRECISION = 100;
-    private static final int MAX_COMPARE_PRECISION = 90;
+    private static final int MAX_PRECISION = CalculatorPrecision.REAL_PRECISION.getPrecision();
+    private static final int MAX_COMPARE_PRECISION = CalculatorPrecision.REAL_PRECISION.getComparePrecision();
     private static final BigDecimal EPS = BigDecimal.ONE
             .divide(BigDecimal.TEN.pow(MAX_COMPARE_PRECISION), MAX_COMPARE_PRECISION, BigDecimal.ROUND_FLOOR);
 
@@ -80,7 +82,7 @@ public final class MathUtils {
     }
 
     public static BigDecimal radToDegrees(BigDecimal fi) {
-        return fi.multiply(BigDecimal.valueOf(180).divide(BigDecimal.valueOf(Math.PI), MAX_PRECISION, HALF_UP));
+        return fi.multiply(BigDecimal.valueOf(180).divide(BigDecimal.valueOf(Math.PI), CalculatorPrecision.REAL_PRECISION.getPrecision(), HALF_UP));
     }
 
     private static final BigDecimal SQRT_DIG = BigDecimal.valueOf(120);

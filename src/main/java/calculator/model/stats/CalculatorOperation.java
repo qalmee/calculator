@@ -11,7 +11,6 @@ public enum CalculatorOperation {
     REVERSE("REVERSE", true, getProperty("calculator_scene.operation_reverse")),
     NEGATE("NEGATE", true, getProperty("calculator_scene.operation_negate")),
     SQUARE("SQUARE", true, getProperty("calculator_scene.operation_square")),
-    BACKSPACE("BACKSPACE", true, "OMEGA_LUL"),
     //only for complex:
     IM_NEGATE("IM_NEGATE", true, getProperty("complex_calculator_scene.operation_im_negate")),
     ABS("ABS", true, getProperty("complex_calculator_scene.operation_abs")),

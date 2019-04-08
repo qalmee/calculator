@@ -5,6 +5,7 @@ import calculator.model.numbers.Fraction;
 import calculator.model.numbers.Number;
 import calculator.model.numbers.Real;
 import calculator.model.stats.CalculatorMode;
+import calculator.model.stats.CalculatorOverflow;
 import calculator.model.utils.exceptions.OverflowException;
 import javafx.util.Pair;
 
@@ -17,9 +18,10 @@ public class NumberConverter {
 
     }
 
-    private static final int OVERFLOW_LENGTH = 1000;
+    private static final int OVERFLOW_LENGTH = CalculatorOverflow.REAL_OVERFLOW.getLength();
+    private static final int OVERFLOW_LENGTH_COMPLEX = CalculatorOverflow.COMPLEX_OVERFLOW.getLength();
 
-    public static String fromScientific(String value, CalculatorMode calculatorMode) {
+    private static String fromScientific(String value, CalculatorMode calculatorMode) {
         switch (calculatorMode) {
             case BASIC:
             case P_NUMBER:
@@ -84,7 +86,6 @@ public class NumberConverter {
     private static String toScientific(String value, int fractionLength, CalculatorMode calculatorMode) {
         switch (calculatorMode) {
             case BASIC:
-                return realToScientific(value, fractionLength);
             case P_NUMBER:
                 return realToScientific(value, fractionLength);
             case FRACTION:
@@ -145,8 +146,23 @@ public class NumberConverter {
             intSize--;
         }
         value = value.replaceAll("\\.", "").substring(0, Math.min(fractionLength, value.length() - 1));
+        int count = 0;
+        for (int i = value.length() - 1; i >= 0; i--) {
+            if (value.charAt(i) == '0') {
+                count++;
+            } else {
+                break;
+            }
+        }
+        value = value.substring(0, value.length() - count);
         if (intSize == 1) {
+            if (value.length() == 1) {
+                return value;
+            }
             return value.substring(0, dotPos) + "." + value.substring(dotPos);
+        }
+        if (value.length() == 1) {
+            return value + "exp" + (intSize - 1);
         }
         return value.substring(0, dotPos) + "." + value.substring(dotPos) + "exp" + (intSize - 1);
     }
@@ -266,6 +282,13 @@ public class NumberConverter {
     }
 
     public static String toScientificIfNeeded(String data, CalculatorMode calculatorMode, int maxLen, int maxLenFract) {
+        if (calculatorMode.equals(CalculatorMode.COMPLEX)) {
+            Complex complex = (Complex) stringToNumber(data, calculatorMode, 10);
+            if (complex.getReal().toPlainString().length() > OVERFLOW_LENGTH_COMPLEX
+                    || complex.getImaginary().toPlainString().length() > OVERFLOW_LENGTH_COMPLEX) {
+                throw new OverflowException("Overflow");
+            }
+        }
         if (data.length() > OVERFLOW_LENGTH) {
             throw new OverflowException("Overflow");
         }

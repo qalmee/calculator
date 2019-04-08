@@ -1,5 +1,7 @@
 package calculator.model.utils;
 
+import calculator.model.stats.CalculatorPrecision;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -10,7 +12,7 @@ public class ConverterPToP {
 
     private static final int MAX_BASE = 16;
     private static final int MIN_BASE = 2;
-    private static final int MAX_PRECISION = 100;
+    private static final int MAX_PRECISION = CalculatorPrecision.REAL_PRECISION.getPrecision();
 
     private ConverterPToP() {
 
@@ -28,7 +30,7 @@ public class ConverterPToP {
         return cutTrailingZeros(result);
     }
 
-    public static String convert10ToP(String valueString, int base, int precision) {
+    private static String convert10ToP(String valueString, int base, int precision) {
         checkArguments(valueString, base, precision);
         valueString = valueString.toUpperCase();
         BigDecimal value = new BigDecimal(valueString);
@@ -96,7 +98,7 @@ public class ConverterPToP {
         return result;
     }
 
-    public static String convertPTo10(String value, int base, int precision) {
+    private static String convertPTo10(String value, int base, int precision) {
         checkArguments(value, base, precision);
         value = cutTrailingZeros(value).toUpperCase();
         String[] stringArray = value.split("\\.");

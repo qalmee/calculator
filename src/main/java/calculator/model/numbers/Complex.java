@@ -1,10 +1,12 @@
 package calculator.model.numbers;
 
+import calculator.model.stats.CalculatorPrecision;
 import calculator.model.utils.MathUtils;
 import calculator.model.utils.NumberConstant;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 import static java.math.RoundingMode.HALF_UP;
@@ -14,10 +16,10 @@ public class Complex implements Number<Complex> {
     private BigDecimal real;
     private BigDecimal imaginary;
 
-    private static final int MAX_PRECISION = 7;
-    private static final int MAX_COMPARE_PRECISION = 5;
+    private static final int MAX_PRECISION = CalculatorPrecision.COMPLEX_PRECISION.getPrecision();
+    private static final int MAX_COMPARE_PRECISION = CalculatorPrecision.COMPLEX_PRECISION.getComparePrecision();
     private static final BigDecimal EPS = BigDecimal.ONE
-            .divide(BigDecimal.TEN.pow(MAX_COMPARE_PRECISION), MAX_COMPARE_PRECISION, BigDecimal.ROUND_HALF_UP);
+            .divide(BigDecimal.TEN.pow(MAX_COMPARE_PRECISION), MAX_COMPARE_PRECISION, RoundingMode.FLOOR);
 
 
     public Complex(BigDecimal real, BigDecimal imaginary) {
@@ -89,7 +91,7 @@ public class Complex implements Number<Complex> {
         return new Complex(this.real, this.imaginary.negate());
     }
 
-    public Complex conjugate() {
+    private Complex conjugate() {
         return new Complex(this.real, this.imaginary.negate());
     }
 
@@ -97,7 +99,7 @@ public class Complex implements Number<Complex> {
         return MathUtils.sqrt(this.real.multiply(this.real).add(this.imaginary.multiply(this.imaginary)));
     }
 
-    public BigDecimal squareScalar() {
+    private BigDecimal squareScalar() {
         return this.real.multiply(this.real).add(this.imaginary.multiply(this.imaginary));
     }
 
@@ -135,9 +137,9 @@ public class Complex implements Number<Complex> {
         real = real.stripTrailingZeros();
         imaginary = imaginary.stripTrailingZeros();
         if (imaginary.signum() < 0) {
-            return real.toPlainString().substring(0, Math.min(real.toPlainString().length(), 10)) + imaginary.toPlainString().substring(0, Math.min(imaginary.toPlainString().length(), 10)) + "i";
+            return real.toPlainString() + imaginary.toPlainString() + "i";
         } else {
-            return real.toPlainString().substring(0, Math.min(real.toPlainString().length(), 10)) + "+" + imaginary.toPlainString().substring(0, Math.min(imaginary.toPlainString().length(), 10)) + "i";
+            return real.toPlainString() + "+" + imaginary.toPlainString() + "i";
         }
     }
 
@@ -167,6 +169,12 @@ public class Complex implements Number<Complex> {
     }
 
     public BigDecimal getReal() {
+        real = real.stripTrailingZeros();
         return real;
+    }
+
+    public BigDecimal getImaginary() {
+        imaginary = imaginary.stripTrailingZeros();
+        return imaginary;
     }
 }

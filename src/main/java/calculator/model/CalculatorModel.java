@@ -1,6 +1,7 @@
 package calculator.model;
 
 import calculator.model.configuration.Config;
+import calculator.model.memory.Memory;
 import calculator.model.memory.MemoryOperation;
 import calculator.model.numbers.Complex;
 import calculator.model.numbers.Number;
@@ -10,6 +11,7 @@ import calculator.model.observer.FractionCalculatorObserver;
 import calculator.model.observer.PNumberCalculatorObserver;
 import calculator.model.stats.CalculatorMode;
 import calculator.model.stats.CalculatorOperation;
+import calculator.model.stats.CalculatorPrecision;
 import calculator.model.stats.ErrorState;
 import calculator.model.utils.ConverterPToP;
 import calculator.model.utils.NumberConverter;
@@ -20,13 +22,14 @@ import calculator.view.localization.Language;
 import java.util.ArrayList;
 import java.util.List;
 
+import static calculator.model.utils.NumberConverter.commasToDots;
 import static calculator.model.utils.NumberConverter.dotsToCommas;
 
 public class CalculatorModel {
 
     private static final int MAX_BASE = 16;
-    private static final int MAX_SCIENTIFIC_DIGITS_REAL = 30;
-    private static final int MAX_SCIENTIFIC_DIGITS_FRACTION = 13;
+    private static final int MAX_SCIENTIFIC_DIGITS_REAL = CalculatorPrecision.SCIENTIFIC_DIGITS_REAL.getPrecision();
+    private static final int MAX_SCIENTIFIC_DIGITS_FRACTION = CalculatorPrecision.SCIENTIFIC_DIGITS_FRACTION.getPrecision();
     private int currentBase = 10;
 
     private CalculatorObserver calculatorObserver;
@@ -57,7 +60,7 @@ public class CalculatorModel {
     private void resetModel() {
         calculatorObserver.setBackSpaceEnabled(true);
         ControlUnit.INSTANCE.resetCalculator();
-        toggleCarretIfComplexOrFraction();
+        toggleCaretIfComplexOrFraction();
     }
 
     public void updateDigitButtons(int base) {
@@ -117,7 +120,7 @@ public class CalculatorModel {
         calculatorObserver.setBackSpaceEnabled(false);
         calculatorObserver.clearResultAfterEnteringDigit();
         setHistoryOnDisplay(calculatorMode);
-        toggleCarretIfComplexOrFraction();
+        toggleCaretIfComplexOrFraction();
     }
 
     public void equalsPressed(String valueOnDisplay, CalculatorMode calculatorMode) {
@@ -136,7 +139,7 @@ public class CalculatorModel {
         }
         calculatorObserver.clearResultAfterEnteringDigit();
         setHistoryOnDisplay(calculatorMode);
-        toggleCarretIfComplexOrFraction();
+        toggleCaretIfComplexOrFraction();
     }
 
     public void memoryOperationPressed(String valueOnDisplay, MemoryOperation memoryOperation, CalculatorMode calculatorMode) {
@@ -153,7 +156,7 @@ public class CalculatorModel {
             }
         }
         calculatorObserver.clearResultAfterEnteringDigit();
-        toggleCarretIfComplexOrFraction();
+        toggleCaretIfComplexOrFraction();
     }
 
     public void displayTextActionHappened() {
@@ -171,7 +174,7 @@ public class CalculatorModel {
         calculatorObserver.setBackSpaceEnabled(true);
         LocalHistory.INSTANCE.popOperand();
         setHistoryOnDisplay(calculatorMode);
-        toggleCarretIfComplexOrFraction();
+        toggleCaretIfComplexOrFraction();
     }
 
     public void convertAll(String valueOnDisplay, int oldBase, int newBase) {
@@ -227,6 +230,7 @@ public class CalculatorModel {
     }
 
     private Number parseStringToNumber(String data, CalculatorMode calculatorMode, int baseOfData) {
+        data = commasToDots(data);
         if (data.isEmpty()) {
             throw new IllegalArgumentException("data is empty");
         }
@@ -248,7 +252,7 @@ public class CalculatorModel {
                 if (data.replaceFirst("exp", "").contains("exp")) {
                     return false;
                 }
-                return data.replaceFirst("exp", "").chars().allMatch(
+                return data.replaceFirst("exp.*", "").chars().allMatch(
                         ch -> (ch >= '0' && ch <= '9' && ch <= digits)
                                 || (ch >= 'A' && ch <= 'F' && ch <= letters)
                                 || ch == '.'
@@ -297,8 +301,10 @@ public class CalculatorModel {
         resetModel();
         calculatorObserver.setErrorState(state);
         calculatorObserver.clearResultAfterEnteringDigit();
-        toggleCarretIfComplexOrFraction();
+        toggleCaretIfComplexOrFraction();
         setHistoryOnDisplay(calculatorMode);
+        Memory.INSTANCE.memoryClear();
+        calculatorObserver.disableMemoryButtons(true);
 
         currentBase = 10;
         if (pNumberCalculatorObserver != null) {
@@ -318,7 +324,7 @@ public class CalculatorModel {
         }
     }
 
-    private void toggleCarretIfComplexOrFraction() {
+    private void toggleCaretIfComplexOrFraction() {
         if (complexCalculatorObserver != null) {
             complexCalculatorObserver.setCaretToRealPart();
         }

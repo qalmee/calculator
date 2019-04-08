@@ -25,10 +25,6 @@ public class ControlUnit {
         newValue = true;
     }
 
-    public void clearEntry() {
-        newValue = true;
-    }
-
     private void debug() {
         System.out.println(Processor.INSTANCE.getLeftResultOperand());
         System.out.println(Processor.INSTANCE.getOperation());
@@ -37,7 +33,6 @@ public class ControlUnit {
         System.out.println();
     }
 
-    @SuppressWarnings("Duplicates")
     public void equalsPressed(Number valueOnDisplay) {
         debug();
         switch (state) {
@@ -52,11 +47,6 @@ public class ControlUnit {
                 }
                 break;
             case OPERATOR_SET:
-                Processor.INSTANCE.setRightOperand(valueOnDisplay);
-                Processor.INSTANCE.operationRun();
-                needToSetResult = true;
-                state = CalculatorState.EQUALS_PRESSED;
-                break;
             case SECOND_OPERAND_INPUT:
                 Processor.INSTANCE.setRightOperand(valueOnDisplay);
                 Processor.INSTANCE.operationRun();
@@ -76,7 +66,6 @@ public class ControlUnit {
         resultValue = Processor.INSTANCE.getLeftResultOperand();
     }
 
-    @SuppressWarnings("Duplicates")
     public void operatorPressed(Number valueOnDisplay, CalculatorOperation operation) {
         debug();
         CalculatorOperation operationInProcessor;

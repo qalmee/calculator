@@ -13,8 +13,6 @@ public class LocalHistory {
 
     public static final LocalHistory INSTANCE = new LocalHistory();
 
-    private static final int HISTORY_SCIENTIFIC_LENGTH = 6;
-
     private LinkedList<ExpressionNode> historyList;
 
     private LocalHistory() {
