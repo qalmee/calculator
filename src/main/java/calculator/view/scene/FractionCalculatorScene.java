@@ -9,6 +9,7 @@ import static calculator.view.localization.LanguageProperties.getProperty;
 
 class FractionCalculatorScene extends CalculatorScene implements FractionCalculatorObserver {
 
+    private static final int TEXT_FIELD_VALUE_MAX_INPUT_TEXT_LENGTH = 25;
     private static final String START_NUMERATOR;
     private static final String START_DENOMINATOR;
 
@@ -43,6 +44,11 @@ class FractionCalculatorScene extends CalculatorScene implements FractionCalcula
     void appendDigitToTextFieldValue(String digitText) {
         String currentNumerator = getValueFromTextFieldValue().split("/")[0];
         String currentDenominator = getValueFromTextFieldValue().split("/")[1];
+
+        if (currentNumerator.length() + currentDenominator.length() > TEXT_FIELD_VALUE_MAX_INPUT_TEXT_LENGTH) {
+            textFieldValueSetText(currentNumerator + "/" + currentDenominator);
+            return;
+        }
 
         if (caretPosition == FractionCaretPosition.NUMERATOR) {
             if (currentNumerator.equals(START_NUMERATOR)) {

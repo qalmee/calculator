@@ -14,6 +14,7 @@ import static calculator.view.localization.LanguageProperties.getProperty;
 
 class ComplexCalculatorScene extends CalculatorScene implements ComplexCalculatorObserver {
 
+    private static final int TEXT_FIELD_VALUE_MAX_INPUT_TEXT_LENGTH = 25;
     private static final String START_REAL_PART;
     private static final String START_IMAGINARY_PART;
     private static final String I_SYMBOL;
@@ -69,6 +70,11 @@ class ComplexCalculatorScene extends CalculatorScene implements ComplexCalculato
     void appendDigitToTextFieldValue(String digitText) {
         String currentRealPart = getValueFromTextFieldValue().split(Pattern.quote("+"))[0];
         String currentImaginaryPart = getValueFromTextFieldValue().split(Pattern.quote("+"))[1];
+
+        if (currentRealPart.length() + currentImaginaryPart.length() > TEXT_FIELD_VALUE_MAX_INPUT_TEXT_LENGTH) {
+            textFieldValueSetText(currentRealPart + "+" + currentImaginaryPart);
+            return;
+        }
 
         if (caretPosition == ComplexCaretPosition.REAL) {
             if (currentRealPart.equals(START_REAL_PART)) {
