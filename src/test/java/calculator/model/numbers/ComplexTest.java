@@ -1,6 +1,5 @@
 package calculator.model.numbers;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -80,7 +79,12 @@ class ComplexTest {
         assertEquals(complexResult, complex.reverse());
     }
 
-    @Test
-    void negate() {
+    @ParameterizedTest
+    @CsvSource({"3,5,-3,-5", "-4,-2,4,2", "0,-2,0,2"})
+    void negate(BigDecimal real, BigDecimal im,
+                BigDecimal realResult, BigDecimal imResult) {
+        Complex complex = new Complex(real, im);
+        Complex complexResult = new Complex(realResult, imResult);
+        assertEquals(complexResult, complex.negate());
     }
 }
