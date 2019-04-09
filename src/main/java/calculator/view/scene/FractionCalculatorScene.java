@@ -48,6 +48,12 @@ class FractionCalculatorScene extends CalculatorScene implements FractionCalcula
     }
 
     @Override
+    void disableButtonsAfterErrorState() {
+        super.disableButtonsAfterErrorState();
+        CalculatorButtons.BUTTON_COMMA.getButton().setDisable(true);
+    }
+
+    @Override
     void appendDigitToTextFieldValue(String digitText) {
         String currentNumerator = getValueFromTextFieldValue().split("/")[0];
         String currentDenominator = getValueFromTextFieldValue().split("/")[1];

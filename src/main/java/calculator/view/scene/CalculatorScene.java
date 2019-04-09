@@ -558,10 +558,15 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         setErrorStateToButtons(true);
     }
 
+    void disableButtonsAfterErrorState() {
+        disableMemoryButtons(true);
+    }
+
     void setToNormalState() {
         isErrorState = false;
         clearTextFields();
         setErrorStateToButtons(false);
+        disableButtonsAfterErrorState();
     }
 
     String getValueFromTextFieldValue() {
