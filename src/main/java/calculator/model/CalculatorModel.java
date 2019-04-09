@@ -39,6 +39,8 @@ public class CalculatorModel {
 
     public void setCalculatorObserver(CalculatorObserver calculatorObserver) {
         this.calculatorObserver = calculatorObserver;
+        Memory.INSTANCE.memoryClear();
+        resetModel();
     }
 
     public void setFractionCalculatorObserver(FractionCalculatorObserver fractionCalculatorObserver) {
