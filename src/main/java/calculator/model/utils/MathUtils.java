@@ -67,7 +67,7 @@ public final class MathUtils {
     }
 
     public static BigDecimal taylorATan(BigDecimal a) {
-        if (a.abs().subtract(BigDecimal.ONE).compareTo(EPS) <= 0) {
+        if (a.abs().subtract(BigDecimal.ONE).abs().compareTo(EPS) <= 0) {
             return BigDecimal.valueOf(Math.PI / 4.0).multiply(BigDecimal.valueOf(a.compareTo(BigDecimal.ZERO)));
         } else if (a.abs().compareTo(BigDecimal.ONE) > 0) {
             BigDecimal absOfA = a.abs();

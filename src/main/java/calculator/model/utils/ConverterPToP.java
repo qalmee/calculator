@@ -30,7 +30,7 @@ public class ConverterPToP {
         return cutTrailingZeros(result);
     }
 
-    private static String convert10ToP(String valueString, int base, int precision) {
+    public static String convert10ToP(String valueString, int base, int precision) {
         checkArguments(valueString, base, precision);
         valueString = valueString.toUpperCase();
         BigDecimal value = new BigDecimal(valueString);
@@ -98,7 +98,7 @@ public class ConverterPToP {
         return result;
     }
 
-    private static String convertPTo10(String value, int base, int precision) {
+    public static String convertPTo10(String value, int base, int precision) {
         checkArguments(value, base, precision);
         value = cutTrailingZeros(value).toUpperCase();
         String[] stringArray = value.split("\\.");
