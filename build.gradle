@@ -43,17 +43,21 @@ dependencies {
 //    testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.0')
 //    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.0')
 
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.4.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.4.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.4.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.4.2'
 //    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.4.0'
 
     testCompile(
-            'org.junit.jupiter:junit-jupiter-api:5.4.0',
-            'org.junit.jupiter:junit-jupiter-params:5.4.0',
-            'org.junit.jupiter:junit-jupiter-engine:5.4.0'
+            'org.junit.jupiter:junit-jupiter-api:5.4.2',
+            'org.junit.jupiter:junit-jupiter-params:5.4.2',
+            'org.junit.jupiter:junit-jupiter-engine:5.4.2'
     )
     testRuntime(
-            'org.junit.jupiter:junit-jupiter-engine:5.4.0',
-            'org.junit.vintage:junit-vintage-engine:5.4.0'
+            'org.junit.jupiter:junit-jupiter-engine:5.4.2',
+//            'org.junit.vintage:junit-vintage-engine:5.4.2',
+            'org.junit.jupiter:junit-jupiter-api:5.4.2',
+            'org.junit.jupiter:junit-jupiter-params:5.4.2'
     )
 }
 
@@ -65,7 +69,7 @@ dependencies {
 test {
 //    useJUnit()
 //    useJUnitPlatform()
-    useJUnitPlatform(Actions.doNothing())
+    useJUnitPlatform(Actions.<JUnitPlatformOptions>doNothing())
     dependsOn 'cleanTest'
 
     testLogging {
