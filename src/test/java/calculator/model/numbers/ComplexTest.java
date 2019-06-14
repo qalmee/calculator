@@ -88,12 +88,12 @@ class ComplexTest {
         assertEquals(complexResult, complex.negate());
     }
 
-//    @ParameterizedTest
-//    @CsvSource({"3,5,-3,-6"})
-//    void negate1(BigDecimal real, BigDecimal im,
-//                 BigDecimal realResult, BigDecimal imResult) {
-//        Complex complex = new Complex(real, im);
-//        Complex complexResult = new Complex(realResult, imResult);
-//        assertEquals(complexResult, complex.negate());
-//    }
+    @ParameterizedTest
+    @CsvSource({"3,5,-3,-6"})
+    void negate1(BigDecimal real, BigDecimal im,
+                 BigDecimal realResult, BigDecimal imResult) {
+        Complex complex = new Complex(real, im);
+        Complex complexResult = new Complex(realResult, imResult);
+        assertEquals(complexResult, complex.negate());
+    }
 }
