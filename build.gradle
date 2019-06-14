@@ -5,7 +5,6 @@ version '1.0'
 
 apply plugin: 'java'
 apply plugin: 'javafx-gradle-plugin'
-//apply plugin: 'org.junit.platform.gradle.plugin'
 
 sourceCompatibility = 1.8
 
@@ -13,6 +12,9 @@ sourceCompatibility = 1.8
 buildscript {
     dependencies {
         classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+        classpath group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.4.2'
+        classpath group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.4.2'
+        classpath group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.4.2'
     }
     repositories {
         mavenLocal()
@@ -61,15 +63,18 @@ dependencies {
     )
 }
 
-task wrapper(type : Wrapper){
-    gradleVersion = '5.4.1'
-}
-
+//task wrapper(type : Wrapper){
+//    gradleVersion = '5.4.1'
+//}
 
 test {
 //    useJUnit()
-//    useJUnitPlatform()
-    useJUnitPlatform(Actions.<JUnitPlatformOptions>doNothing())
+    useJUnitPlatform()
+//    useJUnitPlatform(Actions.<JUnitPlatformOptions>doNothing())
+//    useJUnitPlatform {
+//        excludeTags 'slow'
+//        includeEngines 'junit-jupiter'
+//    }
     dependsOn 'cleanTest'
 
     testLogging {
