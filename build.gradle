@@ -36,4 +36,13 @@ dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.4.0'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.4.0'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.0')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.0')
+}
+
+test {
+//    useJUnit()
+    useJUnitPlatform()
+
+    maxHeapSize = '1G'
 }
