@@ -65,7 +65,7 @@ dependencies {
 test {
 //    useJUnit()
 //    useJUnitPlatform()
-    useJUnitPlatform(Actions.<JUnitPlatformOptions>doNothing())
+    useJUnitPlatform(Actions.doNothing())
     dependsOn 'cleanTest'
 
     testLogging {
