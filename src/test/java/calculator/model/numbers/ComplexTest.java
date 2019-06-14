@@ -89,7 +89,7 @@ class ComplexTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"3,5,-3,-5"})
+    @CsvSource({"3,5,-3,-6"})
     void negate1(BigDecimal real, BigDecimal im,
                  BigDecimal realResult, BigDecimal imResult) {
         Complex complex = new Complex(real, im);
