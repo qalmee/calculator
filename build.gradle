@@ -1,3 +1,5 @@
+import org.gradle.internal.Actions
+
 group 'STP2'
 version '1.0'
 
@@ -61,8 +63,9 @@ dependencies {
 
 
 test {
-//    useJUnit()
-    useJUnitPlatform()
+    useJUnit()
+//    useJUnitPlatform()
+    useJUnitPlatform(Actions.<JUnitPlatformOptions>doNothing())
     dependsOn 'cleanTest'
 
     testLogging {
