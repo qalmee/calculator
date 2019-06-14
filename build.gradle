@@ -40,10 +40,10 @@ dependencies {
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.0')
 }
 
-testLogging {
-    events 'started', 'passed', 'skipped', 'failed'
-    exceptionFormat 'full'
-}
+//testLogging {
+//    events 'started', 'passed', 'skipped', 'failed'
+//    exceptionFormat 'full'
+//}
 
 test {
 //    useJUnit()
