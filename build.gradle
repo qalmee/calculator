@@ -63,7 +63,7 @@ dependencies {
 
 
 test {
-    useJUnit()
+//    useJUnit()
 //    useJUnitPlatform()
     useJUnitPlatform(Actions.<JUnitPlatformOptions>doNothing())
     dependsOn 'cleanTest'
