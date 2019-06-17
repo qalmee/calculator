@@ -89,10 +89,14 @@ public class CalculatorMenu extends MenuBar {
     private void setupModeMenu() {
         ToggleGroup modeToggleGroup = new ToggleGroup();
         Menu menuMode = new Menu(getProperty("calculator_scene.menu_mode"));
+        menuMode.setId("menuMode");
 //        RadioMenuItem menuItemBasic = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_basic"));
         RadioMenuItem menuItemFraction = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_fraction"));
+        menuItemFraction.setId("menuItemFraction");
         RadioMenuItem menuItemComplex = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_complex"));
+        menuItemComplex.setId("menuItemComplex");
         RadioMenuItem menuItemPNumber = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_p-value"));
+        menuItemPNumber.setId("menuItemPNumber");
         menuMode.getItems().addAll(/*menuItemBasic,*/ menuItemFraction, menuItemComplex, menuItemPNumber);
         this.getMenus().add(menuMode);
 

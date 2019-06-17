@@ -124,6 +124,7 @@ class FractionCalculatorScene extends CalculatorScene implements FractionCalcula
 
     private void setupDelimiterButton() {
         Button delimiterButton = CalculatorButtons.BUTTON_DELIMITER.getButton();
+        delimiterButton.setId("switch");
         delimiterButton.setText(BUTTON_DELIMITER_NUMERATOR_TEXT);
         delimiterButton.setOnAction(event -> {
             if (caretPosition == FractionCaretPosition.NUMERATOR) {

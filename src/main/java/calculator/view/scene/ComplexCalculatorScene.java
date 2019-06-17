@@ -117,6 +117,7 @@ class ComplexCalculatorScene extends CalculatorScene implements ComplexCalculato
 
     private void setupIButton() {
         Button iButton = CalculatorButtons.BUTTON_I.getButton();
+        iButton.setId("switch");
         iButton.setOnAction(event -> {
             if (caretPosition == ComplexCaretPosition.REAL) {
                 caretPosition = ComplexCaretPosition.IMAGINARY;

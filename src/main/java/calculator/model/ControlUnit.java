@@ -26,11 +26,11 @@ public class ControlUnit {
     }
 
     private void debug() {
-        System.out.println(Processor.INSTANCE.getLeftResultOperand());
-        System.out.println(Processor.INSTANCE.getOperation());
-        System.out.println(Processor.INSTANCE.getRightOperand());
-        System.out.println(state);
-        System.out.println();
+//        System.out.println(Processor.INSTANCE.getLeftResultOperand());
+//        System.out.println(Processor.INSTANCE.getOperation());
+//        System.out.println(Processor.INSTANCE.getRightOperand());
+//        System.out.println(state);
+//        System.out.println();
     }
 
     public void equalsPressed(Number valueOnDisplay) {
