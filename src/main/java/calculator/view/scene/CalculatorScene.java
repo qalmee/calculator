@@ -65,8 +65,21 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
     private Button buttonScrollLeft;
     private Button buttonScrollRight;
 
+    private ComplexCalculatorScene complexCalculatorScene;
+    private FractionCalculatorScene fractionCalculatorScene;
+    private PNumberCalculatorScene pNumberCalculatorScene;
+
     public CalculatorScene() {
         this(CalculatorMode.BASIC);
+    }
+
+    public TextField getTextFieldValue() {
+        return textFieldValue;
+    }
+
+    @Override
+    public String getValue() {
+        return textFieldValue.getText();
     }
 
     CalculatorScene(CalculatorMode calculatorMode) {
@@ -198,6 +211,7 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
 
     private void setupTextFieldValue() {
         textFieldValue = new TextField();
+        textFieldValue.setId("textFieldValue");
         textFieldValue.getStyleClass().add("text_field_value");
         textFieldValue.setMouseTransparent(true);
         textFieldValue.setFocusTraversable(false);
@@ -423,6 +437,18 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
         button.setFocusTraversable(false);
     }
 
+    public ComplexCalculatorScene getComplexCalculatorScene() {
+        return complexCalculatorScene;
+    }
+
+    public FractionCalculatorScene getFractionCalculatorScene() {
+        return fractionCalculatorScene;
+    }
+
+    public PNumberCalculatorScene getpNumberCalculatorScene() {
+        return pNumberCalculatorScene;
+    }
+
     private void changeScene(CalculatorMode mode) {
         if (calculatorMode != mode) {
             switch (mode) {
@@ -430,13 +456,16 @@ public class CalculatorScene extends Scene implements CalculatorObserver {
                     setupAndSetNewScene(new CalculatorScene(CalculatorMode.BASIC));
                     break;
                 case FRACTION:
-                    setupAndSetNewScene(new FractionCalculatorScene());
+                    fractionCalculatorScene = new FractionCalculatorScene();
+                    setupAndSetNewScene(fractionCalculatorScene);
                     break;
                 case COMPLEX:
-                    setupAndSetNewScene(new ComplexCalculatorScene());
+                    complexCalculatorScene = new ComplexCalculatorScene();
+                    setupAndSetNewScene(complexCalculatorScene);
                     break;
                 case P_NUMBER:
-                    setupAndSetNewScene(new PNumberCalculatorScene());
+                    pNumberCalculatorScene = new PNumberCalculatorScene();
+                    setupAndSetNewScene(pNumberCalculatorScene);
                     break;
                 default:
                     break;

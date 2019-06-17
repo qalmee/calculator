@@ -43,6 +43,10 @@ public class CalculatorModel {
         resetModel();
     }
 
+    public String getValue() {
+        return calculatorObserver.getValue();
+    }
+
     public void setFractionCalculatorObserver(FractionCalculatorObserver fractionCalculatorObserver) {
         this.fractionCalculatorObserver = fractionCalculatorObserver;
     }

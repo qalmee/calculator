@@ -93,4 +93,6 @@ class PNumberCalculatorScene extends CalculatorScene implements PNumberCalculato
     private void updateDigitButtonsOnStart() {
         controllerListener.updateDigitButtons((int) sliderBase.getValue());
     }
+
+
 }

@@ -29,4 +29,6 @@ public interface CalculatorObserver {
     void setErrorState(ErrorState errorState);
 
     void disableMemoryButtons(boolean value);
+
+    String getValue();
 }

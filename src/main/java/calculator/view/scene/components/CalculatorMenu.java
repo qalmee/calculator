@@ -21,6 +21,9 @@ public class CalculatorMenu extends MenuBar {
 
     public CalculatorMenu(ControllerListener controllerListener, CalculatorMode calculatorMode) {
         this.controllerListener = controllerListener;
+        if (calculatorMode == CalculatorMode.BASIC) {
+            calculatorMode = CalculatorMode.P_NUMBER;
+        }
         this.calculatorMode = calculatorMode;
         setupMenu();
     }
@@ -86,27 +89,27 @@ public class CalculatorMenu extends MenuBar {
     private void setupModeMenu() {
         ToggleGroup modeToggleGroup = new ToggleGroup();
         Menu menuMode = new Menu(getProperty("calculator_scene.menu_mode"));
-        RadioMenuItem menuItemBasic = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_basic"));
+//        RadioMenuItem menuItemBasic = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_basic"));
         RadioMenuItem menuItemFraction = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_fraction"));
         RadioMenuItem menuItemComplex = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_complex"));
         RadioMenuItem menuItemPNumber = new RadioMenuItem(getProperty("calculator_scene.menu_item_mode_p-value"));
-        menuMode.getItems().addAll(menuItemBasic, menuItemFraction, menuItemComplex, menuItemPNumber);
+        menuMode.getItems().addAll(/*menuItemBasic,*/ menuItemFraction, menuItemComplex, menuItemPNumber);
         this.getMenus().add(menuMode);
 
-        menuItemBasic.setToggleGroup(modeToggleGroup);
+//        menuItemBasic.setToggleGroup(modeToggleGroup);
         menuItemFraction.setToggleGroup(modeToggleGroup);
         menuItemComplex.setToggleGroup(modeToggleGroup);
         menuItemPNumber.setToggleGroup(modeToggleGroup);
 
-        menuItemBasic.setOnAction(event -> controllerListener.updateCalculatorMode(CalculatorMode.BASIC));
+//        menuItemBasic.setOnAction(event -> controllerListener.updateCalculatorMode(CalculatorMode.BASIC));
         menuItemFraction.setOnAction(event -> controllerListener.updateCalculatorMode(CalculatorMode.FRACTION));
         menuItemComplex.setOnAction(event -> controllerListener.updateCalculatorMode(CalculatorMode.COMPLEX));
         menuItemPNumber.setOnAction(event -> controllerListener.updateCalculatorMode(CalculatorMode.P_NUMBER));
 
         switch (calculatorMode) {
-            case BASIC:
-                menuItemBasic.setSelected(true);
-                break;
+//            case BASIC:
+//                menuItemBasic.setSelected(true);
+//                break;
             case FRACTION:
                 menuItemFraction.setSelected(true);
                 break;
