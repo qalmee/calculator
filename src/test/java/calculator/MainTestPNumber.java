@@ -69,21 +69,6 @@ public class MainTestPNumber extends ApplicationTest {
     }
 
     @Test
-    public void testCalc1() {
-        clickOn("#equals");
-        clickOn("#textFieldValue");
-        press(KeyCode.DIGIT1);
-        press(KeyCode.DIGIT2);
-        press(KeyCode.DIGIT3);
-        clickOn("#add");
-        press(KeyCode.DIGIT3);
-        press(KeyCode.DIGIT2);
-        press(KeyCode.DIGIT1);
-        clickOn("#equals");
-        assertEquals("246", calculatorModel.getValue());
-    }
-
-    @Test
     public void testCalc2() {
         clickOn("#textFieldValue");
         press(KeyCode.DIGIT5);
